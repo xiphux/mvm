@@ -1,0 +1,174 @@
+# Anjuta Version 1.2.4 
+Compatibility Level: 1 
+
+<PROJECT_DESCRIPTION_START>
+Mvm MIPS datapath simulator<PROJECT_DESCRIPTION_END>
+<CONFIG_PROGS_START>
+<CONFIG_PROGS_END>
+<CONFIG_LIBS_START>
+<CONFIG_LIBS_END>
+<CONFIG_HEADERS_START>
+<CONFIG_HEADERS_END>
+<CONFIG_CHARACTERISTICS_START>
+<CONFIG_CHARACTERISTICS_END>
+<CONFIG_LIB_FUNCS_START>
+<CONFIG_LIB_FUNCS_END>
+<CONFIG_ADDITIONAL_START>
+<CONFIG_ADDITIONAL_END>
+<CONFIG_FILES_START>
+<CONFIG_FILES_END>
+<MAKEFILE_AM_START>
+<MAKEFILE_AM_END>
+
+props.file.type=project
+
+anjuta.version=1.2.4
+anjuta.compatibility.level=1
+
+project.name=mvm
+project.type=GENERIC
+project.target.type=EXECUTABLE
+project.version=0.0.1
+project.author=Christopher Han
+project.source.target=mvm
+project.has.gettext=1
+project.gui.command=
+project.programming.language=C++
+project.excluded.modules=intl
+
+project.config.extra.modules.before=
+project.config.extra.modules.after=
+project.config.blocked=1
+project.config.disable.overwriting=1 1 1 1 1 1 1 1 1 
+
+project.menu.entry=mvm Version 0.0.1
+project.menu.group=Application
+project.menu.comment=mvm Version 0.0.1
+project.menu.icon=
+project.menu.need.terminal=0
+
+project.configure.options=
+anjuta.program.arguments=
+preferences.build.option.jobs=0
+preferences.build.option.silent=0
+preferences.build.option.autosave=0
+preferences.make=make
+preferences.build.option.keep.going=1
+preferences.build.option.warn.undef=0
+preferences.autoformat.custom.style= -i8 -sc -bli0 -bl0 -cbi0 -ss
+preferences.indent.opening=0
+preferences.autoformat.disable=1
+preferences.indent.automatic=1
+preferences.use.tabs=1
+preferences.indent.size=4
+preferences.tabsize=4
+preferences.indent.closing=0
+
+module.include.name=.
+module.include.type=
+module.include.files=\
+	src/clock.h\
+	src/core/pc.h\
+	src/core/basemux.h\
+	src/core/register_file.h\
+	src/core/alu.h\
+	src/core/controlstates.h\
+	src/core/control.h\
+	src/core/instruction_memory.h\
+	src/core/adder.h\
+	src/core/mux2.h\
+	src/core/mux3.h\
+	src/core/hazard_detection_unit.h\
+	src/core/idmux.h\
+	src/core/register32.h\
+	src/core/exmux2.h\
+	src/core/exmux3.h\
+	src/vm.h\
+	src/basic/convenience.h\
+	src/stage4_mem.h\
+	src/stage.h\
+	src/stage1_if.h\
+	src/stage2_id.h\
+	src/stage3_ex.h\
+	src/stage5_wb.h\
+	src/parser/ctype.h\
+	src/parser/jtype.h\
+	src/parser/rtype.h\
+	src/parser/ophandlers.h\
+	src/parser/operation.h\
+	src/parser/itype.h\
+	src/opcode.h\
+	src/datapath.h
+
+module.source.name=.
+module.source.type=
+module.source.files=\
+	src/core/instruction_memory.cpp\
+	src/core/adder.cpp\
+	src/core/idmux.cpp\
+	src/core/mux2.cpp\
+	src/core/mux3.cpp\
+	src/core/control.cpp\
+	src/core/pc.cpp\
+	src/core/register32.cpp\
+	src/core/alu.cpp\
+	src/core/exmux2.cpp\
+	src/core/exmux3.cpp\
+	src/stage3_ex.cpp\
+	src/basic/convenience.cpp\
+	src/datapath.cpp\
+	src/stage5_wb.cpp\
+	src/stage2_id.cpp\
+	src/clock.cpp\
+	src/mvm.cpp\
+	src/stage.cpp\
+	src/parser/jtype.cpp\
+	src/parser/ctype.cpp\
+	src/parser/itype.cpp\
+	src/parser/rtype.cpp\
+	src/vm.cpp\
+	src/stage4_mem.cpp\
+	src/stage1_if.cpp
+
+module.pixmap.name=.
+module.pixmap.type=
+module.pixmap.files=
+
+module.data.name=.
+module.data.type=
+module.data.files=
+
+module.help.name=.
+module.help.type=
+module.help.files=
+
+module.doc.name=.
+module.doc.type=
+module.doc.files=\
+	NEWS\
+	README\
+	AUTHORS\
+	INSTALL\
+	ChangeLog\
+	COPYING
+
+module.po.files=
+
+compiler.options.supports=
+compiler.options.include.paths=\
+	.\
+	..
+compiler.options.library.paths=
+compiler.options.libraries=
+compiler.options.libraries.selected=
+compiler.options.defines=\
+	HAVE_CONFIG_H
+compiler.options.defines.selected=
+compiler.options.warning.buttons=0 0 1 1 0 1 0 0 0 0 0 0 0 1 0 0 
+compiler.options.optimize.buttons=1 0 0 0 
+compiler.options.other.buttons=1 0 
+compiler.options.other.c.flags=
+compiler.options.other.l.flags=
+compiler.options.other.l.libs=
+
+project.src.paths=

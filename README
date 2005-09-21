@@ -1,0 +1,74 @@
+Mvm (MIPS Virtual Machine)
+Copyright (C) 2005 Christopher Han <xiphux@gmail.com>
+
+Mvm is a MIPS simulator.  It is designed not to emulate MIPS programs;
+rather, it is for simulating the MIPS datapath.  Instructions are
+parsed and executed exactly as they would be by a real MIPS computer.
+It is supposed to be used as a learning tool for the MIPS datapath, not
+as a performance-oriented emulator.
+
+Mvm is aware of all of the real MIPS instructions, and several of the
+most common pseudo-instructions.  It simulates a five-pipeline datapath.
+
+The source code is even structured with the actual datapath in mind;
+every component of the datapath has its own source object:
+
+src/					- main source code directory
+    basic/				- base definitions/functions
+        convenience.{h,cpp}		- convenience functions
+        opcode.h			- opcode definitions
+    core/				- VM core
+        adder.{h,cpp}			- basic adder
+        address_space.{h,cpp}		- address space (instruction memory,
+                                                         data memory, stack)
+        alu_control_unit.{h,cpp}	- ALU control unit
+        alu.{h,cpp}			- ALU
+        basemux.h			- abstract parent MUX
+        clock.{h,cpp}			- clock
+       	control.{h,cpp}			- control unit
+        controlstates.h			- control state macros
+        data_memory.{h,cpp}		- data memory
+        datapath.{h,cpp}		- main datapath
+        exmux2.{h,cpp}			- EX stage mux (2 inputs)
+        exmux3.{h,cpp}			- EX stage mux (3 inputs)
+        hazard_detection_unit.h		- hazard detection unit
+        idmux.{h,cpp}			- ID stage mux
+        instruction.{h,cpp}		- generic instruction class
+        instruction_memory.{h,cpp}	- instruction memory
+        latch_ex_mem.{h,cpp}		- EX/MEM latch
+        latch.h				- base latch definition
+        latch_id_ex.{h,cpp}		- ID/EX latch
+        latch_if_id.{h,cpp}		- IF/ID latch
+        latch_mem_wb.{h,cpp}		- MEM/WB latch
+        mux2.{h,cpp}			- generic 2-input MUX
+        mux3.{h,cpp}			- generic 3-input MUX
+        pc.{h,cpp}			- program counter
+        register32.{h,cpp}		- 32-bit register
+        register_file.{h,cpp}		- register file
+        stack.{h,cpp}			- stack
+        stage1_if.{h,cpp}		- IF stage
+        stage2_id.{h,cpp}		- ID stage
+        stage3_ex.{h,cpp}		- EX stage
+	stage4_mem.{h,cpp}		- MEM stage
+	stage5_wb.{h,cpp}		- WB stage
+	stage.{h,cpp}			- generic stage object
+	vm.{h,cpp}			- main virtual machine
+    gui/				- ncurses gui
+        base.h				- base ncurses include
+        gui.{h,cpp}			- main ncurses gui
+        regdata.{h,cpp}			- register display window
+    parser/				- parser of MIPS source files
+        cotype.{h,cpp}			- coprocessor instruction object
+        itype.{h,cpp}			- I-type instruction object
+        jtype.{h,cpp}			- J-type instruction object
+        operation.h			- abstract operation parent class
+        ophandlers.{h,cpp}		- converts text to/from operations
+        ptype.{h,cpp}			- pseudo-instruction object
+        rtype.{h,cpp}			- R-type instruction object
+    util/				- console utilities
+        basecmd.{h,cpp}			- generic parent commandline handler
+        consolecmd.{h,cpp}		- interactive console command
+        posixcmd.{h,cpp}		- POSIX (Linux, UNIX) commandline
+        win32cmd.{h,cpp}		- Win32 (Windows) commandline
+    mvm.{h,cpp}				- main executable
+    gcollect.h				- Boehm garbage collection helper
