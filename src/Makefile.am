@@ -1,7 +1,0 @@
-bin_PROGRAMS = mvm
-if NCURSES_DATAPATH
-mvm_SOURCES = basic/convenience.cpp core/register32.cpp core/instruction_memory.cpp core/data_memory.cpp core/stack.cpp core/address_space.cpp core/alu.cpp core/alu_control_unit.cpp core/control.cpp core/idmux.cpp core/exmux2.cpp core/exmux3.cpp core/pc.cpp core/latch_if_id.cpp core/latch_id_ex.cpp core/latch_ex_mem.cpp core/latch_mem_wb.cpp core/stage.cpp core/stage1_if.cpp core/stage2_id.cpp core/stage3_ex.cpp core/stage4_mem.cpp core/stage5_wb.cpp core/datapath.cpp core/vm.cpp core/instruction.cpp core/register_file.cpp parser/ophandlers.cpp parser/cotype.cpp parser/itype.cpp parser/jtype.cpp parser/rtype.cpp parser/ptype.cpp util/basecmd.cpp util/posixcmd.cpp util/consolecmd.cpp util/console.cpp gui/gui.cpp gui/regdata.cpp mvm.cpp
-else
-mvm_SOURCES = basic/convenience.cpp core/register32.cpp core/instruction_memory.cpp core/data_memory.cpp core/stack.cpp core/address_space.cpp core/alu.cpp core/alu_control_unit.cpp core/control.cpp core/idmux.cpp core/exmux2.cpp core/exmux3.cpp core/pc.cpp core/latch_if_id.cpp core/latch_id_ex.cpp core/latch_ex_mem.cpp core/latch_mem_wb.cpp core/stage.cpp core/stage1_if.cpp core/stage2_id.cpp core/stage3_ex.cpp core/stage4_mem.cpp core/stage5_wb.cpp core/datapath.cpp core/vm.cpp core/instruction.cpp core/register_file.cpp parser/ophandlers.cpp parser/cotype.cpp parser/itype.cpp parser/jtype.cpp parser/rtype.cpp parser/ptype.cpp util/basecmd.cpp util/posixcmd.cpp util/consolecmd.cpp util/console.cpp mvm.cpp
-endif
-mvm_LDADD = @NCURSES_LIBS@ @GCLIBS@
