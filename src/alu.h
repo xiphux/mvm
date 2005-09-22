@@ -3,8 +3,8 @@
  * ALU class definition
  * Copyright (C) 2005 Christopher Han
  */
-#ifndef ALU_H
-#define ALU_H
+#ifndef MVM_ALU_H
+#define MVM_ALU_H
 
 class ALU
 {
@@ -17,4 +17,4 @@ public:
 	unsigned int y;
 };
 
-#endif /* ALU_H */
+#endif /* MVM_ALU_H */

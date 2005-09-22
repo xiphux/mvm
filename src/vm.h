@@ -3,8 +3,8 @@
  * Base virtual machine class definition
  * Copyright (C) 2005 Christopher Han
  */
-#ifndef VM_H
-#define VM_H
+#ifndef MVM_VM_H
+#define MVM_VM_H
 
 class vm
 {
@@ -13,4 +13,4 @@ public:
 	virtual ~vm();
 };
 
-#endif /* VM_H */
+#endif /* MVM_VM_H */

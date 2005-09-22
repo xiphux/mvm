@@ -3,8 +3,8 @@
  * Core clock class definition
  * Copyright (C) 2005 Christopher Han
  */
-#ifndef CLOCK_H
-#define CLOCK_H
+#ifndef MVM_CLOCK_H
+#define MVM_CLOCK_H
 
 class clock
 {
@@ -14,4 +14,4 @@ public:
 	void tick();
 };
 
-#endif /* CLOCK_H */
+#endif /* MVM_CLOCK_H */

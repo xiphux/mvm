@@ -3,8 +3,8 @@
  * I-Type operation class definition
  * Copyright (C) 2005 Christopher Han
  */
-#ifndef ITYPE_H
-#define ITYPE_H
+#ifndef MVM_ITYPE_H
+#define MVM_ITYPE_H
 
 #include <string>
 #include <vector>
@@ -26,4 +26,4 @@ private:
 	unsigned short addr;
 };
 
-#endif /* ITYPE_H */
+#endif /* MVM_ITYPE_H */

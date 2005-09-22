@@ -3,8 +3,8 @@
  * R-Type operation class definition
  * Copyright (C) 2005 Christopher Han
  */
-#ifndef RTYPE_H
-#define RTYPE_H
+#ifndef MVM_RTYPE_H
+#define MVM_RTYPE_H
 
 #include <string>
 #include <vector>
@@ -28,4 +28,4 @@ private:
 	unsigned char funct;
 };
 
-#endif /* RTYPE_H */
+#endif /* MVM_RTYPE_H */

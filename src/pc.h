@@ -3,8 +3,8 @@
  * Program Counter class definition
  * Copyright (C) 2005 Christopher Han
  */
-#ifndef PC_H
-#define PC_H
+#ifndef MVM_PC_H
+#define MVM_PC_H
 
 class PC
 {
@@ -13,4 +13,4 @@ public:
 	~PC();
 };
 
-#endif /* PC_H */
+#endif /* MVM_PC_H */

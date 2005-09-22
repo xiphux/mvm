@@ -3,8 +3,8 @@
  * J-Type operation class definition
  * Copyright (C) 2005 Christopher Han
  */
-#ifndef JTYPE_H
-#define JTYPE_H
+#ifndef MVM_JTYPE_H
+#define MVM_JTYPE_H
 
 #include <string>
 #include <vector>
@@ -24,4 +24,4 @@ private:
 	unsigned int target;
 };
 
-#endif /* JTYPE_H */
+#endif /* MVM_JTYPE_H */

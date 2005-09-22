@@ -3,8 +3,8 @@
  * Opcode handler functions
  * Copyright (C) 2005 Christopher Han
  */
-#ifndef OPHANDLERS_H
-#define OPHANDLERS_H
+#ifndef MVM_OPHANDLERS_H
+#define MVM_OPHANDLERS_H
 
 #include <string>
 #include <vector>
@@ -254,4 +254,4 @@ static inline std::string opcode_to_assembly(const unsigned int opcode)
 {
 }
 
-#endif /* OPHANDLERS_H */
+#endif /* MVM_OPHANDLERS_H */

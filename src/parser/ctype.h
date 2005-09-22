@@ -3,8 +3,8 @@
  * Coprocessor operation class definition
  * Copyright (C) 2005 Christopher Han
  */
-#ifndef CTYPE_H
-#define CTYPE_H
+#ifndef MVM_CTYPE_H
+#define MVM_CTYPE_H
 
 #include <string>
 #include <vector>
@@ -29,4 +29,4 @@ private:
 	unsigned char funct;
 };
 
-#endif /* CTYPE_H */
+#endif /* MVM_CTYPE_H */

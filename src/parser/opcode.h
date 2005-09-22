@@ -3,8 +3,8 @@
  * Opcode definitions/handling
  * Copyright (C) 2005 Christopher Han
  */
-#ifndef OPCODE_H
-#define OPCODE_H
+#ifndef MVM_OPCODE_H
+#define MVM_OPCODE_H
 
 #define TYPE_NULL 0
 #define TYPE_R 1
@@ -159,4 +159,4 @@
 #define CTYPE_FUNC_SUB_S	0x01	/* sub.s fd,fs,ft	000001 */
 #define CTYPE_FMT_SUB_S		0x10	/* sub.s fd,fs,ft	10000 */
 
-#endif /* OPCODE_H */
+#endif /* MVM_OPCODE_H */
