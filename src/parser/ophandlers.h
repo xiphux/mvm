@@ -8,7 +8,7 @@
 
 #include <string>
 #include <vector>
-#include "convenience.h"
+#include "basic/convenience.h"
 #include "opcode.h"
 #include "operation.h"
 #include "rtype.h"
