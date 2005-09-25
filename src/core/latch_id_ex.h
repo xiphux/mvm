@@ -1,6 +1,6 @@
 /*
- *  convenience.h
- *  Convenience function definitions
+ *  latch_id_ex.h
+ *  ID/EX pipeline latch class definition
  *  Copyright (C) 2005 Christopher Han
  *
  *  This program is free software; you can redistribute it and/or modify
@@ -17,22 +17,27 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
  */
-#ifndef _MVM_CONVENIENCE_H
-#define _MVM_CONVENIENCE_H
+#ifndef _MVM_LATCH_ID_EX_H
+#define _MVM_LATCH_ID_EX_H
 
-#include <string>
-#include <vector>
+#include "register32.h"
 
-#ifdef OPTIMIZE
-#define abs(v)	(v ^ (v >> (sizeof(int) * 8 - 1))) - (v >> (sizeof(int) * 8 - 1))
-#else
-#define abs(v)	(v<0?-v:v)
-#endif
+class latch_id_ex
+{
+public:
+	latch_id_ex();
+	~latch_id_ex();
+	register32 *WB;
+	register32 *M;
+	register32 *EX;
+	register32 *PCpiu4;
+	register32 *Data1;
+	register32 *Data2;
+	register32 *imm;
+	register32 *RS;
+	register32 *RT;
+	register32 *RD;
+	register32 *OP;
+};
 
-void strip_leading_whitespace(std::string &str);
-void strip_trailing_whitespace(std::string &str);
-void strip_comments(std::string &str);
-std::vector<std::string> tokenize(std::string &str, const char delim);
-void binaryprint(const unsigned int val, const bool zero = true);
-
-#endif /* _MVM_CONVENIENCE_H */
+#endif /* _MVM_LATCH_ID_EX_H */

@@ -31,7 +31,7 @@ public:
 	unsigned int pop_instruction();
 	unsigned int fetch_instruction(const unsigned int addr);
 private:
-	std::deque instructions;
+	std::deque<unsigned int> instructions;
 };
 
 #endif /* _MVM_INSTRUCTION_MEMORY_H */

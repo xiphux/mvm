@@ -1,6 +1,6 @@
 /*
- *  convenience.h
- *  Convenience function definitions
+ *  latch_id_ex.cpp
+ *  ID/EX pipeline latch class implementation
  *  Copyright (C) 2005 Christopher Han
  *
  *  This program is free software; you can redistribute it and/or modify
@@ -17,22 +17,35 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
  */
-#ifndef _MVM_CONVENIENCE_H
-#define _MVM_CONVENIENCE_H
+#include "latch_id_ex.h"
 
-#include <string>
-#include <vector>
+latch_id_ex::latch_id_ex()
+{
+	WB = new register32();
+	M = new register32();
+	EX = new register32();
+	PCpiu4 = new register32();
+	Data1 = new register32();
+	Data2 = new register32();
+	imm = new register32();
+	RS = new register32();
+	RT = new register32();
+	RD = new register32();
+	OP = new register32();
+}
 
-#ifdef OPTIMIZE
-#define abs(v)	(v ^ (v >> (sizeof(int) * 8 - 1))) - (v >> (sizeof(int) * 8 - 1))
-#else
-#define abs(v)	(v<0?-v:v)
-#endif
+latch_id_ex::~latch_id_ex()
+{
+	delete WB;
+	delete M;
+	delete EX;
+	delete PCpiu4;
+	delete Data1;
+	delete Data2;
+	delete imm;
+	delete RS;
+	delete RT;
+	delete RD;
+	delete OP;
+}
 
-void strip_leading_whitespace(std::string &str);
-void strip_trailing_whitespace(std::string &str);
-void strip_comments(std::string &str);
-std::vector<std::string> tokenize(std::string &str, const char delim);
-void binaryprint(const unsigned int val, const bool zero = true);
-
-#endif /* _MVM_CONVENIENCE_H */

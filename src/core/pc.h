@@ -25,9 +25,12 @@ class PC
 public:
 	PC();
 	~PC();
-	bool get_control_signal();
-	void set_control_signal(bool sig);
-	void tick();
+	unsigned int get_value();
+	unsigned int get_address();
+	void set_value(const unsigned int val);
+	void set_address(const unsigned int addr);
+private:
+	unsigned int value;
 };
 
 #endif /* _MVM_PC_H */

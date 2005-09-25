@@ -22,8 +22,7 @@
 
 class basemux
 {
-public:
-	virtual unsigned int getstate() = 0;
+
 };
 
 #endif /* _MVM_BASEMUX_H */

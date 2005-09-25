@@ -1,6 +1,6 @@
 /*
- *  convenience.h
- *  Convenience function definitions
+ *  Win32Cmd.h
+ *  Win32 commandline parser class definition
  *  Copyright (C) 2005 Christopher Han
  *
  *  This program is free software; you can redistribute it and/or modify
@@ -17,22 +17,18 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
  */
-#ifndef _MVM_CONVENIENCE_H
-#define _MVM_CONVENIENCE_H
+#ifndef _MVM_WIN32CMD_H
+#define _MVM_WIN32CMD_H
 
-#include <string>
-#include <vector>
+#include "basecmd.h"
 
-#ifdef OPTIMIZE
-#define abs(v)	(v ^ (v >> (sizeof(int) * 8 - 1))) - (v >> (sizeof(int) * 8 - 1))
-#else
-#define abs(v)	(v<0?-v:v)
-#endif
+class Win32Cmd: public BaseCmd
+{
+public:
+	Win32Cmd(int c, char **v);
+	virtual void parse();
+	virtual void usage(std::string program, std::string version);
+	~Win32Cmd();
+};
 
-void strip_leading_whitespace(std::string &str);
-void strip_trailing_whitespace(std::string &str);
-void strip_comments(std::string &str);
-std::vector<std::string> tokenize(std::string &str, const char delim);
-void binaryprint(const unsigned int val, const bool zero = true);
-
-#endif /* _MVM_CONVENIENCE_H */
+#endif /* _MVM_WIN32CMD_H */

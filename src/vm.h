@@ -20,11 +20,19 @@
 #ifndef _MVM_VM_H
 #define _MVM_VM_H
 
+#include <string>
+#include "datapath.h"
+
 class vm
 {
 public:
-	vm();
-	virtual ~vm();
+	vm(const bool dbg = false);
+	~vm();
+	bool load_instructions(std::string const file);
+	void run();
+	void tick();
+private:
+	datapath *dp;
 };
 
 #endif /* _MVM_VM_H */

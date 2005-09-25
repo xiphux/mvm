@@ -19,8 +19,9 @@
  */
 #include "stage2_id.h"
 
-stage2_id::stage2_id(): instruction(0)
+stage2_id::stage2_id()
 {
+	instruction = 0;
 }
 
 stage2_id::~stage2_id()

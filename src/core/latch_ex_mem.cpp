@@ -1,6 +1,6 @@
 /*
- *  convenience.h
- *  Convenience function definitions
+ *  latch_ex_mem.cpp
+ *  EX/MEM pipeline latch class implementation
  *  Copyright (C) 2005 Christopher Han
  *
  *  This program is free software; you can redistribute it and/or modify
@@ -17,22 +17,18 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
  */
-#ifndef _MVM_CONVENIENCE_H
-#define _MVM_CONVENIENCE_H
+#include "latch_ex_mem.h"
 
-#include <string>
-#include <vector>
+latch_ex_mem::latch_ex_mem()
+{
+	WB = new register32();
+	M = new register32();
+	RIS = new register32();
+	DataW = new register32();
+	RegW = new register32();
+}
 
-#ifdef OPTIMIZE
-#define abs(v)	(v ^ (v >> (sizeof(int) * 8 - 1))) - (v >> (sizeof(int) * 8 - 1))
-#else
-#define abs(v)	(v<0?-v:v)
-#endif
+latch_ex_mem::~latch_ex_mem()
+{
+}
 
-void strip_leading_whitespace(std::string &str);
-void strip_trailing_whitespace(std::string &str);
-void strip_comments(std::string &str);
-std::vector<std::string> tokenize(std::string &str, const char delim);
-void binaryprint(const unsigned int val, const bool zero = true);
-
-#endif /* _MVM_CONVENIENCE_H */

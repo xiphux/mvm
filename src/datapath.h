@@ -20,7 +20,19 @@
 #ifndef _MVM_DATAPATH_H
 #define _MVM_DATAPATH_H
 
-#include "instruction_memory.h"
+#include "opcode.h"
+#include "core/instruction_memory.h"
+#include "core/alu.h"
+#include "core/alu_control_unit.h"
+#include "core/control.h"
+#include "core/exmux2.h"
+#include "core/exmux3.h"
+#include "core/idmux.h"
+#include "core/pc.h"
+#include "core/latch_if_id.h"
+#include "core/latch_id_ex.h"
+#include "core/latch_ex_mem.h"
+#include "core/latch_mem_wb.h"
 #include "stage1_if.h"
 #include "stage2_id.h"
 #include "stage3_ex.h"
@@ -33,16 +45,64 @@ public:
 	datapath();
 	~datapath();
 	void tick();
+	void advance_instructions();
+	void set_registers();
+	void configure_muxes();
+	bool detect_completion();
+	int execute_alu(const unsigned int wbdata);
 	bool disassemble(const unsigned int op);
+	void print_debug();
 
+	bool complete;
+	bool debug;
+	instruction_memory *im;
 private:
+	bool stall;
+	unsigned int clock;
+
 	control *ctrl;
+	PC *pc;
+	idmux *IDmux;
+	exmux3 *EXmux3;
+	exmux3 *EXmux4;
+	exmux2 *EXmux5;
+	ALU *alu;
+	alu_control_unit *acu;
+
 	stage1_if *stage1;
 	stage2_id *stage2;
 	stage3_ex *stage3;
 	stage4_mem *stage4;
 	stage5_wb *stage5;
-	instruction_memory *im;
+
+	latch_if_id *if_id;
+	latch_id_ex *id_ex;
+	latch_ex_mem *ex_mem;
+	latch_mem_wb *mem_wb;
+
+	unsigned int temp_IF_ID_PCpiu4;
+	unsigned int temp_IF_ID_IFdiscard;
+	unsigned int temp_ID_EX_WB;
+	unsigned int temp_ID_EX_M;
+	unsigned int temp_ID_EX_EX;
+	unsigned int temp_PC;
+	unsigned int temp_instruction;
+	unsigned int temp_ID_EX_imm;
+	unsigned int temp_ID_EX_Data1;
+	unsigned int temp_ID_EX_Data2;
+	unsigned int temp_ID_EX_op;
+	unsigned int temp_EX_MEM_WB;
+	unsigned int temp_EX_MEM_M;
+	unsigned int temp_EX_MEM_DataW;
+	unsigned int temp_EX_MEM_RIS;
+	unsigned int temp_EX_MEM_RegW;
+	unsigned int temp_MEM_WB_WB;
+	unsigned int temp_MEM_WB_Data;
+	unsigned int temp_MEM_WB_DataR;
+	unsigned int temp_MEM_WB_RegW;
+	unsigned int MemIstrDim;
+	unsigned int instruction;
+	unsigned int ctrl1;
 };
 
 #endif /* _MVM_DATAPATH_H */

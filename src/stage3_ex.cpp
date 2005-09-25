@@ -19,8 +19,9 @@
  */
 #include "stage3_ex.h"
 
-stage3_ex::stage3_ex(): instruction(0)
+stage3_ex::stage3_ex()
 {
+	instruction = 0;
 }
 
 stage3_ex::~stage3_ex()

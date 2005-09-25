@@ -1,2 +1,2 @@
 bin_PROGRAMS = mvm
-mvm_SOURCES = basic/convenience.cpp parser/ctype.cpp parser/itype.cpp parser/jtype.cpp parser/rtype.cpp mvm.cpp
+mvm_SOURCES = basic/convenience.cpp parser/ctype.cpp parser/itype.cpp parser/jtype.cpp parser/rtype.cpp core/register32.cpp core/instruction_memory.cpp core/alu.cpp core/alu_control_unit.cpp core/control.cpp core/idmux.cpp core/exmux2.cpp core/exmux3.cpp core/pc.cpp core/latch_if_id.cpp core/latch_id_ex.cpp core/latch_ex_mem.cpp core/latch_mem_wb.cpp stage.cpp stage1_if.cpp stage2_id.cpp stage3_ex.cpp stage4_mem.cpp stage5_wb.cpp basecmd.cpp posixcmd.cpp datapath.cpp vm.cpp mvm.cpp

@@ -26,13 +26,14 @@
 #define SIGNAL_WB 3
 #define SIGNAL_M 4
 #define SIGNAL_EX 5
+#define SIGNAL_DISCARD 6
 
 class control
 {
 public:
 	control();
 	~control();
-	void read_instruction(const unsigned int inst, const unsigned int sig);
+	unsigned int read_instruction(const unsigned int inst, const unsigned int sig);
 
 	bool RegWrite;
 	bool MemRead;

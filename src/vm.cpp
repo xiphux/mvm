@@ -17,12 +17,53 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
  */
+#include <fstream>
+#include "parser/ophandlers.h"
+#include "parser/operation.h"
+#include "basic/convenience.h"
 #include "vm.h"
 
-vm::vm()
+vm::vm(const bool dbg)
 {
+	dp = new datapath();
+	dp->debug = dbg;
 }
 
 vm::~vm()
 {
+	delete dp;
+}
+
+bool vm::load_instructions(std::string const file)
+{
+	std::fstream infile(file.c_str(),std::ios::in);
+	if (!infile.good())
+		return false;
+	std::string buf;
+	operation *op;
+	while (!infile.eof()) {
+		getline(infile,buf);
+		strip_comments(buf);
+		strip_trailing_whitespace(buf);
+		if (!buf.empty()) {
+			op = assembly_to_op(buf);
+			if (op) {
+				dp->im->push_instruction(op->instruction());
+				delete op;
+			}
+		}
+	}
+	infile.close();
+	return true;
+}
+
+void vm::run()
+{
+	while (!dp->complete)
+		dp->tick();
+}
+
+void vm::tick()
+{
+	dp->tick();
 }

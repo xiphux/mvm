@@ -1,6 +1,6 @@
 /*
- *  convenience.h
- *  Convenience function definitions
+ *  latch_mem_wb.cpp
+ *  MEM/WB pipeline latch class implementation
  *  Copyright (C) 2005 Christopher Han
  *
  *  This program is free software; you can redistribute it and/or modify
@@ -17,22 +17,21 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
  */
-#ifndef _MVM_CONVENIENCE_H
-#define _MVM_CONVENIENCE_H
+#include "latch_mem_wb.h"
 
-#include <string>
-#include <vector>
+latch_mem_wb::latch_mem_wb()
+{
+	WB = new register32();
+	DataR = new register32();
+	Data = new register32();
+	RegW = new register32();
+}
 
-#ifdef OPTIMIZE
-#define abs(v)	(v ^ (v >> (sizeof(int) * 8 - 1))) - (v >> (sizeof(int) * 8 - 1))
-#else
-#define abs(v)	(v<0?-v:v)
-#endif
+latch_mem_wb::~latch_mem_wb()
+{
+	delete WB;
+	delete DataR;
+	delete Data;
+	delete RegW;
+}
 
-void strip_leading_whitespace(std::string &str);
-void strip_trailing_whitespace(std::string &str);
-void strip_comments(std::string &str);
-std::vector<std::string> tokenize(std::string &str, const char delim);
-void binaryprint(const unsigned int val, const bool zero = true);
-
-#endif /* _MVM_CONVENIENCE_H */

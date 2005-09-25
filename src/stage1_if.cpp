@@ -19,8 +19,9 @@
  */
 #include "stage1_if.h"
 
-stage1_if::stage1_if(): instruction(0)
+stage1_if::stage1_if()
 {
+	instruction = 0;
 }
 
 stage1_if::~stage1_if()
@@ -34,4 +35,3 @@ bool stage1_if::tick()
 
 	return true;
 }
-

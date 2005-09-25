@@ -48,7 +48,16 @@ am__installdirs = "$(DESTDIR)$(bindir)"
 binPROGRAMS_INSTALL = $(INSTALL_PROGRAM)
 PROGRAMS = $(bin_PROGRAMS)
 am_mvm_OBJECTS = convenience.$(OBJEXT) ctype.$(OBJEXT) itype.$(OBJEXT) \
-	jtype.$(OBJEXT) rtype.$(OBJEXT) mvm.$(OBJEXT)
+	jtype.$(OBJEXT) rtype.$(OBJEXT) register32.$(OBJEXT) \
+	instruction_memory.$(OBJEXT) alu.$(OBJEXT) \
+	alu_control_unit.$(OBJEXT) control.$(OBJEXT) idmux.$(OBJEXT) \
+	exmux2.$(OBJEXT) exmux3.$(OBJEXT) pc.$(OBJEXT) \
+	latch_if_id.$(OBJEXT) latch_id_ex.$(OBJEXT) \
+	latch_ex_mem.$(OBJEXT) latch_mem_wb.$(OBJEXT) stage.$(OBJEXT) \
+	stage1_if.$(OBJEXT) stage2_id.$(OBJEXT) stage3_ex.$(OBJEXT) \
+	stage4_mem.$(OBJEXT) stage5_wb.$(OBJEXT) basecmd.$(OBJEXT) \
+	posixcmd.$(OBJEXT) datapath.$(OBJEXT) vm.$(OBJEXT) \
+	mvm.$(OBJEXT)
 mvm_OBJECTS = $(am_mvm_OBJECTS)
 mvm_LDADD = $(LDADD)
 DEFAULT_INCLUDES = -I. -I$(srcdir) -I$(top_builddir)
@@ -133,7 +142,7 @@ sbindir = @sbindir@
 sharedstatedir = @sharedstatedir@
 sysconfdir = @sysconfdir@
 target_alias = @target_alias@
-mvm_SOURCES = basic/convenience.cpp parser/ctype.cpp parser/itype.cpp parser/jtype.cpp parser/rtype.cpp mvm.cpp
+mvm_SOURCES = basic/convenience.cpp parser/ctype.cpp parser/itype.cpp parser/jtype.cpp parser/rtype.cpp core/register32.cpp core/instruction_memory.cpp core/alu.cpp core/alu_control_unit.cpp core/control.cpp core/idmux.cpp core/exmux2.cpp core/exmux3.cpp core/pc.cpp core/latch_if_id.cpp core/latch_id_ex.cpp core/latch_ex_mem.cpp core/latch_mem_wb.cpp stage.cpp stage1_if.cpp stage2_id.cpp stage3_ex.cpp stage4_mem.cpp stage5_wb.cpp basecmd.cpp posixcmd.cpp datapath.cpp vm.cpp mvm.cpp
 all: all-am
 
 .SUFFIXES:
@@ -200,12 +209,35 @@ mostlyclean-compile:
 distclean-compile:
 	-rm -f *.tab.c
 
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/alu.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/alu_control_unit.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/basecmd.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/control.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/convenience.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ctype.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/datapath.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/exmux2.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/exmux3.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/idmux.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/instruction_memory.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/itype.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/jtype.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/latch_ex_mem.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/latch_id_ex.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/latch_if_id.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/latch_mem_wb.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/mvm.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/pc.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/posixcmd.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/register32.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/rtype.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/stage.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/stage1_if.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/stage2_id.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/stage3_ex.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/stage4_mem.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/stage5_wb.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/vm.Po@am__quote@
 
 .cpp.o:
 @am__fastdepCXX_TRUE@	if $(CXXCOMPILE) -MT $@ -MD -MP -MF "$(DEPDIR)/$*.Tpo" -c -o $@ $<; \
@@ -290,6 +322,188 @@ rtype.obj: parser/rtype.cpp
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='parser/rtype.cpp' object='rtype.obj' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
 @am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o rtype.obj `if test -f 'parser/rtype.cpp'; then $(CYGPATH_W) 'parser/rtype.cpp'; else $(CYGPATH_W) '$(srcdir)/parser/rtype.cpp'; fi`
+
+register32.o: core/register32.cpp
+@am__fastdepCXX_TRUE@	if $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT register32.o -MD -MP -MF "$(DEPDIR)/register32.Tpo" -c -o register32.o `test -f 'core/register32.cpp' || echo '$(srcdir)/'`core/register32.cpp; \
+@am__fastdepCXX_TRUE@	then mv -f "$(DEPDIR)/register32.Tpo" "$(DEPDIR)/register32.Po"; else rm -f "$(DEPDIR)/register32.Tpo"; exit 1; fi
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='core/register32.cpp' object='register32.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o register32.o `test -f 'core/register32.cpp' || echo '$(srcdir)/'`core/register32.cpp
+
+register32.obj: core/register32.cpp
+@am__fastdepCXX_TRUE@	if $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT register32.obj -MD -MP -MF "$(DEPDIR)/register32.Tpo" -c -o register32.obj `if test -f 'core/register32.cpp'; then $(CYGPATH_W) 'core/register32.cpp'; else $(CYGPATH_W) '$(srcdir)/core/register32.cpp'; fi`; \
+@am__fastdepCXX_TRUE@	then mv -f "$(DEPDIR)/register32.Tpo" "$(DEPDIR)/register32.Po"; else rm -f "$(DEPDIR)/register32.Tpo"; exit 1; fi
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='core/register32.cpp' object='register32.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o register32.obj `if test -f 'core/register32.cpp'; then $(CYGPATH_W) 'core/register32.cpp'; else $(CYGPATH_W) '$(srcdir)/core/register32.cpp'; fi`
+
+instruction_memory.o: core/instruction_memory.cpp
+@am__fastdepCXX_TRUE@	if $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT instruction_memory.o -MD -MP -MF "$(DEPDIR)/instruction_memory.Tpo" -c -o instruction_memory.o `test -f 'core/instruction_memory.cpp' || echo '$(srcdir)/'`core/instruction_memory.cpp; \
+@am__fastdepCXX_TRUE@	then mv -f "$(DEPDIR)/instruction_memory.Tpo" "$(DEPDIR)/instruction_memory.Po"; else rm -f "$(DEPDIR)/instruction_memory.Tpo"; exit 1; fi
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='core/instruction_memory.cpp' object='instruction_memory.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o instruction_memory.o `test -f 'core/instruction_memory.cpp' || echo '$(srcdir)/'`core/instruction_memory.cpp
+
+instruction_memory.obj: core/instruction_memory.cpp
+@am__fastdepCXX_TRUE@	if $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT instruction_memory.obj -MD -MP -MF "$(DEPDIR)/instruction_memory.Tpo" -c -o instruction_memory.obj `if test -f 'core/instruction_memory.cpp'; then $(CYGPATH_W) 'core/instruction_memory.cpp'; else $(CYGPATH_W) '$(srcdir)/core/instruction_memory.cpp'; fi`; \
+@am__fastdepCXX_TRUE@	then mv -f "$(DEPDIR)/instruction_memory.Tpo" "$(DEPDIR)/instruction_memory.Po"; else rm -f "$(DEPDIR)/instruction_memory.Tpo"; exit 1; fi
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='core/instruction_memory.cpp' object='instruction_memory.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o instruction_memory.obj `if test -f 'core/instruction_memory.cpp'; then $(CYGPATH_W) 'core/instruction_memory.cpp'; else $(CYGPATH_W) '$(srcdir)/core/instruction_memory.cpp'; fi`
+
+alu.o: core/alu.cpp
+@am__fastdepCXX_TRUE@	if $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT alu.o -MD -MP -MF "$(DEPDIR)/alu.Tpo" -c -o alu.o `test -f 'core/alu.cpp' || echo '$(srcdir)/'`core/alu.cpp; \
+@am__fastdepCXX_TRUE@	then mv -f "$(DEPDIR)/alu.Tpo" "$(DEPDIR)/alu.Po"; else rm -f "$(DEPDIR)/alu.Tpo"; exit 1; fi
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='core/alu.cpp' object='alu.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o alu.o `test -f 'core/alu.cpp' || echo '$(srcdir)/'`core/alu.cpp
+
+alu.obj: core/alu.cpp
+@am__fastdepCXX_TRUE@	if $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT alu.obj -MD -MP -MF "$(DEPDIR)/alu.Tpo" -c -o alu.obj `if test -f 'core/alu.cpp'; then $(CYGPATH_W) 'core/alu.cpp'; else $(CYGPATH_W) '$(srcdir)/core/alu.cpp'; fi`; \
+@am__fastdepCXX_TRUE@	then mv -f "$(DEPDIR)/alu.Tpo" "$(DEPDIR)/alu.Po"; else rm -f "$(DEPDIR)/alu.Tpo"; exit 1; fi
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='core/alu.cpp' object='alu.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o alu.obj `if test -f 'core/alu.cpp'; then $(CYGPATH_W) 'core/alu.cpp'; else $(CYGPATH_W) '$(srcdir)/core/alu.cpp'; fi`
+
+alu_control_unit.o: core/alu_control_unit.cpp
+@am__fastdepCXX_TRUE@	if $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT alu_control_unit.o -MD -MP -MF "$(DEPDIR)/alu_control_unit.Tpo" -c -o alu_control_unit.o `test -f 'core/alu_control_unit.cpp' || echo '$(srcdir)/'`core/alu_control_unit.cpp; \
+@am__fastdepCXX_TRUE@	then mv -f "$(DEPDIR)/alu_control_unit.Tpo" "$(DEPDIR)/alu_control_unit.Po"; else rm -f "$(DEPDIR)/alu_control_unit.Tpo"; exit 1; fi
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='core/alu_control_unit.cpp' object='alu_control_unit.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o alu_control_unit.o `test -f 'core/alu_control_unit.cpp' || echo '$(srcdir)/'`core/alu_control_unit.cpp
+
+alu_control_unit.obj: core/alu_control_unit.cpp
+@am__fastdepCXX_TRUE@	if $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT alu_control_unit.obj -MD -MP -MF "$(DEPDIR)/alu_control_unit.Tpo" -c -o alu_control_unit.obj `if test -f 'core/alu_control_unit.cpp'; then $(CYGPATH_W) 'core/alu_control_unit.cpp'; else $(CYGPATH_W) '$(srcdir)/core/alu_control_unit.cpp'; fi`; \
+@am__fastdepCXX_TRUE@	then mv -f "$(DEPDIR)/alu_control_unit.Tpo" "$(DEPDIR)/alu_control_unit.Po"; else rm -f "$(DEPDIR)/alu_control_unit.Tpo"; exit 1; fi
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='core/alu_control_unit.cpp' object='alu_control_unit.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o alu_control_unit.obj `if test -f 'core/alu_control_unit.cpp'; then $(CYGPATH_W) 'core/alu_control_unit.cpp'; else $(CYGPATH_W) '$(srcdir)/core/alu_control_unit.cpp'; fi`
+
+control.o: core/control.cpp
+@am__fastdepCXX_TRUE@	if $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT control.o -MD -MP -MF "$(DEPDIR)/control.Tpo" -c -o control.o `test -f 'core/control.cpp' || echo '$(srcdir)/'`core/control.cpp; \
+@am__fastdepCXX_TRUE@	then mv -f "$(DEPDIR)/control.Tpo" "$(DEPDIR)/control.Po"; else rm -f "$(DEPDIR)/control.Tpo"; exit 1; fi
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='core/control.cpp' object='control.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o control.o `test -f 'core/control.cpp' || echo '$(srcdir)/'`core/control.cpp
+
+control.obj: core/control.cpp
+@am__fastdepCXX_TRUE@	if $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT control.obj -MD -MP -MF "$(DEPDIR)/control.Tpo" -c -o control.obj `if test -f 'core/control.cpp'; then $(CYGPATH_W) 'core/control.cpp'; else $(CYGPATH_W) '$(srcdir)/core/control.cpp'; fi`; \
+@am__fastdepCXX_TRUE@	then mv -f "$(DEPDIR)/control.Tpo" "$(DEPDIR)/control.Po"; else rm -f "$(DEPDIR)/control.Tpo"; exit 1; fi
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='core/control.cpp' object='control.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o control.obj `if test -f 'core/control.cpp'; then $(CYGPATH_W) 'core/control.cpp'; else $(CYGPATH_W) '$(srcdir)/core/control.cpp'; fi`
+
+idmux.o: core/idmux.cpp
+@am__fastdepCXX_TRUE@	if $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT idmux.o -MD -MP -MF "$(DEPDIR)/idmux.Tpo" -c -o idmux.o `test -f 'core/idmux.cpp' || echo '$(srcdir)/'`core/idmux.cpp; \
+@am__fastdepCXX_TRUE@	then mv -f "$(DEPDIR)/idmux.Tpo" "$(DEPDIR)/idmux.Po"; else rm -f "$(DEPDIR)/idmux.Tpo"; exit 1; fi
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='core/idmux.cpp' object='idmux.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o idmux.o `test -f 'core/idmux.cpp' || echo '$(srcdir)/'`core/idmux.cpp
+
+idmux.obj: core/idmux.cpp
+@am__fastdepCXX_TRUE@	if $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT idmux.obj -MD -MP -MF "$(DEPDIR)/idmux.Tpo" -c -o idmux.obj `if test -f 'core/idmux.cpp'; then $(CYGPATH_W) 'core/idmux.cpp'; else $(CYGPATH_W) '$(srcdir)/core/idmux.cpp'; fi`; \
+@am__fastdepCXX_TRUE@	then mv -f "$(DEPDIR)/idmux.Tpo" "$(DEPDIR)/idmux.Po"; else rm -f "$(DEPDIR)/idmux.Tpo"; exit 1; fi
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='core/idmux.cpp' object='idmux.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o idmux.obj `if test -f 'core/idmux.cpp'; then $(CYGPATH_W) 'core/idmux.cpp'; else $(CYGPATH_W) '$(srcdir)/core/idmux.cpp'; fi`
+
+exmux2.o: core/exmux2.cpp
+@am__fastdepCXX_TRUE@	if $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT exmux2.o -MD -MP -MF "$(DEPDIR)/exmux2.Tpo" -c -o exmux2.o `test -f 'core/exmux2.cpp' || echo '$(srcdir)/'`core/exmux2.cpp; \
+@am__fastdepCXX_TRUE@	then mv -f "$(DEPDIR)/exmux2.Tpo" "$(DEPDIR)/exmux2.Po"; else rm -f "$(DEPDIR)/exmux2.Tpo"; exit 1; fi
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='core/exmux2.cpp' object='exmux2.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o exmux2.o `test -f 'core/exmux2.cpp' || echo '$(srcdir)/'`core/exmux2.cpp
+
+exmux2.obj: core/exmux2.cpp
+@am__fastdepCXX_TRUE@	if $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT exmux2.obj -MD -MP -MF "$(DEPDIR)/exmux2.Tpo" -c -o exmux2.obj `if test -f 'core/exmux2.cpp'; then $(CYGPATH_W) 'core/exmux2.cpp'; else $(CYGPATH_W) '$(srcdir)/core/exmux2.cpp'; fi`; \
+@am__fastdepCXX_TRUE@	then mv -f "$(DEPDIR)/exmux2.Tpo" "$(DEPDIR)/exmux2.Po"; else rm -f "$(DEPDIR)/exmux2.Tpo"; exit 1; fi
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='core/exmux2.cpp' object='exmux2.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o exmux2.obj `if test -f 'core/exmux2.cpp'; then $(CYGPATH_W) 'core/exmux2.cpp'; else $(CYGPATH_W) '$(srcdir)/core/exmux2.cpp'; fi`
+
+exmux3.o: core/exmux3.cpp
+@am__fastdepCXX_TRUE@	if $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT exmux3.o -MD -MP -MF "$(DEPDIR)/exmux3.Tpo" -c -o exmux3.o `test -f 'core/exmux3.cpp' || echo '$(srcdir)/'`core/exmux3.cpp; \
+@am__fastdepCXX_TRUE@	then mv -f "$(DEPDIR)/exmux3.Tpo" "$(DEPDIR)/exmux3.Po"; else rm -f "$(DEPDIR)/exmux3.Tpo"; exit 1; fi
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='core/exmux3.cpp' object='exmux3.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o exmux3.o `test -f 'core/exmux3.cpp' || echo '$(srcdir)/'`core/exmux3.cpp
+
+exmux3.obj: core/exmux3.cpp
+@am__fastdepCXX_TRUE@	if $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT exmux3.obj -MD -MP -MF "$(DEPDIR)/exmux3.Tpo" -c -o exmux3.obj `if test -f 'core/exmux3.cpp'; then $(CYGPATH_W) 'core/exmux3.cpp'; else $(CYGPATH_W) '$(srcdir)/core/exmux3.cpp'; fi`; \
+@am__fastdepCXX_TRUE@	then mv -f "$(DEPDIR)/exmux3.Tpo" "$(DEPDIR)/exmux3.Po"; else rm -f "$(DEPDIR)/exmux3.Tpo"; exit 1; fi
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='core/exmux3.cpp' object='exmux3.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o exmux3.obj `if test -f 'core/exmux3.cpp'; then $(CYGPATH_W) 'core/exmux3.cpp'; else $(CYGPATH_W) '$(srcdir)/core/exmux3.cpp'; fi`
+
+pc.o: core/pc.cpp
+@am__fastdepCXX_TRUE@	if $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT pc.o -MD -MP -MF "$(DEPDIR)/pc.Tpo" -c -o pc.o `test -f 'core/pc.cpp' || echo '$(srcdir)/'`core/pc.cpp; \
+@am__fastdepCXX_TRUE@	then mv -f "$(DEPDIR)/pc.Tpo" "$(DEPDIR)/pc.Po"; else rm -f "$(DEPDIR)/pc.Tpo"; exit 1; fi
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='core/pc.cpp' object='pc.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o pc.o `test -f 'core/pc.cpp' || echo '$(srcdir)/'`core/pc.cpp
+
+pc.obj: core/pc.cpp
+@am__fastdepCXX_TRUE@	if $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT pc.obj -MD -MP -MF "$(DEPDIR)/pc.Tpo" -c -o pc.obj `if test -f 'core/pc.cpp'; then $(CYGPATH_W) 'core/pc.cpp'; else $(CYGPATH_W) '$(srcdir)/core/pc.cpp'; fi`; \
+@am__fastdepCXX_TRUE@	then mv -f "$(DEPDIR)/pc.Tpo" "$(DEPDIR)/pc.Po"; else rm -f "$(DEPDIR)/pc.Tpo"; exit 1; fi
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='core/pc.cpp' object='pc.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o pc.obj `if test -f 'core/pc.cpp'; then $(CYGPATH_W) 'core/pc.cpp'; else $(CYGPATH_W) '$(srcdir)/core/pc.cpp'; fi`
+
+latch_if_id.o: core/latch_if_id.cpp
+@am__fastdepCXX_TRUE@	if $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT latch_if_id.o -MD -MP -MF "$(DEPDIR)/latch_if_id.Tpo" -c -o latch_if_id.o `test -f 'core/latch_if_id.cpp' || echo '$(srcdir)/'`core/latch_if_id.cpp; \
+@am__fastdepCXX_TRUE@	then mv -f "$(DEPDIR)/latch_if_id.Tpo" "$(DEPDIR)/latch_if_id.Po"; else rm -f "$(DEPDIR)/latch_if_id.Tpo"; exit 1; fi
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='core/latch_if_id.cpp' object='latch_if_id.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o latch_if_id.o `test -f 'core/latch_if_id.cpp' || echo '$(srcdir)/'`core/latch_if_id.cpp
+
+latch_if_id.obj: core/latch_if_id.cpp
+@am__fastdepCXX_TRUE@	if $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT latch_if_id.obj -MD -MP -MF "$(DEPDIR)/latch_if_id.Tpo" -c -o latch_if_id.obj `if test -f 'core/latch_if_id.cpp'; then $(CYGPATH_W) 'core/latch_if_id.cpp'; else $(CYGPATH_W) '$(srcdir)/core/latch_if_id.cpp'; fi`; \
+@am__fastdepCXX_TRUE@	then mv -f "$(DEPDIR)/latch_if_id.Tpo" "$(DEPDIR)/latch_if_id.Po"; else rm -f "$(DEPDIR)/latch_if_id.Tpo"; exit 1; fi
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='core/latch_if_id.cpp' object='latch_if_id.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o latch_if_id.obj `if test -f 'core/latch_if_id.cpp'; then $(CYGPATH_W) 'core/latch_if_id.cpp'; else $(CYGPATH_W) '$(srcdir)/core/latch_if_id.cpp'; fi`
+
+latch_id_ex.o: core/latch_id_ex.cpp
+@am__fastdepCXX_TRUE@	if $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT latch_id_ex.o -MD -MP -MF "$(DEPDIR)/latch_id_ex.Tpo" -c -o latch_id_ex.o `test -f 'core/latch_id_ex.cpp' || echo '$(srcdir)/'`core/latch_id_ex.cpp; \
+@am__fastdepCXX_TRUE@	then mv -f "$(DEPDIR)/latch_id_ex.Tpo" "$(DEPDIR)/latch_id_ex.Po"; else rm -f "$(DEPDIR)/latch_id_ex.Tpo"; exit 1; fi
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='core/latch_id_ex.cpp' object='latch_id_ex.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o latch_id_ex.o `test -f 'core/latch_id_ex.cpp' || echo '$(srcdir)/'`core/latch_id_ex.cpp
+
+latch_id_ex.obj: core/latch_id_ex.cpp
+@am__fastdepCXX_TRUE@	if $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT latch_id_ex.obj -MD -MP -MF "$(DEPDIR)/latch_id_ex.Tpo" -c -o latch_id_ex.obj `if test -f 'core/latch_id_ex.cpp'; then $(CYGPATH_W) 'core/latch_id_ex.cpp'; else $(CYGPATH_W) '$(srcdir)/core/latch_id_ex.cpp'; fi`; \
+@am__fastdepCXX_TRUE@	then mv -f "$(DEPDIR)/latch_id_ex.Tpo" "$(DEPDIR)/latch_id_ex.Po"; else rm -f "$(DEPDIR)/latch_id_ex.Tpo"; exit 1; fi
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='core/latch_id_ex.cpp' object='latch_id_ex.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o latch_id_ex.obj `if test -f 'core/latch_id_ex.cpp'; then $(CYGPATH_W) 'core/latch_id_ex.cpp'; else $(CYGPATH_W) '$(srcdir)/core/latch_id_ex.cpp'; fi`
+
+latch_ex_mem.o: core/latch_ex_mem.cpp
+@am__fastdepCXX_TRUE@	if $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT latch_ex_mem.o -MD -MP -MF "$(DEPDIR)/latch_ex_mem.Tpo" -c -o latch_ex_mem.o `test -f 'core/latch_ex_mem.cpp' || echo '$(srcdir)/'`core/latch_ex_mem.cpp; \
+@am__fastdepCXX_TRUE@	then mv -f "$(DEPDIR)/latch_ex_mem.Tpo" "$(DEPDIR)/latch_ex_mem.Po"; else rm -f "$(DEPDIR)/latch_ex_mem.Tpo"; exit 1; fi
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='core/latch_ex_mem.cpp' object='latch_ex_mem.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o latch_ex_mem.o `test -f 'core/latch_ex_mem.cpp' || echo '$(srcdir)/'`core/latch_ex_mem.cpp
+
+latch_ex_mem.obj: core/latch_ex_mem.cpp
+@am__fastdepCXX_TRUE@	if $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT latch_ex_mem.obj -MD -MP -MF "$(DEPDIR)/latch_ex_mem.Tpo" -c -o latch_ex_mem.obj `if test -f 'core/latch_ex_mem.cpp'; then $(CYGPATH_W) 'core/latch_ex_mem.cpp'; else $(CYGPATH_W) '$(srcdir)/core/latch_ex_mem.cpp'; fi`; \
+@am__fastdepCXX_TRUE@	then mv -f "$(DEPDIR)/latch_ex_mem.Tpo" "$(DEPDIR)/latch_ex_mem.Po"; else rm -f "$(DEPDIR)/latch_ex_mem.Tpo"; exit 1; fi
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='core/latch_ex_mem.cpp' object='latch_ex_mem.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o latch_ex_mem.obj `if test -f 'core/latch_ex_mem.cpp'; then $(CYGPATH_W) 'core/latch_ex_mem.cpp'; else $(CYGPATH_W) '$(srcdir)/core/latch_ex_mem.cpp'; fi`
+
+latch_mem_wb.o: core/latch_mem_wb.cpp
+@am__fastdepCXX_TRUE@	if $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT latch_mem_wb.o -MD -MP -MF "$(DEPDIR)/latch_mem_wb.Tpo" -c -o latch_mem_wb.o `test -f 'core/latch_mem_wb.cpp' || echo '$(srcdir)/'`core/latch_mem_wb.cpp; \
+@am__fastdepCXX_TRUE@	then mv -f "$(DEPDIR)/latch_mem_wb.Tpo" "$(DEPDIR)/latch_mem_wb.Po"; else rm -f "$(DEPDIR)/latch_mem_wb.Tpo"; exit 1; fi
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='core/latch_mem_wb.cpp' object='latch_mem_wb.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o latch_mem_wb.o `test -f 'core/latch_mem_wb.cpp' || echo '$(srcdir)/'`core/latch_mem_wb.cpp
+
+latch_mem_wb.obj: core/latch_mem_wb.cpp
+@am__fastdepCXX_TRUE@	if $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT latch_mem_wb.obj -MD -MP -MF "$(DEPDIR)/latch_mem_wb.Tpo" -c -o latch_mem_wb.obj `if test -f 'core/latch_mem_wb.cpp'; then $(CYGPATH_W) 'core/latch_mem_wb.cpp'; else $(CYGPATH_W) '$(srcdir)/core/latch_mem_wb.cpp'; fi`; \
+@am__fastdepCXX_TRUE@	then mv -f "$(DEPDIR)/latch_mem_wb.Tpo" "$(DEPDIR)/latch_mem_wb.Po"; else rm -f "$(DEPDIR)/latch_mem_wb.Tpo"; exit 1; fi
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='core/latch_mem_wb.cpp' object='latch_mem_wb.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o latch_mem_wb.obj `if test -f 'core/latch_mem_wb.cpp'; then $(CYGPATH_W) 'core/latch_mem_wb.cpp'; else $(CYGPATH_W) '$(srcdir)/core/latch_mem_wb.cpp'; fi`
 uninstall-info-am:
 
 ID: $(HEADERS) $(SOURCES) $(LISP) $(TAGS_FILES)

@@ -19,8 +19,9 @@
  */
 #include "stage5_wb.h"
 
-stage5_wb::stage5_wb(): instruction(0)
+stage5_wb::stage5_wb()
 {
+	instruction = 0;
 }
 
 stage5_wb::~stage5_wb()

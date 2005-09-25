@@ -83,30 +83,20 @@ module.include.files=\
 	src/core/register32.h\
 	src/core/exmux2.h\
 	src/core/exmux3.h\
-	src/pc.h\
 	src/vm.h\
-	src/alu.h\
 	src/basic/convenience.h\
 	src/stage4_mem.h\
 	src/stage.h\
 	src/stage1_if.h\
 	src/stage2_id.h\
-	src/stage2_is.h\
 	src/stage3_ex.h\
-	src/stage3_rf.h\
-	src/stage4_ex.h\
-	src/stage5_df.h\
 	src/stage5_wb.h\
-	src/stage6_ds.h\
 	src/parser/ctype.h\
 	src/parser/jtype.h\
 	src/parser/rtype.h\
 	src/parser/ophandlers.h\
-	src/parser/opcode.h\
 	src/parser/operation.h\
 	src/parser/itype.h\
-	src/stage7_tc.h\
-	src/stage8_wb.h\
 	src/opcode.h\
 	src/datapath.h
 
@@ -132,13 +122,11 @@ module.source.files=\
 	src/clock.cpp\
 	src/mvm.cpp\
 	src/stage.cpp\
-	src/pc.cpp\
 	src/parser/jtype.cpp\
 	src/parser/ctype.cpp\
 	src/parser/itype.cpp\
 	src/parser/rtype.cpp\
 	src/vm.cpp\
-	src/alu.cpp\
 	src/stage4_mem.cpp\
 	src/stage1_if.cpp
 
@@ -177,7 +165,7 @@ compiler.options.defines=\
 	HAVE_CONFIG_H
 compiler.options.defines.selected=
 compiler.options.warning.buttons=0 0 1 1 0 1 0 0 0 0 0 0 0 1 0 0 
-compiler.options.optimize.buttons=0 0 1 0 
+compiler.options.optimize.buttons=1 0 0 0 
 compiler.options.other.buttons=1 0 
 compiler.options.other.c.flags=
 compiler.options.other.l.flags=

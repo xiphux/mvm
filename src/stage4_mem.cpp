@@ -19,8 +19,9 @@
  */
 #include "stage4_mem.h"
 
-stage4_mem::stage4_mem(): instruction(0)
+stage4_mem::stage4_mem()
 {
+	instruction = 0;
 }
 
 stage4_mem::~stage4_mem()
