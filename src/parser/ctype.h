@@ -30,7 +30,7 @@ public:
 	ctype(const unsigned char o, const unsigned char fmt, const unsigned char t, const unsigned char s, const unsigned char d, const unsigned char f);
 	ctype(unsigned int ins);
 	ctype(std::string cmd, std::vector<std::string> params);
-	~ctype();
+	virtual ~ctype();
 	unsigned int instruction();
 	unsigned int coprocessor();
 private:

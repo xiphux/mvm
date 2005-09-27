@@ -30,7 +30,7 @@ public:
 	itype(const unsigned char o, const unsigned char s, const unsigned char t, const unsigned short a);
 	itype(unsigned int ins);
 	itype(std::string cmd, std::vector<std::string> params);
-	~itype();
+	virtual ~itype();
 	unsigned int instruction();
 private:
 	void assemble(const unsigned char o, const unsigned char s, const unsigned char t, const unsigned short a);

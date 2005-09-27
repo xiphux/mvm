@@ -1,6 +1,6 @@
 /*
- *  instruction_memory.h
- *  Instruction memory class definition
+ *  consolecmd.h
+ *  Console command class definition
  *  Copyright (C) 2005 Christopher Han
  *
  *  This program is free software; you can redistribute it and/or modify
@@ -17,22 +17,27 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
  */
-#ifndef _MVM_INSTRUCTION_MEMORY_H
-#define _MVM_INSTRUCTION_MEMORY_H
+#ifndef _MVM_CONSOLECMD_H
+#define _MVM_CONSOLECMD_H
 
-#include <deque>
-#include "instruction.h"
+#include <vector>
+#include <string>
 
-class instruction_memory
+class consolecmd
 {
 public:
-	instruction_memory();
-	~instruction_memory();
-	void push_instruction(instruction *inst);
-	instruction *pop_instruction();
-	instruction *fetch_instruction(const unsigned int addr);
+	consolecmd(std::string c, std::string d, const unsigned int cod);
+	~consolecmd();
+	std::string getcmd();
+	std::string getdesc();
+	bool addalias(std::string a);
+	std::string helpstring();
+	unsigned int code;
+	bool operator== (std::string c);
+	std::vector<std::string> aliases;
 private:
-	std::deque<instruction*> instructions;
+	std::string cmd;
+	std::string desc;
 };
 
-#endif /* _MVM_INSTRUCTION_MEMORY_H */
+#endif /* _MVM_CONSOLECMD_H */

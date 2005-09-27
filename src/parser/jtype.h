@@ -30,7 +30,7 @@ public:
 	jtype(const unsigned char o, const unsigned int t);
 	jtype(unsigned int ins);
 	jtype(std::string cmd, std::vector<std::string> params);
-	~jtype();
+	virtual ~jtype();
 	unsigned int instruction();
 private:
 	void assemble(const unsigned char o, const unsigned int t);

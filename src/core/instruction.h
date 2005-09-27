@@ -1,6 +1,6 @@
 /*
- *  stage2_id.h
- *  Instruction decode stage class definition
+ *  instruction.h
+ *  Instruction class definition
  *  Copyright (C) 2005 Christopher Han
  *
  *  This program is free software; you can redistribute it and/or modify
@@ -17,17 +17,22 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
  */
-#ifndef _MVM_STAGE2_ID_H
-#define _MVM_STAGE2_ID_H
+#ifndef _MVM_INSTRUCTION_H
+#define _MVM_INSTRUCTION_H
 
-#include "stage.h"
+#include <string>
+#include "parser/operation.h"
 
-class stage2_id: public stage
+class instruction
 {
 public:
-	stage2_id();
-	~stage2_id();
-	bool tick();
+	instruction(std::string i, operation *o);
+	~instruction();
+	operation *get_opcode();
+	std::string get_instruction();
+private:
+	std::string inst;
+	operation *op;
 };
 
-#endif /* _MVM_STAGE2_ID_H */
+#endif /* _MVM_INSTRUCTION_H */

@@ -20,7 +20,7 @@
 #ifndef _MVM_DATAPATH_H
 #define _MVM_DATAPATH_H
 
-#include "opcode.h"
+#include "basic/opcode.h"
 #include "core/instruction_memory.h"
 #include "core/alu.h"
 #include "core/alu_control_unit.h"
@@ -86,7 +86,7 @@ private:
 	unsigned int temp_ID_EX_M;
 	unsigned int temp_ID_EX_EX;
 	unsigned int temp_PC;
-	unsigned int temp_instruction;
+	instruction *temp_instruction;
 	unsigned int temp_ID_EX_imm;
 	unsigned int temp_ID_EX_Data1;
 	unsigned int temp_ID_EX_Data2;
@@ -101,7 +101,7 @@ private:
 	unsigned int temp_MEM_WB_DataR;
 	unsigned int temp_MEM_WB_RegW;
 	unsigned int MemIstrDim;
-	unsigned int instruction;
+	instruction *inst;
 	unsigned int ctrl1;
 };
 

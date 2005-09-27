@@ -1,7 +1,12 @@
 AC_INIT(Mvm, 0.0.1, xiphux@gmail.com)
 AC_CONFIG_AUX_DIR(config)
-AM_INIT_AUTOMAKE(Mvm, 0.0.1)
 AM_CONFIG_HEADER(config.h)
+AM_INIT_AUTOMAKE(Mvm, 0.0.1)
+AM_MAINTAINER_MODE
+MYCFLAGS="-Wall -W -Wwrite-strings"
+AC_ARG_ENABLE(debug, [  --enable-debug turns -g on and -O2 off], MYCFLAGS="$MYCFLAGS -ggdb3", MYCFLAGS="$MYCFLAGS -O2")
+CFLAGS="$CFLAGS $MYCFLAGS"
+CXXFLAGS="$CXXFLAGS $MYCFLAGS"
 AC_PROG_CXX
-AC_PROG_INSTALL
+#AC_PROG_INSTALL
 AC_OUTPUT(Makefile src/Makefile)

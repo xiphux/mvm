@@ -25,23 +25,24 @@ instruction_memory::instruction_memory()
 
 instruction_memory::~instruction_memory()
 {
+	for (std::deque<instruction*>::iterator it = instructions.begin(); it != instructions.end(); it++)
+		delete *it;
 	instructions.clear();
 }
 
-void instruction_memory::push_instruction(const unsigned int inst)
+void instruction_memory::push_instruction(instruction *inst)
 {
 	instructions.push_back(inst);
 }
 
-unsigned int instruction_memory::pop_instruction()
+instruction *instruction_memory::pop_instruction()
 {
-	unsigned int f = instructions.front();
+	instruction *f = instructions.front();
 	instructions.pop_front();
 	return f;
 }
 
-unsigned int instruction_memory::fetch_instruction(const unsigned int addr)
+instruction *instruction_memory::fetch_instruction(const unsigned int addr)
 {
 	return instructions.at(addr>>2);
 }
-

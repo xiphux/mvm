@@ -1,6 +1,6 @@
 /*
- *  instruction_memory.h
- *  Instruction memory class definition
+ *  vm.h
+ *  Base virtual machine class definition
  *  Copyright (C) 2005 Christopher Han
  *
  *  This program is free software; you can redistribute it and/or modify
@@ -17,22 +17,23 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
  */
-#ifndef _MVM_INSTRUCTION_MEMORY_H
-#define _MVM_INSTRUCTION_MEMORY_H
+#ifndef _MVM_VM_H
+#define _MVM_VM_H
 
-#include <deque>
-#include "instruction.h"
+#include <string>
+#include "datapath.h"
 
-class instruction_memory
+class vm
 {
 public:
-	instruction_memory();
-	~instruction_memory();
-	void push_instruction(instruction *inst);
-	instruction *pop_instruction();
-	instruction *fetch_instruction(const unsigned int addr);
+	vm(const bool dbg = false);
+	~vm();
+	bool load_instructions(std::string const file);
+	void run();
+	void tick();
+	void reset();
 private:
-	std::deque<instruction*> instructions;
+	datapath *dp;
 };
 
-#endif /* _MVM_INSTRUCTION_MEMORY_H */
+#endif /* _MVM_VM_H */

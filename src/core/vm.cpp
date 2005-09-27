@@ -41,6 +41,7 @@ bool vm::load_instructions(std::string const file)
 		return false;
 	std::string buf;
 	operation *op;
+	instruction *in;
 	while (!infile.eof()) {
 		getline(infile,buf);
 		strip_comments(buf);
@@ -48,8 +49,8 @@ bool vm::load_instructions(std::string const file)
 		if (!buf.empty()) {
 			op = assembly_to_op(buf);
 			if (op) {
-				dp->im->push_instruction(op->instruction());
-				delete op;
+				in = new instruction(buf,op);
+				dp->im->push_instruction(in);
 			}
 		}
 	}
@@ -66,4 +67,10 @@ void vm::run()
 void vm::tick()
 {
 	dp->tick();
+}
+
+void vm::reset()
+{
+	delete dp;
+	dp = new datapath();
 }

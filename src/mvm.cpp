@@ -20,12 +20,14 @@
 #include <fstream>
 #include "basecmd.h"
 #include "parser/ophandlers.h"
-#include "vm.h"
+#include "core/vm.h"
+#include "console.h"
 
 int main(int argc, char **argv)
 {
 	BaseCmd *cmd = BaseCmd::initialize(argc,argv);
 	cmd->addoption('d',"debug",OPTPARM_NONE,"","Enable debugging output");
+	cmd->addoption('i',"interactive",OPTPARM_NONE,"","Enable interactive console");
 	cmd->parse();
 	if (cmd->result("help")) {
 		cmd->usage("Mvm",VERSION_STRING);
@@ -55,20 +57,73 @@ int main(int argc, char **argv)
 		debug = true;
 		printf("Enabling debugging output\n");
 	}
-	std::string file;
+	vm *VM = new vm(debug);
+	std::vector<std::string> files;
 	for (int i = 1; i < argc; i++) {
 		std::string tmp = argv[i];
-		if (tmp.at(0) != '-') {
-			file = tmp;
-			break;
+		if (tmp.at(0) != '-')
+			files.push_back(tmp);
+	}
+
+	if (cmd->result("interactive")) {
+		bool complete = false;
+		console *con = new console();
+		if (!files.empty())
+			VM->load_instructions(files.at(0));
+		char ch;
+		con->draw_prompt();
+		std::string command;
+		while (!complete) {
+			ch = getchar();
+			switch (ch) {
+				case EOF:
+					complete = true;
+					break;
+
+				case '\n':
+					if (command.size()>0) {	
+						unsigned int ret = con->read_command(command);
+						if (ret == COMMAND_RUN)
+							VM->run();
+						else if (ret == COMMAND_STEP)
+							VM->tick();
+						else if (ret == COMMAND_QUIT)
+							complete = true;
+						else if (ret == COMMAND_HELP)
+							con->usage();
+						else if (ret == COMMAND_LOAD) {
+							if (command.size()<=5) {
+								std::cout << " Usage: " << command << " [FILENAME]" << std::endl;
+							} else {
+								VM->reset();
+								VM->load_instructions(command.substr(5));
+							}
+						} else
+							std::cout << " Invalid command" << std::endl;
+					}
+					command.clear();
+					if (!complete)
+						con->draw_prompt();
+					break;
+				default:
+					command.push_back(ch);
+					break;
+			}
+		}
+		std::cout << std::endl;
+		delete con;
+	} else {
+		if (files.empty()) {
+			fprintf(stderr,"Error: no input file given\n");
+			delete cmd;
+			return 1;
+		}
+		for (std::vector<std::string>::iterator it = files.begin(); it != files.end(); it++) {
+			VM->load_instructions(*it);
+			VM->run();
+			VM->reset();
 		}
 	}
-	if (file.empty()) {
-		fprintf(stderr,"Error: no input file given\n");
-		return 1;
-	}
-	vm *VM = new vm(debug);
-	VM->load_instructions(file);
-	VM->run();
+	delete cmd;
 	return 0;
 }

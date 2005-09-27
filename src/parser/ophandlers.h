@@ -23,7 +23,7 @@
 #include <string>
 #include <vector>
 #include "basic/convenience.h"
-#include "opcode.h"
+#include "basic/opcode.h"
 #include "operation.h"
 #include "rtype.h"
 #include "itype.h"
@@ -142,7 +142,7 @@ static inline unsigned int dereference_register(std::string reg)
 		return 0;
 	reg.erase(0,1);
 	bool num = true;
-	for (int i = 0; i < reg.size(); i++) {
+	for (unsigned int i = 0; i < reg.size(); i++) {
 		if (!isdigit(reg.at(i)))
 			num = false;
 	}
@@ -266,6 +266,7 @@ static inline operation *assembly_to_op(std::string op)
 
 static inline std::string opcode_to_assembly(const unsigned int opcode)
 {
+	return "";
 }
 
 #endif /* _MVM_OPHANDLERS_H */

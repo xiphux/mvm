@@ -1,6 +1,6 @@
 /*
- *  instruction_memory.h
- *  Instruction memory class definition
+ *  stage2_id.h
+ *  Instruction decode stage class definition
  *  Copyright (C) 2005 Christopher Han
  *
  *  This program is free software; you can redistribute it and/or modify
@@ -17,22 +17,17 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
  */
-#ifndef _MVM_INSTRUCTION_MEMORY_H
-#define _MVM_INSTRUCTION_MEMORY_H
+#ifndef _MVM_STAGE2_ID_H
+#define _MVM_STAGE2_ID_H
 
-#include <deque>
-#include "instruction.h"
+#include "stage.h"
 
-class instruction_memory
+class stage2_id: public stage
 {
 public:
-	instruction_memory();
-	~instruction_memory();
-	void push_instruction(instruction *inst);
-	instruction *pop_instruction();
-	instruction *fetch_instruction(const unsigned int addr);
-private:
-	std::deque<instruction*> instructions;
+	stage2_id();
+	virtual ~stage2_id();
+	bool tick();
 };
 
-#endif /* _MVM_INSTRUCTION_MEMORY_H */
+#endif /* _MVM_STAGE2_ID_H */

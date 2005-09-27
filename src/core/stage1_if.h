@@ -26,7 +26,7 @@ class stage1_if: public stage
 {
 public:
 	stage1_if();
-	~stage1_if();
+	virtual ~stage1_if();
 	bool tick();
 };
 

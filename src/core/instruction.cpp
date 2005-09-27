@@ -1,6 +1,6 @@
 /*
- *  vm.h
- *  Base virtual machine class definition
+ *  instruction.cpp
+ *  Instruction class implementation
  *  Copyright (C) 2005 Christopher Han
  *
  *  This program is free software; you can redistribute it and/or modify
@@ -17,22 +17,23 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
  */
-#ifndef _MVM_VM_H
-#define _MVM_VM_H
+#include "instruction.h"
 
-#include <string>
-#include "datapath.h"
-
-class vm
+instruction::instruction(std::string i, operation *o): inst(i)
 {
-public:
-	vm(const bool dbg = false);
-	~vm();
-	bool load_instructions(std::string const file);
-	void run();
-	void tick();
-private:
-	datapath *dp;
-};
+	op = o;
+}
 
-#endif /* _MVM_VM_H */
+instruction::~instruction()
+{
+}
+
+operation *instruction::get_opcode()
+{
+	return op;
+}
+
+std::string instruction::get_instruction()
+{
+	return inst;
+}

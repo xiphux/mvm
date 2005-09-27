@@ -1,6 +1,6 @@
 /*
- *  stage4_mem.h
- *  Memory stage class definition
+ *  stage3_ex.h
+ *  Execution stage class definition
  *  Copyright (C) 2005 Christopher Han
  *
  *  This program is free software; you can redistribute it and/or modify
@@ -17,17 +17,17 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
  */
-#ifndef _MVM_STAGE4_MEM_H
-#define _MVM_STAGE4_MEM_H
+#ifndef _MVM_STAGE3_EX_H
+#define _MVM_STAGE3_EX_H
 
 #include "stage.h"
 
-class stage4_mem: public stage
+class stage3_ex: public stage
 {
 public:
-	stage4_mem();
-	~stage4_mem();
+	stage3_ex();
+	virtual ~stage3_ex();
 	bool tick();
 };
 
-#endif /* _MVM_STAGE4_MEM_H */
+#endif /* _MVM_STAGE3_EX_H */

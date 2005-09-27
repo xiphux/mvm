@@ -6,11 +6,13 @@ RunInTerminal=true
 clean before build=false
 
 [filenumbers]
-0=1
-1=1
-2=25
-3=23
-4=111
+0=60
+1=29
+2=65
+3=95
+4=40
+5=103
+6=39
 
 [filemarkers]
 0=
@@ -18,18 +20,13 @@ clean before build=false
 2=
 3=
 4=
+5=
+6=
 
 [File View]
 filter.file.unmatch=*.so *.o *.a *.la
 filter.file.ignore.hidden=0
 filter.dir.ignore.hidden=0
-
-[filelist]
-0=/storage/code/school/mvm/src/core/exmux3.h
-1=/storage/code/school/mvm/src/core/exmux2.h
-2=/storage/code/school/mvm/src/core/basemux.h
-3=/storage/code/school/mvm/src/datapath.h
-4=/storage/code/school/mvm/src/datapath.cpp
 
 [Project Tree]
 0=0
@@ -43,3 +40,4 @@ filter.dir.ignore.hidden=0
 2=0:2:0
 3=0:2:1
 4=0:2:2
+5=0:2:3

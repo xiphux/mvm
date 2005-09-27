@@ -20,7 +20,7 @@
 #include "datapath.h"
 #include "basic/convenience.h"
 
-datapath::datapath(): complete(false), clock(0), debug(false)
+datapath::datapath(): complete(false), debug(false), clock(0)
 {
 	ctrl = new control();
 	im = new instruction_memory();
@@ -101,7 +101,7 @@ int datapath::execute_alu(const unsigned int wbdata)
 	int ALUdata2 = EXmux5->mux(temp_EX_MEM_DataW,id_ex->imm->get());
 	int AluOP = id_ex->EX->get()&0xcfffffff;
 	int aluCtrl = acu->fire_signal(AluOP,id_ex->OP->get());
-	return alu->execute(AluOP,ALUdata1,ALUdata2);
+	return alu->execute(aluCtrl,ALUdata1,ALUdata2);
 }
 
 void datapath::tick()
@@ -117,15 +117,15 @@ void datapath::tick()
 		WBdata = mem_wb->Data->get();
 	if (mem_wb->WB->get()&0x8fffffff)
 		mem_wb->RegW->set(WBdata);
-	unsigned char RL1 = RS(instruction);
-	unsigned char RL2 = RT(instruction);
+	unsigned char RL1 = RS(inst->get_opcode()->instruction());
+	unsigned char RL2 = RT(inst->get_opcode()->instruction());
 	if (id_ex->M->get()>>31) {
 		unsigned int rt = id_ex->RT->get();
 		if (rt == RL1 || rt == RL2)
 			stall = true;
 	} else
 		stall = false;
-	unsigned int isBne = OPCODE(instruction);
+	unsigned int isBne = OPCODE(inst->get_opcode()->instruction());
 	unsigned int ctrl_EX = id_ex->WB->get()>>31;
 	unsigned int exDest;
 	if (ctrl_EX && (isBne == 0x4 || isBne == 0x5)) {
@@ -139,19 +139,19 @@ void datapath::tick()
 	if (!stall)
 		temp_instruction = im->fetch_instruction(pc->get_address());
 	else
-		temp_instruction = instruction;
+		temp_instruction = inst;
 
 	advance_instructions();
 
-	temp_ID_EX_imm = instruction & 0xffff;
-	temp_ID_EX_op = OPCODE(instruction);
+	temp_ID_EX_imm = inst->get_opcode()->instruction() & 0xffff;
+	temp_ID_EX_op = OPCODE(inst->get_opcode()->instruction());
 
 	id_ex->PCpiu4->set(if_id->PCpiu4->get());
 
-	unsigned int IsJump = OPCODE(instruction);
+	unsigned int IsJump = OPCODE(inst->get_opcode()->instruction());
 	unsigned int NewPC1, NewPC2;
 	if (IsJump == 0x2 || IsJump == 0x3)
-		NewPC1 = ADDR(instruction);
+		NewPC1 = ADDR(inst->get_opcode()->instruction());
 	else
 		NewPC1 = temp_ID_EX_imm;
 
@@ -166,10 +166,10 @@ void datapath::tick()
 	
 	// Unit di propagazione 2b
 	
-	unsigned int jump = ctrl->read_instruction(instruction, SIGNAL_JUMP);
+	unsigned int jump = ctrl->read_instruction(inst->get_opcode()->instruction(), SIGNAL_JUMP);
 	unsigned int temp_ctrl1 = ctrl1;
 	ctrl1 &= jump;
-	unsigned int ctrl2 = ctrl->read_instruction(instruction, SIGNAL_PCSRC);
+	unsigned int ctrl2 = ctrl->read_instruction(inst->get_opcode()->instruction(), SIGNAL_PCSRC);
 	ctrl2 = 0;
 	if (!stall) {
 		IDmux->set_signal1(ctrl1);
@@ -177,11 +177,11 @@ void datapath::tick()
 		temp_PC = IDmux->mux(NewPC1,NewPC2);
 	} else
 		temp_PC = pc->get_value();
-	unsigned int ID_discard = ctrl->read_instruction(instruction,SIGNAL_DISCARD);
+	unsigned int ID_discard = ctrl->read_instruction(inst->get_opcode()->instruction(),SIGNAL_DISCARD);
 	unsigned int ID_MuxCtrl = ID_discard || stall;
-	unsigned int ctrl_WB = ctrl->read_instruction(instruction,SIGNAL_WB);
-	unsigned int ctrl_M = ctrl->read_instruction(instruction,SIGNAL_M);
-	ctrl_EX = ctrl->read_instruction(instruction,SIGNAL_EX);
+	unsigned int ctrl_WB = ctrl->read_instruction(inst->get_opcode()->instruction(),SIGNAL_WB);
+	unsigned int ctrl_M = ctrl->read_instruction(inst->get_opcode()->instruction(),SIGNAL_M);
+	ctrl_EX = ctrl->read_instruction(inst->get_opcode()->instruction(),SIGNAL_EX);
 	if (!ID_MuxCtrl) {
 		temp_ID_EX_WB = ctrl_WB;
 		temp_ID_EX_M = ctrl_M;
@@ -232,7 +232,9 @@ void datapath::print_debug()
 	printf("PC: ");
 	binaryprint(pc->get_value(),true);
 	printf("instruction: ");
-	binaryprint(instruction,true);
+	printf("%s\n",inst->get_instruction().c_str());
+	printf("instruction (opcode): ");
+	binaryprint(inst->get_opcode()->instruction(),true);
 	printf("if_id->PCpiu4: ");
 	binaryprint(if_id->PCpiu4->get(),true);
 	printf("id_ex->imm: ");
@@ -288,15 +290,15 @@ void datapath::configure_muxes()
 
 void datapath::set_registers()
 {
-	id_ex->RS->set(RS(instruction));
-	id_ex->RT->set(RT(instruction));
-	id_ex->RD->set(RD(instruction));
-	id_ex->OP->set(OPCODE(instruction));
+	id_ex->RS->set(RS(inst->get_opcode()->instruction()));
+	id_ex->RT->set(RT(inst->get_opcode()->instruction()));
+	id_ex->RD->set(RD(inst->get_opcode()->instruction()));
+	id_ex->OP->set(OPCODE(inst->get_opcode()->instruction()));
 	id_ex->WB->set(temp_ID_EX_WB);
 	id_ex->M->set(temp_ID_EX_M);
 	id_ex->EX->set(temp_ID_EX_EX);
 	pc->set_value(temp_PC);
-	instruction = temp_instruction;
+	inst = temp_instruction;
 	if_id->PCpiu4->set(temp_IF_ID_PCpiu4);
 	id_ex->imm->set(temp_ID_EX_imm);
 	id_ex->Data1->set(temp_ID_EX_Data1);
@@ -314,4 +316,5 @@ void datapath::set_registers()
 
 bool datapath::disassemble(const unsigned int op)
 {
+	return true;
 }
