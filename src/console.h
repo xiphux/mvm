@@ -30,6 +30,7 @@
 #define COMMAND_HELP 4
 #define COMMAND_LOAD 5
 #define COMMAND_LIST 6
+#define COMMAND_DEBUG 7
 
 class console
 {

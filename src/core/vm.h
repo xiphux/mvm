@@ -33,6 +33,7 @@ public:
 	void tick();
 	void reset();
 	void print_instructions();
+	void set_debug(const bool d);
 private:
 	datapath *dp;
 };

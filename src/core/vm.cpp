@@ -89,3 +89,8 @@ void vm::print_instructions()
 		std::cout << (*it)->get_instruction() << std::endl;
 	}
 }
+
+void vm::set_debug(const bool d)
+{
+	dp->debug = d;
+}

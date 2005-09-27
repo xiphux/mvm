@@ -19,7 +19,7 @@
  */
 #include "consolecmd.h"
 
-consolecmd::consolecmd(std::string c, std::string d, const unsigned int cod):cmd(c),desc(d),code(cod)
+consolecmd::consolecmd(std::string c, std::string d, const unsigned int cod):code(cod),cmd(c),desc(d)
 {
 }
 

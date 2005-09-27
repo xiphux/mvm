@@ -43,6 +43,8 @@ console::console()
 	commands.push_back(e);
 	consolecmd *f = new consolecmd("list","List instruction memory",COMMAND_LIST);
 	commands.push_back(f);
+	consolecmd *g = new consolecmd("debug","Enable/Disable debugging",COMMAND_DEBUG);
+	commands.push_back(g);
 }
 
 console::~console()
