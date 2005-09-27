@@ -44,6 +44,7 @@ class datapath
 public:
 	datapath();
 	~datapath();
+	void init();
 	void tick();
 	void advance_instructions();
 	void set_registers();
@@ -56,12 +57,12 @@ public:
 	bool complete;
 	bool debug;
 	instruction_memory *im;
+	PC *pc;
 private:
 	bool stall;
 	unsigned int clock;
 
 	control *ctrl;
-	PC *pc;
 	idmux *IDmux;
 	exmux3 *EXmux3;
 	exmux3 *EXmux4;

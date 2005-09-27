@@ -17,6 +17,8 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
  */
+#include <sys/stat.h>
+#include <iostream>
 #include <fstream>
 #include "parser/ophandlers.h"
 #include "parser/operation.h"
@@ -36,7 +38,8 @@ vm::~vm()
 
 bool vm::load_instructions(std::string const file)
 {
-	std::fstream infile(file.c_str(),std::ios::in);
+	std::ifstream infile;
+	infile.open(file.c_str(),std::ios::in);
 	if (!infile.good())
 		return false;
 	std::string buf;
@@ -73,4 +76,16 @@ void vm::reset()
 {
 	delete dp;
 	dp = new datapath();
+}
+
+void vm::print_instructions()
+{
+	unsigned int i = 0;
+	for (std::deque<instruction*>::iterator it = dp->im->instructions.begin(); it != dp->im->instructions.end(); it++) {
+		if (dp->pc->get_value() == i++)
+			std::cout << "->";
+		else
+			std::cout << "  ";
+		std::cout << (*it)->get_instruction() << std::endl;
+	}
 }

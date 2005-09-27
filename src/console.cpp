@@ -41,6 +41,8 @@ console::console()
 	consolecmd *e = new consolecmd("load","Load instructions from a file",COMMAND_LOAD);
 	e->addalias("file");
 	commands.push_back(e);
+	consolecmd *f = new consolecmd("list","List instruction memory",COMMAND_LIST);
+	commands.push_back(f);
 }
 
 console::~console()

@@ -32,6 +32,7 @@ public:
 	void run();
 	void tick();
 	void reset();
+	void print_instructions();
 private:
 	datapath *dp;
 };

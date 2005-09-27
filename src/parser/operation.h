@@ -24,6 +24,7 @@ class operation
 {
 public:
 	virtual unsigned int instruction() = 0;
+	virtual ~operation(){}
 };
 
 #endif /* _MVM_OPERATION_H */

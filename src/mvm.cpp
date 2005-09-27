@@ -91,12 +91,18 @@ int main(int argc, char **argv)
 							complete = true;
 						else if (ret == COMMAND_HELP)
 							con->usage();
+						else if (ret == COMMAND_LIST)
+							VM->print_instructions();
 						else if (ret == COMMAND_LOAD) {
-							if (command.size()<=5) {
+							if (command.size()<=5)
 								std::cout << " Usage: " << command << " [FILENAME]" << std::endl;
-							} else {
+							else {
 								VM->reset();
-								VM->load_instructions(command.substr(5));
+								if (VM->load_instructions(command.substr(5)))
+									std::cout << " Successfully loaded instructions from file ";
+								else
+									std::cout << " Failed to load instructions from file ";
+								std::cout << command.substr(5) << std::endl;
 							}
 						} else
 							std::cout << " Invalid command" << std::endl;

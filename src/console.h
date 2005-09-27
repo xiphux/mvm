@@ -29,6 +29,7 @@
 #define COMMAND_RUN 3
 #define COMMAND_HELP 4
 #define COMMAND_LOAD 5
+#define COMMAND_LIST 6
 
 class console
 {

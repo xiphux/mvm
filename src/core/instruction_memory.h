@@ -31,7 +31,6 @@ public:
 	void push_instruction(instruction *inst);
 	instruction *pop_instruction();
 	instruction *fetch_instruction(const unsigned int addr);
-private:
 	std::deque<instruction*> instructions;
 };
 

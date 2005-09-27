@@ -26,6 +26,7 @@ public:
 	virtual bool tick() = 0;
 	unsigned int get_instruction();
 	void set_instruction(unsigned int i);
+	virtual ~stage(){}
 protected:
 	unsigned int instruction;
 };

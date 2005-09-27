@@ -19,6 +19,7 @@
  */
 #include "datapath.h"
 #include "basic/convenience.h"
+#include "parser/rtype.h"
 
 datapath::datapath(): complete(false), debug(false), clock(0)
 {
@@ -40,6 +41,7 @@ datapath::datapath(): complete(false), debug(false), clock(0)
 	id_ex = new latch_id_ex();
 	ex_mem = new latch_ex_mem();
 	mem_wb = new latch_mem_wb();
+	init();
 }
 
 datapath::~datapath()
@@ -62,6 +64,12 @@ datapath::~datapath()
 	delete id_ex;
 	delete ex_mem;
 	delete mem_wb;
+}
+
+void datapath::init()
+{
+	operation *o = new rtype(0);
+	inst = new instruction("nop",o);
 }
 
 void datapath::advance_instructions()
