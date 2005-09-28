@@ -20,6 +20,7 @@
 #ifndef _MVM_DATAPATH_H
 #define _MVM_DATAPATH_H
 
+#include <map>
 #include "basic/opcode.h"
 #include "core/instruction_memory.h"
 #include "core/alu.h"
@@ -33,6 +34,7 @@
 #include "core/latch_id_ex.h"
 #include "core/latch_ex_mem.h"
 #include "core/latch_mem_wb.h"
+#include "core/register_file.h"
 #include "stage1_if.h"
 #include "stage2_id.h"
 #include "stage3_ex.h"
@@ -58,6 +60,7 @@ public:
 	bool debug;
 	instruction_memory *im;
 	PC *pc;
+	std::map<std::string,unsigned int> labels;
 private:
 	bool stall;
 	unsigned int clock;
@@ -69,6 +72,7 @@ private:
 	exmux2 *EXmux5;
 	ALU *alu;
 	alu_control_unit *acu;
+	register_file *rf;
 
 	stage1_if *stage1;
 	stage2_id *stage2;

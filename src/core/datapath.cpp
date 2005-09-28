@@ -32,6 +32,7 @@ datapath::datapath(): complete(false), debug(false), clock(0)
 	EXmux5 = new exmux2();
 	alu = new ALU();
 	acu = new alu_control_unit();
+	rf = new register_file();
 	stage1 = new stage1_if();
 	stage2 = new stage2_id();
 	stage3 = new stage3_ex();
@@ -55,6 +56,7 @@ datapath::~datapath()
 	delete EXmux5;
 	delete acu;
 	delete alu;
+	delete rf;
 	delete stage1;
 	delete stage2;
 	delete stage3;
@@ -74,6 +76,9 @@ void datapath::init()
 
 void datapath::advance_instructions()
 {
+	/*
+	 * Increment the PC of the running instruction
+	 */
 	temp_IF_ID_PCpiu4 = pc->get_value()+1;
 	unsigned int a = stage1->get_instruction();
 	unsigned int b = stage2->get_instruction();
@@ -83,17 +88,33 @@ void datapath::advance_instructions()
 		if (pc->get_value() > MemIstrDim)
 			stage1->set_instruction(0x9);
 		else
+			/*
+			 * Instruction found in state IF
+			 */
 			stage1->set_instruction(pc->get_value());
 		stage2->set_instruction(a);
 	} else
+		/*
+		 * Stall
+		 */
 		stage2->set_instruction(0x9);
+	/*
+	 * Instruction found in state EX
+	 */
 	stage3->set_instruction(b);
+	/*
+	 * Instruction found in state MEM
+	 */
 	stage4->set_instruction(c);
+	/*
+	 * Instruction found in state WB
+	 */
 	stage5->set_instruction(d);
 }
 
 bool datapath::detect_completion()
 {
+	return false;
 	unsigned int a = (stage1->get_instruction()==0x9 /* 1001 */ ?1:0);
 	unsigned int b = (stage2->get_instruction()==0x9 /* 1001 */ ?1:0);
 	unsigned int c = (stage3->get_instruction()==0x9 /* 1001 */ ?1:0);
@@ -104,11 +125,32 @@ bool datapath::detect_completion()
 
 int datapath::execute_alu(const unsigned int wbdata)
 {
+	/*
+	 * Choose one of the three possibilities to be ALU operand 1
+	 */
 	int ALUdata1 = EXmux3->mux(id_ex->Data1->get(),wbdata,ex_mem->RIS->get());
+	/*
+	 * Choose one of the three possibilities to be ALU operand 2
+	 */
 	int temp_EX_MEM_DataW = EXmux4->mux(id_ex->Data2->get(),wbdata,ex_mem->RIS->get());
+	/*
+	 * Choose between the two operators and the immediate field
+	 */
 	int ALUdata2 = EXmux5->mux(temp_EX_MEM_DataW,id_ex->imm->get());
+	/*
+	 * AluOP is the second and third bit of register ID/EX.M
+	 */
 	int AluOP = id_ex->EX->get()&0xcfffffff;
+	/*
+	 * Function field tells instruction
+	 */
+	/*
+	 * Create ALU instruction
+	 */
 	int aluCtrl = acu->fire_signal(AluOP,id_ex->OP->get());
+	/*
+	 * ALU does its job
+	 */
 	return alu->execute(aluCtrl,ALUdata1,ALUdata2);
 }
 
@@ -118,22 +160,65 @@ void datapath::tick()
 	if (complete = detect_completion())
 		return;
 
+	/*
+	 * Depending on the state of WB, save to the given register
+	 */
+
+	/*
+	 * Choose value to save
+	 */
 	unsigned int WBdata;
 	if (mem_wb->WB->get()&0x1)
 		WBdata = mem_wb->DataR->get();
 	else
 		WBdata = mem_wb->Data->get();
+
+	/*
+	 * Save only if RegWrite = 1
+	 */
 	if (mem_wb->WB->get()&0x8fffffff)
 		mem_wb->RegW->set(WBdata);
+
+	/*
+	 * Value of register RS
+	 */
 	unsigned char RL1 = RS(inst->get_opcode()->instruction());
+
+	/*
+	 * Value of register RT
+	 */
 	unsigned char RL2 = RT(inst->get_opcode()->instruction());
+
+	/*
+	 * MemRead means the next op is LW
+	 */
 	if (id_ex->M->get()>>31) {
 		unsigned int rt = id_ex->RT->get();
+		/*
+		 * If the destination is one of the registers
+		 * we have to wait one clock cycle
+		 */
 		if (rt == RL1 || rt == RL2)
 			stall = true;
 	} else
+		/*
+		 * Otherwise continue
+		 */
 		stall = false;
+
+	/*
+	 * Opcode field indicates if we have a BNE (op == 5)
+	 */
 	unsigned int isBne = OPCODE(inst->get_opcode()->instruction());
+
+	/*
+	 * Forwarding unit 2a present only if one of the
+	 * two registers is a destination for a successive state,
+	 * must make a stall cycle
+	 */
+	/*
+	 * Regwrite of the former state
+	 */
 	unsigned int ctrl_EX = id_ex->WB->get()>>31;
 	unsigned int exDest;
 	if (ctrl_EX && (isBne == 0x4 || isBne == 0x5)) {
@@ -144,48 +229,233 @@ void datapath::tick()
 		if (exDest == RL1 || exDest == RL1)
 			stall = true;
 	}
+
+	/*
+	 * If not stalling, advance instructions
+	 */
 	if (!stall)
+		/*
+		 * New instruction from instruction memory
+		 */
 		temp_instruction = im->fetch_instruction(pc->get_address());
 	else
 		temp_instruction = inst;
 
 	advance_instructions();
 
+	/*
+	 * Immediate value
+	 */
 	temp_ID_EX_imm = inst->get_opcode()->instruction() & 0xffff;
+
+	/*
+	 * OP field controls the ALU
+	 */
 	temp_ID_EX_op = OPCODE(inst->get_opcode()->instruction());
 
+	/*
+	 * Forward PC
+	 */
 	id_ex->PCpiu4->set(if_id->PCpiu4->get());
 
+	/*
+	 * Control if the unit is type J
+	 */
 	unsigned int IsJump = OPCODE(inst->get_opcode()->instruction());
 	unsigned int NewPC1, NewPC2;
+
+	/*
+	 * Possible new PC 1
+	 */
 	if (IsJump == 0x2 || IsJump == 0x3)
 		NewPC1 = ADDR(inst->get_opcode()->instruction());
 	else
 		NewPC1 = temp_ID_EX_imm;
 
+	/*
+	 * Possible new PC 2
+	 */
 	NewPC2 = temp_IF_ID_PCpiu4;
 
+	/*
+	 * Read data 1 corresponds to the value of RS
+	 */
 	temp_ID_EX_Data1 = RL1;
+
+	/*
+	 * Read data 2 corresponds to the value of RT
+	 */
 	temp_ID_EX_Data2 = RL2;
 
-	// Riferimenti alla memoria dati
-	//    Save
+	/*
+	 * Given references to the memory
+	 */
 	//    Load
+	//
+	/*
+	 * Save to memory (MemWrite = 1)
+	 */
+	if (ex_mem->M->get()&0x40000000) {
+		if (ex_mem->M->get()&0x1) {
+			if (ex_mem->RIS->get()%4) {
+				printf("Memory access error");
+			}
+			/*
+		byte1 = mid(insieme,1,8)
+		byte2 = mid(insieme,9,8)
+		byte3 = mid(insieme,17,8)
+		byte4 = mid(insieme,25,8)
+		prova = EX_MEM_RIS mod 4
+		if prova <> 0 then
+			response.Write "<div align=center><font color=red size=3><b>ERRORE: INDIRIZZO DI MEMORIA ERRATO!</b></font></div>"
+			response.End
+		end if
+		EX_MEM_RIS = cint(EX_MEM_RIS)
+		if EX_MEM_RIS =< 4996 then 
+			MemDati(EX_MEM_RIS) = byte1
+			MemDati(EX_MEM_RIS + 1) = byte2
+			MemDati(EX_MEM_RIS + 2) = byte3
+			MemDati(EX_MEM_RIS + 3) = byte4
+		end if
+			 */
+		} else {
+			/*
+			 * Save byte
+			 */
+			/*
+		dato = IntToBin(EX_MEM_DataW,8,0)	'Save Byte
+		lungh = len(dato)
+		if lungh > 8 then
+			dato = right(dato,8)
+		end if
+		MemDati(EX_MEM_RIS) = dato
+		*/
+		}
+	}
+
+	/*
+	 * Load word (MemRead = 1)
+	 */
+	/*
+if left(EX_MEM_M,1) = "1" then				'Caso di una Load (MemRead = 1)
 	
-	// Unit di propagazione 2b
-	
+		if right(EX_MEM_M,1) = "1" then			'Load Word
+		prova = EX_MEM_RIS mod 4
+		if prova <> 0 then
+			response.Write "<div align=center><font color=red size=3><b>ERRORE: INDIRIZZO DI MEMORIA ERRATO!</b></font></div>"
+			response.End
+		end if
+		if EX_MEM_RIS =< 4996 then 
+			byte1 = MemDati(EX_MEM_RIS)
+			byte2 = MemDati(EX_MEM_RIS + 1)
+			byte3 = MemDati(EX_MEM_RIS + 2)
+			byte4 = MemDati(EX_MEM_RIS + 3)
+			temp_MEM_WB_DataR = byte1 & byte2 & byte3 & byte4
+			temp_MEM_WB_DataR = bintoInt(temp_MEM_WB_DataR,0)
+		else
+			temp_MEM_WB_DataR = 1
+		end if
+		
+	else
+		temp_MEM_WB_DataR = MemDati(EX_MEM_RIS)		'Load Byte
+		temp_MEM_WB_DataR = BinToInt(temp_MEM_WB_DataR,0)
+	end if
+end if
+	 */
+
+	/*
+	 * Forwarding unit 2b present only during branch
+	 * if one of the two registers is the register destination
+	 * of the state MEM, must forward the new value
+	 */
+	/*
+	 * RegWrite in the state MEM
+	 */
+	unsigned int ctrl_MEM = ex_mem->WB->get()>>31;
+	unsigned int bData1 = temp_ID_EX_Data1;
+	unsigned int bData2 = temp_ID_EX_Data2;
+	if (ctrl_MEM) {
+		if (ex_mem->RegW->get() == RL1) {
+			if (ex_mem->WB->get()&0x1)
+				bData1 = temp_MEM_WB_DataR;
+			else
+				bData1 = ex_mem->RIS->get();
+		}
+		if (ex_mem->RegW->get() == RL2) {
+			if (ex_mem->WB->get()&0x1)
+				bData2 = temp_MEM_WB_DataR;
+			else
+				bData2 = ex_mem->RIS->get();
+		}
+	}
+
+	/*
+	 * If the two read data are equal
+	 */
+	if (bData1 == bData2) {
+		if (isBne == 5)
+			ctrl1 = 0;
+		else
+			ctrl1 = 1;
+	} else {
+		if (isBne == 5)
+			/*
+			 * BNE
+			 */
+			ctrl1 = 1;
+		else
+			ctrl1 = 0;
+	}
+
+	/*
+	 * In the case of an unconditional jump, ctrl is always 1
+	 */
+	if (isBne == 2 || isBne == 3) {
+		ctrl1 = 1;
+		if (isBne == 3)
+			rf->set_register(31,pc->get_value());
+	}
+
+	unsigned int isjr = inst->get_opcode()->instruction()&0x3f;
+	if (!isBne && isjr == 8) {
+		NewPC1 = rf->get_register(31);
+		ctrl1 = 1;
+	}
+
+	/*
+	 * Jump case
+	 */
 	unsigned int jump = ctrl->read_instruction(inst->get_opcode()->instruction(), SIGNAL_JUMP);
 	unsigned int temp_ctrl1 = ctrl1;
+	/*
+	 * Logical and
+	 */
 	ctrl1 &= jump;
+	/*
+	 * Second data controlled by the control unit
+	 */
 	unsigned int ctrl2 = ctrl->read_instruction(inst->get_opcode()->instruction(), SIGNAL_PCSRC);
 	ctrl2 = 0;
+	/*
+	 * Stall controls whether PC forwards
+	 */
 	if (!stall) {
+		/*
+		 * They control whether the new instruction is NewPC1 or NewPC2
+		 */
 		IDmux->set_signal1(ctrl1);
 		IDmux->set_signal2(ctrl2);
 		temp_PC = IDmux->mux(NewPC1,NewPC2);
 	} else
 		temp_PC = pc->get_value();
 	unsigned int ID_discard = ctrl->read_instruction(inst->get_opcode()->instruction(),SIGNAL_DISCARD);
+
+	/*
+	 * Control signal generation
+	 */
+	/*
+	 * Control MUX for control signals
+	 */
 	unsigned int ID_MuxCtrl = ID_discard || stall;
 	unsigned int ctrl_WB = ctrl->read_instruction(inst->get_opcode()->instruction(),SIGNAL_WB);
 	unsigned int ctrl_M = ctrl->read_instruction(inst->get_opcode()->instruction(),SIGNAL_M);
@@ -200,12 +470,28 @@ void datapath::tick()
 		temp_ID_EX_EX = 0x0;
 	}
 
+	/*
+	 * Forwarding
+	 */
+
 	temp_EX_MEM_RIS = execute_alu(WBdata);
-	
+
+	/*
+	 * Signal RegDest
+	 */
 	if (!(id_ex->EX->get()&0x8fffffff))
+		/*
+		 * RT if the instruction is type I
+		 */
 		temp_EX_MEM_RegW = id_ex->RT->get();
 	else
+		/*
+		 * RS if the instruction is type R
+		 */
 		temp_EX_MEM_RegW = id_ex->RD->get();
+	/*
+	 * Forward control signals
+	 */
 	temp_MEM_WB_WB = ex_mem->WB->get();
 	temp_MEM_WB_Data = ex_mem->RIS->get();
 	if (ctrl1) {

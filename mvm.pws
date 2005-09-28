@@ -6,11 +6,11 @@ RunInTerminal=true
 clean before build=false
 
 [filenumbers]
-0=60
-1=29
-2=65
-3=95
-4=40
+0=33
+1=24
+2=62
+3=415
+4=2
 5=103
 6=39
 
@@ -28,6 +28,13 @@ filter.file.unmatch=*.so *.o *.a *.la
 filter.file.ignore.hidden=0
 filter.dir.ignore.hidden=0
 
+[filelist]
+0=/storage/code/school/mvm/src/core/register_file.h
+1=/storage/code/school/mvm/src/core/register_file.cpp
+2=/storage/code/school/mvm/src/core/datapath.h
+3=/storage/code/school/mvm/src/core/datapath.cpp
+4=/storage/code/school/mvm/src/Makefile.am
+
 [Project Tree]
 0=0
 1=0:0
@@ -40,4 +47,3 @@ filter.dir.ignore.hidden=0
 2=0:2:0
 3=0:2:1
 4=0:2:2
-5=0:2:3

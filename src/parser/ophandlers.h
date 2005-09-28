@@ -29,6 +29,7 @@
 #include "itype.h"
 #include "jtype.h"
 #include "ctype.h"
+#include "mvm.h"
 
 static inline unsigned int opcode_type(const unsigned char opcode)
 {
@@ -235,14 +236,26 @@ static inline bool dereference_pointer(std::string pointer, std::string &imm, st
 
 static inline unsigned int dereference_label(std::string label)
 {
+	std::map<std::string,unsigned int>::iterator it = VM->dp->labels.find(label);
+	if (it != VM->dp->labels.end()) {
+		return it->second;
+	}
 	return 0;
 }
 
+static std::string lastlabel;
+
 static inline operation *assembly_to_op(std::string op)
 {
+	operation *o = NULL;
 	strip_leading_whitespace(op);
 	strip_comments(op);
 	strip_trailing_whitespace(op);
+	if (op.find_first_of(':')!=std::string::npos) {
+		lastlabel = op.substr(0,op.find_first_of(':'));
+		op = op.substr(op.find_first_of(':')+1);
+		strip_leading_whitespace(op);
+	}
 	if (op.empty())
 		return NULL;
 	std::string cmd = extract_operation(op);
@@ -251,17 +264,26 @@ static inline operation *assembly_to_op(std::string op)
 	unsigned int type = instruction_type(cmd);
 	switch (type) {
 		case TYPE_R:
-			return new rtype(cmd,params);
+			o = new rtype(cmd,params);
+			break;
 		case TYPE_I:
-			return new itype(cmd,params);
+			o = new itype(cmd,params);
+			break;
 		case TYPE_J:
-			return new jtype(cmd,params);
+			o = new jtype(cmd,params);
+			break;
 		case TYPE_MEM:
-			return new itype(cmd,params);
+			o = new itype(cmd,params);
+			break;
 		case TYPE_COPROC:
-			return new ctype(cmd,params);
+			o = new ctype(cmd,params);
+			break;
 	}
-	return NULL;
+	if (o && !lastlabel.empty()) {
+		VM->dp->labels[lastlabel] = VM->dp->im->instructions.size()<<2;
+		lastlabel.clear();
+	}
+	return o;
 }
 
 static inline std::string opcode_to_assembly(const unsigned int opcode)

@@ -1,6 +1,6 @@
 /*
  *  mvm.cpp
- *  Mvm core class implementation
+ *  Mvm core implementation
  *  Copyright (C) 2005 Christopher Han
  *
  *  This program is free software; you can redistribute it and/or modify
@@ -20,13 +20,13 @@
 #include <fstream>
 #include "basecmd.h"
 #include "parser/ophandlers.h"
-#include "core/vm.h"
+#include "mvm.h"
 #include "console.h"
 
 static bool complete = false;
 static bool debug = false;
 static bool loaded = false;
-static vm *VM = 0;
+vm *VM = 0;
 static console *con = 0;
 static std::vector<std::string> files;
 

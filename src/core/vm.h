@@ -28,13 +28,12 @@ class vm
 public:
 	vm(const bool dbg = false);
 	~vm();
-	bool load_instructions(std::string const file);
+	bool load_instructions(std::string const file, const bool load = false);
 	void run();
 	void tick();
 	void reset();
 	void print_instructions();
 	void set_debug(const bool d);
-private:
 	datapath *dp;
 };
 
