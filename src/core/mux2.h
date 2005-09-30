@@ -22,16 +22,24 @@
 
 #include "basemux.h"
 
-class mux2: public basemux
+namespace mvm
 {
-public:
-	mux2();
-	~mux2();
-	unsigned int getstate();
-	void setstate(const unsigned int st);
-	void setstate(const bool st);
-private:
-	bool state;
-};
+	namespace core
+	{
+
+		class mux2: public basemux
+		{
+		public:
+			mux2();
+			~mux2();
+			unsigned int getstate();
+			void setstate(const unsigned int st);
+			void setstate(const bool st);
+		private:
+			bool state;
+		};
+
+	}
+}
 
 #endif /* _MVM_MUX2_H */

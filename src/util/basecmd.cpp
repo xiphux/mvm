@@ -27,7 +27,7 @@
 /**
  * Constructor
  */
-BaseCmd::BaseCmd()
+mvm::util::BaseCmd::BaseCmd()
 {
 	addoption('h',"help",OPTPARM_NONE,"","This help message");
 	addoption('V',"version",OPTPARM_NONE,"","Display program version");
@@ -36,7 +36,7 @@ BaseCmd::BaseCmd()
 /**
  * Destructor
  */
-BaseCmd::~BaseCmd()
+mvm::util::BaseCmd::~BaseCmd()
 {
 }
 
@@ -47,7 +47,7 @@ BaseCmd::~BaseCmd()
  * @param c argument count
  * @param v array of argument strings
  */
-BaseCmd *BaseCmd::initialize(int c, char **v)
+mvm::util::BaseCmd *mvm::util::BaseCmd::initialize(int c, char **v)
 {
 #ifdef _WIN32
 	return new Win32Cmd(c,v);
@@ -64,7 +64,7 @@ BaseCmd *BaseCmd::initialize(int c, char **v)
  * @param parmtype type of parameter the argument takes
  * @param desc description string
  */
-void BaseCmd::addoption(const char shortopt, std::string longopt, const unsigned int parmtype, std::string parmname, std::string desc)
+void mvm::util::BaseCmd::addoption(const char shortopt, std::string longopt, const unsigned int parmtype, std::string parmname, std::string desc)
 {
 	struct option opt;
 	opt.shortopt = shortopt;
@@ -81,7 +81,7 @@ void BaseCmd::addoption(const char shortopt, std::string longopt, const unsigned
  * Remove an option from the list of recognized options
  * @param o short option to find
  */
-void BaseCmd::deloption(const char o)
+void mvm::util::BaseCmd::deloption(const char o)
 {
 	for (std::vector<struct option>::iterator it = options.begin(); it != options.end(); it++) {
 		if (it->shortopt == o) {
@@ -96,7 +96,7 @@ void BaseCmd::deloption(const char o)
  * Remove an option from the list of recognized options
  * @param o long option to find
  */
-void BaseCmd::deloption(std::string o)
+void mvm::util::BaseCmd::deloption(std::string o)
 {
 	for (std::vector<struct option>::iterator it = options.begin(); it != options.end(); it++) {
 		if (it->longopt == o) {
@@ -110,7 +110,7 @@ void BaseCmd::deloption(std::string o)
  * usage()
  * Print usage message
  */
-void BaseCmd::usage(std::string program, std::string version)
+void mvm::util::BaseCmd::usage(std::string program, std::string version)
 {
 	if (!program.empty()) {
 		std::cout << program;
@@ -128,7 +128,7 @@ void BaseCmd::usage(std::string program, std::string version)
  * Gets the post-parse result of an OPTPARM_NONE option
  * @param o short option to get
  */
-bool BaseCmd::result(const char o)
+bool mvm::util::BaseCmd::result(const char o)
 {
 	for (std::vector<struct option>::iterator it = options.begin(); it != options.end(); it++) {
 		if (it->shortopt == o && it->parmtype == OPTPARM_NONE)
@@ -142,7 +142,7 @@ bool BaseCmd::result(const char o)
  * Gets the post-parse result of an OPTPARM_NONE option
  * @param o long option to get
  */
-bool BaseCmd::result(std::string o)
+bool mvm::util::BaseCmd::result(std::string o)
 {
 	for (std::vector<struct option>::iterator it = options.begin(); it != options.end(); it++) {
 		if (it->longopt == o && it->parmtype == OPTPARM_NONE)
@@ -157,7 +157,7 @@ bool BaseCmd::result(std::string o)
  * @param o short option to get
  * @param ret reference to int where result should be stored
  */
-bool BaseCmd::result(const char o, int &ret)
+bool mvm::util::BaseCmd::result(const char o, int &ret)
 {
 	for (std::vector<struct option>::iterator it = options.begin(); it != options.end(); it++) {
 		if (it->shortopt == o && it->parmtype == OPTPARM_INT) {
@@ -175,7 +175,7 @@ bool BaseCmd::result(const char o, int &ret)
  * @param o long option to get
  * @param ret reference to int where result should be stored
  */
-bool BaseCmd::result(std::string o, int &ret)
+bool mvm::util::BaseCmd::result(std::string o, int &ret)
 {
 	for (std::vector<struct option>::iterator it = options.begin(); it != options.end(); it++) {
 		if (it->longopt == o && it->parmtype == OPTPARM_INT) {
@@ -193,7 +193,7 @@ bool BaseCmd::result(std::string o, int &ret)
  * @param o short option to get
  * @param ret reference to string where result should be stored
  */
-bool BaseCmd::result(const char o, std::string &ret)
+bool mvm::util::BaseCmd::result(const char o, std::string &ret)
 {
 	for (std::vector<struct option>::iterator it = options.begin(); it != options.end(); it++) {
 		if (it->shortopt == o && it->parmtype == OPTPARM_STRING) {
@@ -211,7 +211,7 @@ bool BaseCmd::result(const char o, std::string &ret)
  * @param o long option to get
  * @param ret reference to string where result should be stored
  */
-bool BaseCmd::result(std::string o, std::string &ret)
+bool mvm::util::BaseCmd::result(std::string o, std::string &ret)
 {
 	for (std::vector<struct option>::iterator it = options.begin(); it != options.end(); it++) {
 		if (it->longopt == o && it->parmtype == OPTPARM_STRING) {
@@ -228,7 +228,7 @@ bool BaseCmd::result(std::string o, std::string &ret)
  * Prints usage message and terminates when given an invalid option
  * @param opt invalid option
  */
-int BaseCmd::invalidoption(std::string opt)
+int mvm::util::BaseCmd::invalidoption(std::string opt)
 {
 	std::cerr << "BaseCmd error: Unrecognized option " << opt << std::endl;
 	usage("","");

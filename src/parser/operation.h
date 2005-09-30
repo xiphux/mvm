@@ -20,11 +20,19 @@
 #ifndef _MVM_OPERATION_H
 #define _MVM_OPERATION_H
 
-class operation
+namespace mvm
 {
-public:
-	virtual unsigned int instruction() = 0;
-	virtual ~operation(){}
-};
+	namespace parser
+	{
+
+		class operation
+		{
+		public:
+			virtual unsigned int instruction() = 0;
+			virtual ~operation(){}
+		};
+
+	}
+}
 
 #endif /* _MVM_OPERATION_H */

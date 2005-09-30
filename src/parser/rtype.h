@@ -24,22 +24,30 @@
 #include <vector>
 #include "operation.h"
 
-class rtype: public operation
+namespace mvm
 {
-public:
-	rtype(const unsigned char o, const unsigned char s, const unsigned char t, const unsigned char d, const unsigned char sh, const unsigned char f);
-	rtype(unsigned int ins);
-	rtype(std::string cmd, std::vector<std::string> params);
-	virtual ~rtype();
-	unsigned int instruction();
-private:
-	void assemble(const unsigned char o, const unsigned char s, const unsigned char t, const unsigned char d, const unsigned char sh, const unsigned char f);
-	unsigned char opcode;
-	unsigned char rs;
-	unsigned char rt;
-	unsigned char rd;
-	unsigned char shamt;
-	unsigned char funct;
-};
+	namespace parser
+	{
+
+		class rtype: public operation
+		{
+		public:
+			rtype(const unsigned char o, const unsigned char s, const unsigned char t, const unsigned char d, const unsigned char sh, const unsigned char f);
+			rtype(unsigned int ins);
+			rtype(std::string cmd, std::vector<std::string> params);
+			virtual ~rtype();
+			unsigned int instruction();
+		private:
+			void assemble(const unsigned char o, const unsigned char s, const unsigned char t, const unsigned char d, const unsigned char sh, const unsigned char f);
+			unsigned char opcode;
+			unsigned char rs;
+			unsigned char rt;
+			unsigned char rd;
+			unsigned char shamt;
+			unsigned char funct;
+		};
+
+	}
+}
 
 #endif /* _MVM_RTYPE_H */

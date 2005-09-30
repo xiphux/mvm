@@ -19,7 +19,7 @@
  */
 #include "latch_ex_mem.h"
 
-latch_ex_mem::latch_ex_mem()
+mvm::core::latch_ex_mem::latch_ex_mem()
 {
 	WB = new register32();
 	M = new register32();
@@ -28,7 +28,12 @@ latch_ex_mem::latch_ex_mem()
 	RegW = new register32();
 }
 
-latch_ex_mem::~latch_ex_mem()
+mvm::core::latch_ex_mem::~latch_ex_mem()
 {
+	delete WB;
+	delete M;
+	delete RIS;
+	delete DataW;
+	delete RegW;
 }
 

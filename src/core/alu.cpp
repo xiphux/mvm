@@ -20,15 +20,15 @@
 #include "alu.h"
 #include "basic/convenience.h"
 
-ALU::ALU()
+mvm::core::ALU::ALU()
 {
 }
 
-ALU::~ALU()
+mvm::core::ALU::~ALU()
 {
 }
 
-int ALU::execute(unsigned int op, int a, int b)
+int mvm::core::ALU::execute(unsigned int op, int a, int b)
 {
 	switch (op) {
 		case 0:			/* 000 (AND) */

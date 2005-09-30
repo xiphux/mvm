@@ -20,12 +20,20 @@
 #ifndef _MVM_ALU_H
 #define _MVM_ALU_H
 
-class ALU
+namespace mvm
 {
-public:
-	ALU();
-	~ALU();
-	int execute(unsigned int op, int a, int b);
-};
+	namespace core
+	{
+
+		class ALU
+		{
+		public:
+			ALU();
+			~ALU();
+			int execute(unsigned int op, int a, int b);
+		};
+
+	}
+}
 
 #endif /* _MVM_ALU_H */

@@ -24,7 +24,7 @@
  * @param c argument count
  * @param v array of argument strings
  */
-Win32Cmd::Win32Cmd(int c, char **v)
+mvm::util::Win32Cmd::Win32Cmd(int c, char **v)
 {
 	argc = c;
 	argv = v;
@@ -33,7 +33,7 @@ Win32Cmd::Win32Cmd(int c, char **v)
 /**
  * Destructor
  */
-Win32Cmd::~Win32Cmd()
+mvm::util::Win32Cmd::~Win32Cmd()
 {
 }
 
@@ -41,7 +41,7 @@ Win32Cmd::~Win32Cmd()
  * parse()
  * Iterates through and processes arguments
  */
-void Win32Cmd::parse()
+void mvm::util::Win32Cmd::parse()
 {
 	for (int i = 1; i < argc; i++) {
 		std::string arg = argv[i];
@@ -74,7 +74,7 @@ void Win32Cmd::parse()
 	}
 }
 
-void Win32Cmd::usage(std::string program, std::string version)
+void mvm::util::Win32Cmd::usage(std::string program, std::string version)
 {
 	BaseCmd::usage(program, version);
 	for (std::vector<struct option>::iterator it = options.begin(); it != options.end(); it++) {

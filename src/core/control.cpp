@@ -20,15 +20,15 @@
 #include "control.h"
 #include "basic/opcode.h"
 
-control::control()
+mvm::core::control::control()
 {
 }
 
-control::~control()
+mvm::core::control::~control()
 {
 }
 
-unsigned int control::read_instruction(const unsigned int inst, const unsigned int sig)
+unsigned int mvm::core::control::read_instruction(const unsigned int inst, const unsigned int sig)
 {
 	unsigned int op = OPCODE(inst);
 	unsigned int ex,mem,wb;

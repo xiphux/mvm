@@ -19,35 +19,35 @@
  */
 #include "exmux3.h"
 
-exmux3::exmux3(): signal1(false), signal2(false)
+mvm::core::exmux3::exmux3(): signal1(false), signal2(false)
 {
 }
 
-exmux3::~exmux3()
+mvm::core::exmux3::~exmux3()
 {
 }
 
-bool exmux3::get_signal1()
+bool mvm::core::exmux3::get_signal1()
 {
 	return signal1;
 }
 
-bool exmux3::get_signal2()
+bool mvm::core::exmux3::get_signal2()
 {
 	return signal2;
 }
 
-void exmux3::set_signal1(const bool s)
+void mvm::core::exmux3::set_signal1(const bool s)
 {
 	signal1 = s;
 }
 
-void exmux3::set_signal2(const bool s)
+void mvm::core::exmux3::set_signal2(const bool s)
 {
 	signal2 = s;
 }
 
-int exmux3::mux(const int a, const int b, const int c)
+int mvm::core::exmux3::mux(const int a, const int b, const int c)
 {
 	if (!signal1 && !signal2)
 		return a;

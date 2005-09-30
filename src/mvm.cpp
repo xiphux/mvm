@@ -18,16 +18,16 @@
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
  */
 #include <fstream>
-#include "basecmd.h"
+#include "util/basecmd.h"
 #include "parser/ophandlers.h"
+#include "util/console.h"
 #include "mvm.h"
-#include "console.h"
 
 static bool complete = false;
 static bool debug = false;
 static bool loaded = false;
-vm *VM = 0;
-static console *con = 0;
+mvm::core::vm *VM = 0;
+static mvm::util::console *con = 0;
 static std::vector<std::string> files;
 
 static inline void display_version_string()
@@ -122,7 +122,7 @@ static inline void process_input(std::string &command)
 
 static inline void run_console()
 {
-	con = new console();
+	con = new mvm::util::console();
 	if (!files.empty())
 		VM->load_instructions(files.at(0));
 	char ch;
@@ -150,7 +150,7 @@ static inline void run_console()
 
 int main(int argc, char **argv)
 {
-	BaseCmd *cmd = BaseCmd::initialize(argc,argv);
+	mvm::util::BaseCmd *cmd = mvm::util::BaseCmd::initialize(argc,argv);
 	cmd->addoption('d',"debug",OPTPARM_NONE,"","Enable debugging output");
 	cmd->addoption('b',"batch",OPTPARM_NONE,"","Run entire file (no console)");
 	cmd->parse();
@@ -167,7 +167,7 @@ int main(int argc, char **argv)
 		debug = true;
 		printf("Enabling debugging output\n");
 	}
-	VM = new vm(debug);
+	VM = new mvm::core::vm(debug);
 	for (int i = 1; i < argc; i++) {
 		std::string tmp = argv[i];
 		if (tmp.at(0) != '-') {

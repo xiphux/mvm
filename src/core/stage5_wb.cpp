@@ -19,16 +19,16 @@
  */
 #include "stage5_wb.h"
 
-stage5_wb::stage5_wb()
+mvm::core::stage5_wb::stage5_wb()
 {
 	instruction = 0;
 }
 
-stage5_wb::~stage5_wb()
+mvm::core::stage5_wb::~stage5_wb()
 {
 }
 
-bool stage5_wb::tick()
+bool mvm::core::stage5_wb::tick()
 {
 	if (!instruction)
 		return false;

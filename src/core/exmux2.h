@@ -22,16 +22,24 @@
 
 #include "basemux.h"
 
-class exmux2: public basemux
+namespace mvm
 {
-public:
-	exmux2();
-	~exmux2();
-	bool get_signal();
-	void set_signal(const bool s);
-	int mux(const int a, const int b);
-private:
-	bool signal;
-};
+	namespace core
+	{
+
+		class exmux2: public basemux
+		{
+		public:
+			exmux2();
+			~exmux2();
+			bool get_signal();
+			void set_signal(const bool s);
+			int mux(const int a, const int b);
+		private:
+			bool signal;
+		};
+
+	}
+}
 
 #endif /* _MVM_EXMUX2_H */

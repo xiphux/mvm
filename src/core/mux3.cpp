@@ -19,34 +19,34 @@
  */
 #include "mux3.h"
 
-mux3::mux3()
+mvm::core::mux3::mux3()
 {
 }
 
-mux3::~mux3()
+mvm::core::mux3::~mux3()
 {
 }
 
-unsigned int mux3::result()
+unsigned int mvm::core::mux3::result()
 {
 }
 
-bool mux3::get_jump_signal()
+bool mvm::core::mux3::get_jump_signal()
 {
 	return jump;
 }
 
-bool mux3::get_exception_signal()
+bool mvm::core::mux3::get_exception_signal()
 {
 	return exception;
 }
 
-void mux3::set_jump_signal(bool sig)
+void mvm::core::mux3::set_jump_signal(bool sig)
 {
 	jump = sig;
 }
 
-void mux3::get_jump_signal(bool sig)
+void mvm::core::mux3::get_jump_signal(bool sig)
 {
 	exception = sig;
 }

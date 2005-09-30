@@ -19,21 +19,21 @@
  */
 #include "instruction.h"
 
-instruction::instruction(std::string i, operation *o): inst(i)
+mvm::core::instruction::instruction(std::string i, mvm::parser::operation *o): inst(i)
 {
 	op = o;
 }
 
-instruction::~instruction()
+mvm::core::instruction::~instruction()
 {
 }
 
-operation *instruction::get_opcode()
+mvm::parser::operation *mvm::core::instruction::get_opcode()
 {
 	return op;
 }
 
-std::string instruction::get_instruction()
+std::string mvm::core::instruction::get_instruction()
 {
 	return inst;
 }

@@ -23,15 +23,23 @@
 #include <deque>
 #include "instruction.h"
 
-class instruction_memory
+namespace mvm
 {
-public:
-	instruction_memory();
-	~instruction_memory();
-	void push_instruction(instruction *inst);
-	instruction *pop_instruction();
-	instruction *fetch_instruction(const unsigned int addr);
-	std::deque<instruction*> instructions;
-};
+	namespace core
+	{
+
+		class instruction_memory
+		{
+		public:
+			instruction_memory();
+			~instruction_memory();
+			void push_instruction(instruction *inst);
+			instruction *pop_instruction();
+			instruction *fetch_instruction(const unsigned int addr);
+			std::deque<instruction*> instructions;
+		};
+
+	}
+}
 
 #endif /* _MVM_INSTRUCTION_MEMORY_H */

@@ -19,30 +19,30 @@
  */
 #include "pc.h"
 
-PC::PC(): value(0)
+mvm::core::PC::PC(): value(0)
 {
 }
 
-PC::~PC()
+mvm::core::PC::~PC()
 {
 }
 
-unsigned int PC::get_value()
+unsigned int mvm::core::PC::get_value()
 {
 	return value;
 }
 
-unsigned int PC::get_address()
+unsigned int mvm::core::PC::get_address()
 {
 	return value << 2;
 }
 
-void PC::set_value(const unsigned int val)
+void mvm::core::PC::set_value(const unsigned int val)
 {
 	value = val;
 }
 
-void PC::set_address(const unsigned int addr)
+void mvm::core::PC::set_address(const unsigned int addr)
 {
 	value = addr >> 2;
 }

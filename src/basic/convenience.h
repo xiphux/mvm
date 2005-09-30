@@ -29,10 +29,18 @@
 #define abs(v)	(v<0?-v:v)
 #endif
 
-void strip_leading_whitespace(std::string &str);
-void strip_trailing_whitespace(std::string &str);
-void strip_comments(std::string &str);
-std::vector<std::string> tokenize(std::string &str, const char delim);
-void binaryprint(const unsigned int val, const bool zero = true);
+namespace mvm
+{
+	namespace basic
+	{
+	
+		void strip_leading_whitespace(std::string &str);
+		void strip_trailing_whitespace(std::string &str);
+		void strip_comments(std::string &str);
+		std::vector<std::string> tokenize(std::string &str, const char delim);
+		void binaryprint(const unsigned int val, const bool zero = true);
+
+	}
+}
 
 #endif /* _MVM_CONVENIENCE_H */

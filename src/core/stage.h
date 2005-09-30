@@ -20,15 +20,23 @@
 #ifndef _MVM_STAGE_H
 #define _MVM_STAGE_H
 
-class stage
+namespace mvm
 {
-public:
-	virtual bool tick() = 0;
-	unsigned int get_instruction();
-	void set_instruction(unsigned int i);
-	virtual ~stage(){}
-protected:
-	unsigned int instruction;
-};
+	namespace core
+	{
+
+		class stage
+		{
+		public:
+			virtual bool tick() = 0;
+			unsigned int get_instruction();
+			void set_instruction(unsigned int i);
+			virtual ~stage(){}
+		protected:
+			unsigned int instruction;
+		};
+
+	}
+}
 
 #endif /* _MVM_STAGE_H */

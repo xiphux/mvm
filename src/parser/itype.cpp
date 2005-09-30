@@ -20,12 +20,12 @@
 #include "ophandlers.h"
 #include "itype.h"
 
-itype::itype(const unsigned char o, const unsigned char s, const unsigned char t, const unsigned short a)
+mvm::parser::itype::itype(const unsigned char o, const unsigned char s, const unsigned char t, const unsigned short a)
 {
 	assemble(o,s,t,a);
 }
 
-itype::itype(unsigned int ins)
+mvm::parser::itype::itype(unsigned int ins)
 {
 	unsigned short a = ins & BITS16;
 	ins >>= 16;
@@ -37,7 +37,7 @@ itype::itype(unsigned int ins)
 	assemble(o,s,t,a);
 }
 
-itype::itype(std::string cmd, std::vector<std::string> params)
+mvm::parser::itype::itype(std::string cmd, std::vector<std::string> params)
 {
 	transform(cmd.begin(), cmd.end(), cmd.begin(), (int(*)(int))tolower);
 	unsigned char o = 0;
@@ -147,16 +147,16 @@ itype::itype(std::string cmd, std::vector<std::string> params)
 	assemble(o,s,t,a);
 }
 
-itype::~itype()
+mvm::parser::itype::~itype()
 {
 }
 
-unsigned int itype::instruction()
+unsigned int mvm::parser::itype::instruction()
 {
 	return (((((((opcode&BITS6)<<5)|(rs&BITS5))<<5)|(rt&BITS5))<<16)|(addr&BITS16));
 }
 
-void itype::assemble(const unsigned char o, const unsigned char s, const unsigned char t, const unsigned short a)
+void mvm::parser::itype::assemble(const unsigned char o, const unsigned char s, const unsigned char t, const unsigned short a)
 {
 	opcode = o;
 	rs = s;

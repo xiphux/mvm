@@ -19,7 +19,7 @@
  */
 #include "latch_id_ex.h"
 
-latch_id_ex::latch_id_ex()
+mvm::core::latch_id_ex::latch_id_ex()
 {
 	WB = new register32();
 	M = new register32();
@@ -34,7 +34,7 @@ latch_id_ex::latch_id_ex()
 	OP = new register32();
 }
 
-latch_id_ex::~latch_id_ex()
+mvm::core::latch_id_ex::~latch_id_ex()
 {
 	delete WB;
 	delete M;

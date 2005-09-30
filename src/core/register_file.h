@@ -22,15 +22,23 @@
 
 #include "register32.h"
 
-class register_file
+namespace mvm
 {
-public:
-	register_file();
-	~register_file();
-	unsigned int get_register(const unsigned int reg);
-	void set_register(const unsigned int reg, const unsigned int val);
-private:
-	register32 *regs[32];
-};
+	namespace core
+	{
+
+		class register_file
+		{
+		public:
+			register_file();
+			~register_file();
+			unsigned int get_register(const unsigned int reg);
+			void set_register(const unsigned int reg, const unsigned int val);
+		private:
+			register32 *regs[32];
+		};
+	
+	}
+}
 
 #endif /* _MVM_REGISTER_FILE_H */

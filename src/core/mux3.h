@@ -22,19 +22,27 @@
 
 #include "basemux.h"
 
-class mux3: public basemux
+namespace mvm
 {
-public:
-	mux3();
-	~mux3();
-	unsigned int result();
-	bool get_jump_signal();
-	bool get_exception_signal();
-	void set_jump_signal(bool sig);
-	void get_jump_signal(bool sig);
-private:
-	bool jump;
-	bool exception;
-};
+	namespace core
+	{
+
+		class mux3: public basemux
+		{
+		public:
+			mux3();
+			~mux3();
+			unsigned int result();
+			bool get_jump_signal();
+			bool get_exception_signal();
+			void set_jump_signal(bool sig);
+			void get_jump_signal(bool sig);
+		private:
+			bool jump;
+			bool exception;
+		};
+
+	}
+}
 
 #endif /* _MVM_MUX3_H */

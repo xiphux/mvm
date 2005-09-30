@@ -24,7 +24,7 @@
  * @param c argument count
  * @param v array of argument strings
  */
-PosixCmd::PosixCmd(int c, char **v): BaseCmd()
+mvm::util::PosixCmd::PosixCmd(int c, char **v): BaseCmd()
 {
 	argc = c;
 	argv = v;
@@ -33,7 +33,7 @@ PosixCmd::PosixCmd(int c, char **v): BaseCmd()
 /**
  * Destructor
  */
-PosixCmd::~PosixCmd()
+mvm::util::PosixCmd::~PosixCmd()
 {
 }
 
@@ -42,7 +42,7 @@ PosixCmd::~PosixCmd()
  * Parses a long option (--help)
  * @param arg argument as a C++ string
  */
-void PosixCmd::parselongopt(std::string arg)
+void mvm::util::PosixCmd::parselongopt(std::string arg)
 {
 	std::string::size_type ind = arg.find('=',2);
 	std::string mainpart = arg.substr(2,ind);
@@ -72,7 +72,7 @@ void PosixCmd::parselongopt(std::string arg)
  * parse()
  * Iterates through and processes arguments
  */
-void PosixCmd::parse()
+void mvm::util::PosixCmd::parse()
 {
 	for (int i = 1; i < argc; i++) {
 		std::string arg = argv[i];
@@ -117,7 +117,7 @@ void PosixCmd::parse()
  * usage()
  * Print program usage message
  */
-void PosixCmd::usage(std::string program, std::string version)
+void mvm::util::PosixCmd::usage(std::string program, std::string version)
 {
 	BaseCmd::usage(program, version);
 	for (std::vector<struct option>::iterator it = options.begin(); it != options.end(); it++) {

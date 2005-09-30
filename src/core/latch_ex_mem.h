@@ -22,16 +22,24 @@
 
 #include "register32.h"
 
-class latch_ex_mem
+namespace mvm
 {
-public:
-	latch_ex_mem();
-	~latch_ex_mem();
-	register32 *WB;
-	register32 *M;
-	register32 *RIS;
-	register32 *DataW;
-	register32 *RegW;
-};
+	namespace core
+	{
+
+		class latch_ex_mem
+		{
+		public:
+			latch_ex_mem();
+			~latch_ex_mem();
+			register32 *WB;
+			register32 *M;
+			register32 *RIS;
+			register32 *DataW;
+			register32 *RegW;
+		};
+
+	}
+}
 
 #endif /* _MVM_LATCH_EX_MEM_H */

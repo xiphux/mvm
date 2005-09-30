@@ -19,12 +19,12 @@
  */
 #include "stage.h"
 
-unsigned int stage::get_instruction()
+unsigned int mvm::core::stage::get_instruction()
 {
 	return instruction;
 }
 
-void stage::set_instruction(unsigned int i)
+void mvm::core::stage::set_instruction(unsigned int i)
 {
 	instruction = i;
 }

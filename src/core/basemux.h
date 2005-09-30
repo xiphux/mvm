@@ -20,9 +20,17 @@
 #ifndef _MVM_BASEMUX_H
 #define _MVM_BASEMUX_H
 
-class basemux
+namespace mvm
 {
+	namespace core
+	{
 
-};
+		class basemux
+		{
+
+		};
+	
+	}
+}
 
 #endif /* _MVM_BASEMUX_H */

@@ -21,7 +21,7 @@
 #include "basic/convenience.h"
 #include "parser/rtype.h"
 
-datapath::datapath(): complete(false), debug(false), clock(0)
+mvm::core::datapath::datapath(): complete(false), debug(false), clock(0)
 {
 	ctrl = new control();
 	im = new instruction_memory();
@@ -45,7 +45,7 @@ datapath::datapath(): complete(false), debug(false), clock(0)
 	init();
 }
 
-datapath::~datapath()
+mvm::core::datapath::~datapath()
 {
 	delete ctrl;
 	delete im;
@@ -68,13 +68,13 @@ datapath::~datapath()
 	delete mem_wb;
 }
 
-void datapath::init()
+void mvm::core::datapath::init()
 {
-	operation *o = new rtype(0);
+	mvm::parser::operation *o = new mvm::parser::rtype(0);
 	inst = new instruction("nop",o);
 }
 
-void datapath::advance_instructions()
+void mvm::core::datapath::advance_instructions()
 {
 	/*
 	 * Increment the PC of the running instruction
@@ -112,7 +112,7 @@ void datapath::advance_instructions()
 	stage5->set_instruction(d);
 }
 
-bool datapath::detect_completion()
+bool mvm::core::datapath::detect_completion()
 {
 	return false;
 	unsigned int a = (stage1->get_instruction()==0x9 /* 1001 */ ?1:0);
@@ -123,7 +123,7 @@ bool datapath::detect_completion()
 	return ((a && b && c && d && e) && (clock > 2));
 }
 
-int datapath::execute_alu(const unsigned int wbdata)
+int mvm::core::datapath::execute_alu(const unsigned int wbdata)
 {
 	/*
 	 * Choose one of the three possibilities to be ALU operand 1
@@ -154,7 +154,7 @@ int datapath::execute_alu(const unsigned int wbdata)
 	return alu->execute(aluCtrl,ALUdata1,ALUdata2);
 }
 
-void datapath::tick()
+void mvm::core::datapath::tick()
 {
 	clock++;
 	if (complete = detect_completion())
@@ -507,57 +507,57 @@ end if
 		print_debug();
 }
 
-void datapath::print_debug()
+void mvm::core::datapath::print_debug()
 {
 	printf("id_ex->RS: ");
-	binaryprint(id_ex->RS->get(),true);
+	mvm::basic::binaryprint(id_ex->RS->get(),true);
 	printf("id_ex->RT: ");
-	binaryprint(id_ex->RT->get(),true);
+	mvm::basic::binaryprint(id_ex->RT->get(),true);
 	printf("id_ex->RD: ");
-	binaryprint(id_ex->RD->get(),true);
+	mvm::basic::binaryprint(id_ex->RD->get(),true);
 	printf("id_ex->OP: ");
-	binaryprint(id_ex->OP->get(),true);
+	mvm::basic::binaryprint(id_ex->OP->get(),true);
 	printf("id_ex->WB: ");
-	binaryprint(id_ex->WB->get(),true);
+	mvm::basic::binaryprint(id_ex->WB->get(),true);
 	printf("id_ex->M: ");
-	binaryprint(id_ex->M->get(),true);
+	mvm::basic::binaryprint(id_ex->M->get(),true);
 	printf("id_ex->EX: ");
-	binaryprint(id_ex->EX->get(),true);
+	mvm::basic::binaryprint(id_ex->EX->get(),true);
 	printf("PC: ");
-	binaryprint(pc->get_value(),true);
+	mvm::basic::binaryprint(pc->get_value(),true);
 	printf("instruction: ");
 	printf("%s\n",inst->get_instruction().c_str());
 	printf("instruction (opcode): ");
-	binaryprint(inst->get_opcode()->instruction(),true);
+	mvm::basic::binaryprint(inst->get_opcode()->instruction(),true);
 	printf("if_id->PCpiu4: ");
-	binaryprint(if_id->PCpiu4->get(),true);
+	mvm::basic::binaryprint(if_id->PCpiu4->get(),true);
 	printf("id_ex->imm: ");
-	binaryprint(id_ex->imm->get(),true);
+	mvm::basic::binaryprint(id_ex->imm->get(),true);
 	printf("id_ex->Data1: ");
-	binaryprint(id_ex->Data1->get(),true);
+	mvm::basic::binaryprint(id_ex->Data1->get(),true);
 	printf("id_ex->Data2: ");
-	binaryprint(id_ex->Data2->get(),true);
+	mvm::basic::binaryprint(id_ex->Data2->get(),true);
 	printf("ex_mem->WB: ");
-	binaryprint(ex_mem->WB->get(),true);
+	mvm::basic::binaryprint(ex_mem->WB->get(),true);
 	printf("ex_mem->M: ");
-	binaryprint(ex_mem->M->get(),true);
+	mvm::basic::binaryprint(ex_mem->M->get(),true);
 	printf("ex_mem->DataW: ");
-	binaryprint(ex_mem->DataW->get(),true);
+	mvm::basic::binaryprint(ex_mem->DataW->get(),true);
 	printf("ex_mem->RIS: ");
-	binaryprint(ex_mem->RIS->get(),true);
+	mvm::basic::binaryprint(ex_mem->RIS->get(),true);
 	printf("ex_mem->RegW: ");
-	binaryprint(ex_mem->RegW->get(),true);
+	mvm::basic::binaryprint(ex_mem->RegW->get(),true);
 	printf("mem_wb->WB: ");
-	binaryprint(mem_wb->WB->get(),true);
+	mvm::basic::binaryprint(mem_wb->WB->get(),true);
 	printf("mem_wb->Data: ");
-	binaryprint(mem_wb->Data->get(),true);
+	mvm::basic::binaryprint(mem_wb->Data->get(),true);
 	printf("mem_wb->DataR: ");
-	binaryprint(mem_wb->DataR->get(),true);
+	mvm::basic::binaryprint(mem_wb->DataR->get(),true);
 	printf("mem_wb->RegW: ");
-	binaryprint(mem_wb->RegW->get(),true);
+	mvm::basic::binaryprint(mem_wb->RegW->get(),true);
 }
 
-void datapath::configure_muxes()
+void mvm::core::datapath::configure_muxes()
 {
 	EXmux3->set_signal1(false);
 	EXmux3->set_signal2(false);
@@ -582,7 +582,7 @@ void datapath::configure_muxes()
 	EXmux5->set_signal(id_ex->EX->get()>>31);
 }
 
-void datapath::set_registers()
+void mvm::core::datapath::set_registers()
 {
 	id_ex->RS->set(RS(inst->get_opcode()->instruction()));
 	id_ex->RT->set(RT(inst->get_opcode()->instruction()));
@@ -608,7 +608,7 @@ void datapath::set_registers()
 	mem_wb->RegW->set(temp_MEM_WB_RegW);
 }
 
-bool datapath::disassemble(const unsigned int op)
+bool mvm::core::datapath::disassemble(const unsigned int op)
 {
 	return true;
 }

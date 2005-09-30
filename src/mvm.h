@@ -22,6 +22,6 @@
 
 #include "core/vm.h"
 
-extern vm *VM;
+extern mvm::core::vm *VM;
 
 #endif /* _MVM_MVM_H */

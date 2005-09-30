@@ -20,15 +20,15 @@
 #include "alu_control_unit.h"
 #include "basic/opcode.h"
 
-alu_control_unit::alu_control_unit()
+mvm::core::alu_control_unit::alu_control_unit()
 {
 }
 
-alu_control_unit::~alu_control_unit()
+mvm::core::alu_control_unit::~alu_control_unit()
 {
 }
 
-unsigned int alu_control_unit::fire_signal(const unsigned int ctrl, const unsigned int inst)
+unsigned int mvm::core::alu_control_unit::fire_signal(const unsigned int ctrl, const unsigned int inst)
 {
 	unsigned int op = OPCODE(inst);
 	unsigned int funct = FUNCT(inst);

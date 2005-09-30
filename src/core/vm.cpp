@@ -25,32 +25,32 @@
 #include "basic/convenience.h"
 #include "vm.h"
 
-vm::vm(const bool dbg)
+mvm::core::vm::vm(const bool dbg)
 {
 	dp = new datapath();
 	dp->debug = dbg;
 }
 
-vm::~vm()
+mvm::core::vm::~vm()
 {
 	delete dp;
 }
 
-bool vm::load_instructions(std::string const file, const bool load)
+bool mvm::core::vm::load_instructions(std::string const file, const bool load)
 {
 	std::ifstream infile;
 	infile.open(file.c_str(),std::ios::in);
 	if (!infile.good())
 		return false;
 	std::string buf;
-	operation *op;
+	mvm::parser::operation *op;
 	instruction *in;
 	while (!infile.eof()) {
 		getline(infile,buf);
-		strip_comments(buf);
-		strip_trailing_whitespace(buf);
+		mvm::basic::strip_comments(buf);
+		mvm::basic::strip_trailing_whitespace(buf);
 		if (!buf.empty()) {
-			op = assembly_to_op(buf);
+			op = mvm::parser::assembly_to_op(buf);
 			if (op) {
 				in = new instruction(buf,op);
 				if (load)
@@ -66,24 +66,24 @@ bool vm::load_instructions(std::string const file, const bool load)
 	return true;
 }
 
-void vm::run()
+void mvm::core::vm::run()
 {
 	while (!dp->complete)
 		dp->tick();
 }
 
-void vm::tick()
+void mvm::core::vm::tick()
 {
 	dp->tick();
 }
 
-void vm::reset()
+void mvm::core::vm::reset()
 {
 	delete dp;
 	dp = new datapath();
 }
 
-void vm::print_instructions()
+void mvm::core::vm::print_instructions()
 {
 	unsigned int i = 0;
 	for (std::deque<instruction*>::iterator it = dp->im->instructions.begin(); it != dp->im->instructions.end(); it++) {
@@ -99,7 +99,7 @@ void vm::print_instructions()
 	}
 }
 
-void vm::set_debug(const bool d)
+void mvm::core::vm::set_debug(const bool d)
 {
 	dp->debug = d;
 }

@@ -19,16 +19,16 @@
  */
 #include "stage1_if.h"
 
-stage1_if::stage1_if()
+mvm::core::stage1_if::stage1_if()
 {
 	instruction = 0;
 }
 
-stage1_if::~stage1_if()
+mvm::core::stage1_if::~stage1_if()
 {
 }
 
-bool stage1_if::tick()
+bool mvm::core::stage1_if::tick()
 {
 	if (!instruction)
 		return false;

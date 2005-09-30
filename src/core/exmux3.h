@@ -22,19 +22,27 @@
 
 #include "basemux.h"
 
-class exmux3: public basemux
+namespace mvm
 {
-public:
-	exmux3();
-	~exmux3();
-	bool get_signal1();
-	bool get_signal2();
-	void set_signal1(const bool s);
-	void set_signal2(const bool s);
-	int mux(const int a, const int b, const int c);
-private:
-	bool signal1;
-	bool signal2;
-};
+	namespace core
+	{
+
+		class exmux3: public basemux
+		{
+		public:
+			exmux3();
+			~exmux3();
+			bool get_signal1();
+			bool get_signal2();
+			void set_signal1(const bool s);
+			void set_signal2(const bool s);
+			int mux(const int a, const int b, const int c);
+		private:
+			bool signal1;
+			bool signal2;
+		};
+
+	}
+}
 
 #endif /* _MVM_EXMUX3_H */

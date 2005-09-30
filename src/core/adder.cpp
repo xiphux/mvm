@@ -19,30 +19,30 @@
  */
 #include "adder.h"
 
-adder::adder():a(0),b(0),result(0)
+mvm::core::adder::adder():a(0),b(0),result(0)
 {
 }
 
-adder::~adder()
+mvm::core::adder::~adder()
 {
 }
 
-void adder::setaval(const int v)
+void mvm::core::adder::setaval(const int v)
 {
 	a = v;
 }
 
-void adder::setbval(const int v)
+void mvm::core::adder::setbval(const int v)
 {
 	b = v;
 }
 
-void adder::execute()
+void mvm::core::adder::execute()
 {
 	result = a + b;
 }
 
-int adder::getresult()
+int mvm::core::adder::getresult()
 {
 	return result;
 }

@@ -19,26 +19,26 @@
  */
 #include "mux2.h"
 
-mux2::mux2()
+mvm::core::mux2::mux2()
 {
 	state = false;
 }
 
-mux2::~mux()
+mvm::core::mux2::~mux()
 {
 }
 
-unsigned int mux2::getstate()
+unsigned int mvm::core::mux2::getstate()
 {
 	return (state?1:0);
 }
 
-void mux2::setstate(const unsigned int st)
+void mvm::core::mux2::setstate(const unsigned int st)
 {
 	state = (st?true:false);
 }
 
-void mux2::setstate(const bool st)
+void mvm::core::mux2::setstate(const bool st)
 {
 	state = st;
 }

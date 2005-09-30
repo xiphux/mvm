@@ -19,7 +19,7 @@
  */
 #include "latch_mem_wb.h"
 
-latch_mem_wb::latch_mem_wb()
+mvm::core::latch_mem_wb::latch_mem_wb()
 {
 	WB = new register32();
 	DataR = new register32();
@@ -27,7 +27,7 @@ latch_mem_wb::latch_mem_wb()
 	RegW = new register32();
 }
 
-latch_mem_wb::~latch_mem_wb()
+mvm::core::latch_mem_wb::~latch_mem_wb()
 {
 	delete WB;
 	delete DataR;

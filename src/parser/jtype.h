@@ -24,18 +24,26 @@
 #include <vector>
 #include "operation.h"
 
-class jtype: public operation
+namespace mvm
 {
-public:
-	jtype(const unsigned char o, const unsigned int t);
-	jtype(unsigned int ins);
-	jtype(std::string cmd, std::vector<std::string> params);
-	virtual ~jtype();
-	unsigned int instruction();
-private:
-	void assemble(const unsigned char o, const unsigned int t);
-	unsigned char opcode;
-	unsigned int target;
-};
+	namespace parser
+	{
+
+		class jtype: public operation
+		{
+		public:
+			jtype(const unsigned char o, const unsigned int t);
+			jtype(unsigned int ins);
+			jtype(std::string cmd, std::vector<std::string> params);
+			virtual ~jtype();
+			unsigned int instruction();
+		private:
+			void assemble(const unsigned char o, const unsigned int t);
+			unsigned char opcode;
+			unsigned int target;
+		};
+
+	}
+}
 
 #endif /* _MVM_JTYPE_H */

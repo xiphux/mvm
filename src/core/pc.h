@@ -20,17 +20,25 @@
 #ifndef _MVM_PC_H
 #define _MVM_PC_H
 
-class PC
+namespace mvm
 {
-public:
-	PC();
-	~PC();
-	unsigned int get_value();
-	unsigned int get_address();
-	void set_value(const unsigned int val);
-	void set_address(const unsigned int addr);
-private:
-	unsigned int value;
-};
+	namespace core
+	{
+
+		class PC
+		{
+		public:
+			PC();
+			~PC();
+			unsigned int get_value();
+			unsigned int get_address();
+			void set_value(const unsigned int val);
+			void set_address(const unsigned int addr);
+		private:
+			unsigned int value;
+		};
+
+	}
+}
 
 #endif /* _MVM_PC_H */

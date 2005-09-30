@@ -45,40 +45,48 @@
 #define PACKAGE_BUGREPORT "cfh@gwu.edu"
 #endif
 
-class BaseCmd
+namespace mvm
 {
-public:
-	BaseCmd();
-	virtual ~BaseCmd();
-	virtual void usage(std::string program, std::string version);
-	void addoption(const char shortopt, std::string longopt, unsigned int parmtype, std::string parmname, std::string desc);
-	void deloption(const char o);
-	void deloption(std::string o);
-	virtual void parse() = 0;
-	static BaseCmd *initialize(int c, char **v);
-	bool result(const char o);
-	bool result(std::string o);
-	bool result(const char o, int &ret);
-	bool result(std::string o, int &ret);
-	bool result(const char o, std::string &ret);
-	bool result(std::string o, std::string &ret);
-protected:
-	struct option {
-		char shortopt;
-		std::string longopt;
-		unsigned int parmtype;
-		std::string parmname;
-		std::string desc;
-		bool given;
-		union {
-			int intret;
-			char *stringret;
-		} ret;
-	};
-	std::vector<struct option> options;
-	int argc;
-	char **argv;
-	int invalidoption(std::string opt);
-};
+	namespace util
+	{
+
+		class BaseCmd
+		{
+		public:
+			BaseCmd();
+			virtual ~BaseCmd();
+			virtual void usage(std::string program, std::string version);
+			void addoption(const char shortopt, std::string longopt, unsigned int parmtype, std::string parmname, std::string desc);
+			void deloption(const char o);
+			void deloption(std::string o);
+			virtual void parse() = 0;
+			static BaseCmd *initialize(int c, char **v);
+			bool result(const char o);
+			bool result(std::string o);
+			bool result(const char o, int &ret);
+			bool result(std::string o, int &ret);
+			bool result(const char o, std::string &ret);
+			bool result(std::string o, std::string &ret);
+		protected:
+			struct option {
+				char shortopt;
+				std::string longopt;
+				unsigned int parmtype;
+				std::string parmname;
+				std::string desc;
+				bool given;
+				union {
+					int intret;
+					char *stringret;
+				} ret;
+			};
+			std::vector<struct option> options;
+			int argc;
+			char **argv;
+			int invalidoption(std::string opt);
+		};
+
+	}
+}
 
 #endif /* _MVM_BASECMD_H */

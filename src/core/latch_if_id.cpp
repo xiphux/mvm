@@ -19,13 +19,13 @@
  */
 #include "latch_if_id.h"
 
-latch_if_id::latch_if_id()
+mvm::core::latch_if_id::latch_if_id()
 {
 	PCpiu4 = new register32();
 	IFdiscard = new register32();
 }
 
-latch_if_id::~latch_if_id()
+mvm::core::latch_if_id::~latch_if_id()
 {
 	delete PCpiu4;
 	delete IFdiscard;

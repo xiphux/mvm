@@ -19,16 +19,16 @@
  */
 #include "stage2_id.h"
 
-stage2_id::stage2_id()
+mvm::core::stage2_id::stage2_id()
 {
 	instruction = 0;
 }
 
-stage2_id::~stage2_id()
+mvm::core::stage2_id::~stage2_id()
 {
 }
 
-bool stage2_id::tick()
+bool mvm::core::stage2_id::tick()
 {
 	if (!instruction)
 		return false;

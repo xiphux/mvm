@@ -1,7 +1,7 @@
 /*
- *  Win32Cmd.h
- *  Win32 commandline parser class definition
- *  Copyright (C) 2005 Christopher Han
+ *  PosixCmd.h
+ *  Posix commandline parser class definition
+ *  Copyright (C) 2005 Christopher Han <xiphux@gmail.com>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -17,18 +17,28 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
  */
-#ifndef _MVM_WIN32CMD_H
-#define _MVM_WIN32CMD_H
+#ifndef _MVM_POSIXCMD_H
+#define _MVM_POSIXCMD_H
 
 #include "basecmd.h"
 
-class Win32Cmd: public BaseCmd
+namespace mvm
 {
-public:
-	Win32Cmd(int c, char **v);
-	virtual void parse();
-	virtual void usage(std::string program, std::string version);
-	~Win32Cmd();
-};
+	namespace util
+	{
 
-#endif /* _MVM_WIN32CMD_H */
+		class PosixCmd: public BaseCmd
+		{
+		public:
+			PosixCmd(int c, char **v);
+			virtual void parse();
+			virtual void usage(std::string program, std::string version);
+			~PosixCmd();
+		private:
+			void parselongopt(std::string arg);
+		};
+
+	}
+}
+
+#endif /* _MVM_POSIXCMD_H */

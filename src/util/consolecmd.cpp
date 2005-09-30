@@ -19,26 +19,26 @@
  */
 #include "consolecmd.h"
 
-consolecmd::consolecmd(std::string c, std::string d, const unsigned int cod):code(cod),cmd(c),desc(d)
+mvm::util::consolecmd::consolecmd(std::string c, std::string d, const unsigned int cod):code(cod),cmd(c),desc(d)
 {
 }
 
-consolecmd::~consolecmd()
+mvm::util::consolecmd::~consolecmd()
 {
 	aliases.clear();
 }
 
-std::string consolecmd::getcmd()
+std::string mvm::util::consolecmd::getcmd()
 {
 	return cmd;
 }
 
-std::string consolecmd::getdesc()
+std::string mvm::util::consolecmd::getdesc()
 {
 	return desc;
 }
 
-bool consolecmd::addalias(std::string a)
+bool mvm::util::consolecmd::addalias(std::string a)
 {
 	for (std::vector<std::string>::iterator it = aliases.begin(); it != aliases.end(); it++) {
 		if (*it == a)
@@ -48,7 +48,7 @@ bool consolecmd::addalias(std::string a)
 	return true;
 }
 
-std::string consolecmd::helpstring()
+std::string mvm::util::consolecmd::helpstring()
 {
 	std::string ret = cmd;
 	int j = 0;
@@ -64,7 +64,7 @@ std::string consolecmd::helpstring()
 	return ret;
 }
 
-bool consolecmd::operator== (std::string c)
+bool mvm::util::consolecmd::operator== (std::string c)
 {
 	if (c == cmd)
 		return true;

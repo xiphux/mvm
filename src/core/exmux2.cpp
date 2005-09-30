@@ -19,25 +19,25 @@
  */
 #include "exmux2.h"
 
-exmux2::exmux2(): signal(false)
+mvm::core::exmux2::exmux2(): signal(false)
 {
 }
 
-exmux2::~exmux2()
+mvm::core::exmux2::~exmux2()
 {
 }
 
-bool exmux2::get_signal()
+bool mvm::core::exmux2::get_signal()
 {
 	return signal;
 }
 
-void exmux2::set_signal(const bool s)
+void mvm::core::exmux2::set_signal(const bool s)
 {
 	signal = s;
 }
 
-int exmux2::mux(const int a, const int b)
+int mvm::core::exmux2::mux(const int a, const int b)
 {
 	if (signal)
 		return a;

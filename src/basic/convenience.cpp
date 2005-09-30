@@ -19,7 +19,7 @@
  */
 #include "convenience.h"
 
-void strip_leading_whitespace(std::string &str)
+void mvm::basic::strip_leading_whitespace(std::string &str)
 {
 	if (str.size() < 1)
 		return;
@@ -32,7 +32,7 @@ void strip_leading_whitespace(std::string &str)
 	}
 }
 
-void strip_trailing_whitespace(std::string &str)
+void mvm::basic::strip_trailing_whitespace(std::string &str)
 {
 	if (str.size() <= 1)
 		return;
@@ -47,14 +47,14 @@ void strip_trailing_whitespace(std::string &str)
 	}
 }
 
-void strip_comments(std::string &str)
+void mvm::basic::strip_comments(std::string &str)
 {
 	std::string::size_type i = str.find_first_of('#');
 	if (i != std::string::npos)
 		str.erase(i);
 }
 
-std::vector<std::string> tokenize(std::string &str, const char delim)
+std::vector<std::string> mvm::basic::tokenize(std::string &str, const char delim)
 {
 	std::vector<std::string> params;
 	std::string parm;
@@ -73,7 +73,7 @@ std::vector<std::string> tokenize(std::string &str, const char delim)
 	return params;
 }
 
-void binaryprint(const unsigned int val, const bool zero)
+void mvm::basic::binaryprint(const unsigned int val, const bool zero)
 {
 	if (!zero && !val)
 		return;

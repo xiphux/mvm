@@ -19,24 +19,24 @@
  */
 #include "register_file.h"
 
-register_file::register_file()
+mvm::core::register_file::register_file()
 {
 	for (int i = 0; i < 32; i++)
 		regs[i] = new register32();
 }
 
-register_file::~register_file()
+mvm::core::register_file::~register_file()
 {
 	for (int i = 0; i < 32; i++)
 		delete regs[i];
 }
 
-unsigned int register_file::get_register(const unsigned int reg)
+unsigned int mvm::core::register_file::get_register(const unsigned int reg)
 {
 	return regs[reg]->get();
 }
 
-void register_file::set_register(const unsigned int reg, const unsigned int val)
+void mvm::core::register_file::set_register(const unsigned int reg, const unsigned int val)
 {
 	regs[reg]->set(val);
 }

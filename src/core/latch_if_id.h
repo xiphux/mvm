@@ -22,13 +22,21 @@
 
 #include "register32.h"
 
-class latch_if_id
+namespace mvm
 {
-public:
-	latch_if_id();
-	~latch_if_id();
-	register32 *PCpiu4;
-	register32 *IFdiscard;
-};
+	namespace core
+	{
+
+		class latch_if_id
+		{
+		public:
+			latch_if_id();
+			~latch_if_id();
+			register32 *PCpiu4;
+			register32 *IFdiscard;
+		};
+
+	}
+}
 
 #endif /* _MVM_LATCH_IF_ID_H */

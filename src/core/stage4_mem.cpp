@@ -19,16 +19,16 @@
  */
 #include "stage4_mem.h"
 
-stage4_mem::stage4_mem()
+mvm::core::stage4_mem::stage4_mem()
 {
 	instruction = 0;
 }
 
-stage4_mem::~stage4_mem()
+mvm::core::stage4_mem::~stage4_mem()
 {
 }
 
-bool stage4_mem::tick()
+bool mvm::core::stage4_mem::tick()
 {
 	if (!instruction)
 		return false;

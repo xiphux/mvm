@@ -20,12 +20,12 @@
 #include "ophandlers.h"
 #include "rtype.h"
 
-rtype::rtype(const unsigned char o, const unsigned char s, const unsigned char t, const unsigned char d, const unsigned char sh, const unsigned char f)
+mvm::parser::rtype::rtype(const unsigned char o, const unsigned char s, const unsigned char t, const unsigned char d, const unsigned char sh, const unsigned char f)
 {
 	assemble(o,s,t,d,sh,f);
 }
 
-rtype::rtype(unsigned int ins)
+mvm::parser::rtype::rtype(unsigned int ins)
 {
 	unsigned char f = ins & BITS6;
 	ins >>= 6;
@@ -41,7 +41,7 @@ rtype::rtype(unsigned int ins)
 	assemble(o,s,t,d,sh,f);
 }
 
-rtype::rtype(std::string cmd, std::vector<std::string> params)
+mvm::parser::rtype::rtype(std::string cmd, std::vector<std::string> params)
 {
 	transform(cmd.begin(), cmd.end(), cmd.begin(), (int(*)(int))tolower);
 	unsigned char o = 0;
@@ -173,11 +173,11 @@ rtype::rtype(std::string cmd, std::vector<std::string> params)
 	assemble(o,s,t,d,sh,f);
 }
 
-rtype::~rtype()
+mvm::parser::rtype::~rtype()
 {
 }
 
-void rtype::assemble(const unsigned char o, const unsigned char s, const unsigned char t, const unsigned char d, const unsigned char sh, const unsigned char f)
+void mvm::parser::rtype::assemble(const unsigned char o, const unsigned char s, const unsigned char t, const unsigned char d, const unsigned char sh, const unsigned char f)
 {
 	opcode = o;
 	rs = s;
@@ -187,7 +187,7 @@ void rtype::assemble(const unsigned char o, const unsigned char s, const unsigne
 	funct = f;
 }
 
-unsigned int rtype::instruction()
+unsigned int mvm::parser::rtype::instruction()
 {
 	return (((((((((((opcode&BITS6)<<5)|(rs&BITS5))<<5)|(rt&BITS5))<<5)|(rd&BITS5))<<5)|(shamt&BITS5))<<6)|(funct&BITS6));
 }

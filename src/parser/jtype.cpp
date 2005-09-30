@@ -20,12 +20,12 @@
 #include "ophandlers.h"
 #include "jtype.h"
 
-jtype::jtype(const unsigned char o, const unsigned int t)
+mvm::parser::jtype::jtype(const unsigned char o, const unsigned int t)
 {
 	assemble(o,t);
 }
 
-jtype::jtype(unsigned int ins)
+mvm::parser::jtype::jtype(unsigned int ins)
 {
 	unsigned int t = ins & BITS26;
 	ins >>= 26;
@@ -33,7 +33,7 @@ jtype::jtype(unsigned int ins)
 	assemble(o,t);
 }
 
-jtype::jtype(std::string cmd, std::vector<std::string> params)
+mvm::parser::jtype::jtype(std::string cmd, std::vector<std::string> params)
 {
 	transform(cmd.begin(), cmd.end(), cmd.begin(), (int(*)(int))tolower);
 	unsigned char o = 0;
@@ -48,16 +48,16 @@ jtype::jtype(std::string cmd, std::vector<std::string> params)
 	assemble(o,t);
 }
 
-jtype::~jtype()
+mvm::parser::jtype::~jtype()
 {
 }
 
-unsigned int jtype::instruction()
+unsigned int mvm::parser::jtype::instruction()
 {
 	return (((opcode&BITS6)<<26)|(target&BITS26));
 }
 
-void jtype::assemble(const unsigned char o, const unsigned int t)
+void mvm::parser::jtype::assemble(const unsigned char o, const unsigned int t)
 {
 	opcode = o;
 	target = t;

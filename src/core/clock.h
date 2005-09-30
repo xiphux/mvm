@@ -20,12 +20,20 @@
 #ifndef _MVM_CLOCK_H
 #define _MVM_CLOCK_H
 
-class clock
+namespace mvm
 {
-public:
-	clock();
-	~clock();
-	void tick();
-};
+	namespace core
+	{
+
+		class clock
+		{
+		public:
+			clock();
+			~clock();
+			void tick();
+		};
+
+	}
+}
 
 #endif /* _MVM_CLOCK_H */

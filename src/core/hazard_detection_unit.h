@@ -20,11 +20,19 @@
 #ifndef _MVM_HAZARD_DETECTION_UNIT_H
 #define _MVM_HAZARD_DETECTION_UNIT_H
 
-class hazard_detection_unit
+namespace mvm
 {
-public:
-	hazard_detection_unit();
-	~hazard_detection_unit();
-};
+	namespace core
+	{
+
+		class hazard_detection_unit
+		{
+		public:
+			hazard_detection_unit();
+			~hazard_detection_unit();
+		};
+
+	}
+}
 
 #endif /* _MVM_HAZARD_DETECTION_UNIT_H */

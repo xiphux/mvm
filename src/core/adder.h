@@ -20,19 +20,27 @@
 #ifndef _MVM_ADDER_H
 #define _MVM_ADDER_H
 
-class adder
+namespace mvm
 {
-public:
-	adder();
-	~adder();
-	void setaval(const int v);
-	void setbval(const int v);
-	void execute();
-	int getresult();
-private:
-	int a;
-	int b;
-	int result;
-};
+	namespace core
+	{
+
+		class adder
+		{
+		public:
+			adder();
+			~adder();
+			void setaval(const int v);
+			void setbval(const int v);
+			void execute();
+			int getresult();
+		private:
+			int a;
+			int b;
+			int result;
+		};
+
+	}
+}
 
 #endif /* _MVM_ADDER_H */

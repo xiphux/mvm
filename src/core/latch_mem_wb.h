@@ -22,15 +22,23 @@
 
 #include "register32.h"
 
-class latch_mem_wb
+namespace mvm
 {
-public:
-	latch_mem_wb();
-	~latch_mem_wb();
-	register32 *WB;
-	register32 *DataR;
-	register32 *Data;
-	register32 *RegW;
-};
+	namespace core
+	{
+
+		class latch_mem_wb
+		{
+		public:
+			latch_mem_wb();
+			~latch_mem_wb();
+			register32 *WB;
+			register32 *DataR;
+			register32 *Data;
+			register32 *RegW;
+		};
+
+	}
+}
 
 #endif /* _MVM_LATCH_MEM_WB_H */

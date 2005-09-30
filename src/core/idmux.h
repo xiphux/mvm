@@ -22,19 +22,27 @@
 
 #include "basemux.h"
 
-class idmux
+namespace mvm
 {
-public:
-	idmux();
-	~idmux();
-	bool get_signal1();
-	bool get_signal2();
-	void set_signal1(const bool s);
-	void set_signal2(const bool s);
-	int mux(const int a, const int b);
-private:
-	bool signal1;
-	bool signal2;
-};
+	namespace core
+	{
+
+		class idmux
+		{
+		public:
+			idmux();
+			~idmux();
+			bool get_signal1();
+			bool get_signal2();
+			void set_signal1(const bool s);
+			void set_signal2(const bool s);
+			int mux(const int a, const int b);
+		private:
+			bool signal1;
+			bool signal2;
+		};
+
+	}
+}
 
 #endif /* _MVM_IDMUX_H */

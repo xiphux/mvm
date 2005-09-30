@@ -19,35 +19,35 @@
  */
 #include "idmux.h"
 
-idmux::idmux(): signal1(false), signal2(false)
+mvm::core::idmux::idmux(): signal1(false), signal2(false)
 {
 }
 
-idmux::~idmux()
+mvm::core::idmux::~idmux()
 {
 }
 
-bool idmux::get_signal1()
+bool mvm::core::idmux::get_signal1()
 {
 	return signal1;
 }
 
-bool idmux::get_signal2()
+bool mvm::core::idmux::get_signal2()
 {
 	return signal2;
 }
 
-void idmux::set_signal1(const bool s)
+void mvm::core::idmux::set_signal1(const bool s)
 {
 	signal1 = s;
 }
 
-void idmux::set_signal2(const bool s)
+void mvm::core::idmux::set_signal2(const bool s)
 {
 	signal2 = s;
 }
 
-int idmux::mux(const int a, const int b)
+int mvm::core::idmux::mux(const int a, const int b)
 {
 	if (signal1 && !signal2)
 		return a;

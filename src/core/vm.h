@@ -23,18 +23,26 @@
 #include <string>
 #include "datapath.h"
 
-class vm
+namespace mvm
 {
-public:
-	vm(const bool dbg = false);
-	~vm();
-	bool load_instructions(std::string const file, const bool load = false);
-	void run();
-	void tick();
-	void reset();
-	void print_instructions();
-	void set_debug(const bool d);
-	datapath *dp;
-};
+	namespace core
+	{
+
+		class vm
+		{
+		public:
+			vm(const bool dbg = false);
+			~vm();
+			bool load_instructions(std::string const file, const bool load = false);
+			void run();
+			void tick();
+			void reset();
+			void print_instructions();
+			void set_debug(const bool d);
+			datapath *dp;
+		};
+
+	}
+}
 
 #endif /* _MVM_VM_H */

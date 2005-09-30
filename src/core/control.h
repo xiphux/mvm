@@ -28,29 +28,37 @@
 #define SIGNAL_EX 5
 #define SIGNAL_DISCARD 6
 
-class control
+namespace mvm
 {
-public:
-	control();
-	~control();
-	unsigned int read_instruction(const unsigned int inst, const unsigned int sig);
+	namespace core
+	{
 
-	bool RegWrite;
-	bool MemRead;
-	bool MemWrite;
-	bool IRWrite;
-	bool PCWrite;
-	bool PCWriteCond;
-	bool CauseWrite;
-	bool EPCWrite;
-	unsigned char RegDst;
-	unsigned char ALUSrcA;
-	unsigned char MemtoReg;
-	unsigned char IorD;
-	unsigned char IntCause;
-	unsigned char ALUOp;
-	unsigned char ALUSrcB;
-	unsigned char PCSource;
-};
+		class control
+		{
+		public:
+			control();
+			~control();
+			unsigned int read_instruction(const unsigned int inst, const unsigned int sig);
+
+			bool RegWrite;
+			bool MemRead;
+			bool MemWrite;
+			bool IRWrite;
+			bool PCWrite;
+			bool PCWriteCond;
+			bool CauseWrite;
+			bool EPCWrite;
+			unsigned char RegDst;
+			unsigned char ALUSrcA;
+			unsigned char MemtoReg;
+			unsigned char IorD;
+			unsigned char IntCause;
+			unsigned char ALUOp;
+			unsigned char ALUSrcB;
+			unsigned char PCSource;
+		};
+
+	}
+}
 
 #endif /* _MVM_CONTROL_H */

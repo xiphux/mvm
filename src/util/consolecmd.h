@@ -23,21 +23,29 @@
 #include <vector>
 #include <string>
 
-class consolecmd
+namespace mvm
 {
-public:
-	consolecmd(std::string c, std::string d, const unsigned int cod);
-	~consolecmd();
-	std::string getcmd();
-	std::string getdesc();
-	bool addalias(std::string a);
-	std::string helpstring();
-	unsigned int code;
-	bool operator== (std::string c);
-	std::vector<std::string> aliases;
-private:
-	std::string cmd;
-	std::string desc;
-};
+	namespace util
+	{
+
+		class consolecmd
+		{
+		public:
+			consolecmd(std::string c, std::string d, const unsigned int cod);
+			~consolecmd();
+			std::string getcmd();
+			std::string getdesc();
+			bool addalias(std::string a);
+			std::string helpstring();
+			unsigned int code;
+			bool operator== (std::string c);
+			std::vector<std::string> aliases;
+		private:
+			std::string cmd;
+			std::string desc;
+		};
+
+	}
+}
 
 #endif /* _MVM_CONSOLECMD_H */

@@ -20,12 +20,20 @@
 #ifndef _MVM_ALU_CONTROL_UNIT_H
 #define _MVM_ALU_CONTORL_UNIT_H
 
-class alu_control_unit
+namespace mvm
 {
-public:
-	alu_control_unit();
-	~alu_control_unit();
-	unsigned int fire_signal(const unsigned int ctrl, const unsigned int inst);
-};
+	namespace core
+	{
+
+		class alu_control_unit
+		{
+		public:
+			alu_control_unit();
+			~alu_control_unit();
+			unsigned int fire_signal(const unsigned int ctrl, const unsigned int inst);
+		};
+
+	}
+}
 
 #endif /* _MVM_ALU_CONTROL_UNIT_H */

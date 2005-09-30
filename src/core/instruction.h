@@ -23,16 +23,24 @@
 #include <string>
 #include "parser/operation.h"
 
-class instruction
+namespace mvm
 {
-public:
-	instruction(std::string i, operation *o);
-	~instruction();
-	operation *get_opcode();
-	std::string get_instruction();
-private:
-	std::string inst;
-	operation *op;
-};
+	namespace core
+	{
+
+		class instruction
+		{
+		public:
+			instruction(std::string i, mvm::parser::operation *o);
+			~instruction();
+			mvm::parser::operation *get_opcode();
+			std::string get_instruction();
+		private:
+			std::string inst;
+			mvm::parser::operation *op;
+		};
+
+	}
+}
 
 #endif /* _MVM_INSTRUCTION_H */

@@ -20,15 +20,23 @@
 #ifndef _MVM_REGISTER32_H
 #define _MVM_REGISTER32_H
 
-class register32
+namespace mvm
 {
-public:
-	register32();
-	~register32();
-	unsigned int get();
-	void set(const unsigned int v);
-private:
-	unsigned int data;
-};
+	namespace core
+	{
+
+		class register32
+		{
+		public:
+			register32();
+			~register32();
+			unsigned int get();
+			void set(const unsigned int v);
+		private:
+			unsigned int data;
+		};
+
+	}
+}
 
 #endif /* _MVM_REGISTER32_H */

@@ -22,22 +22,30 @@
 
 #include "register32.h"
 
-class latch_id_ex
+namespace mvm
 {
-public:
-	latch_id_ex();
-	~latch_id_ex();
-	register32 *WB;
-	register32 *M;
-	register32 *EX;
-	register32 *PCpiu4;
-	register32 *Data1;
-	register32 *Data2;
-	register32 *imm;
-	register32 *RS;
-	register32 *RT;
-	register32 *RD;
-	register32 *OP;
-};
+	namespace core
+	{
+
+		class latch_id_ex
+		{
+		public:
+			latch_id_ex();
+			~latch_id_ex();
+			register32 *WB;
+			register32 *M;
+			register32 *EX;
+			register32 *PCpiu4;
+			register32 *Data1;
+			register32 *Data2;
+			register32 *imm;
+			register32 *RS;
+			register32 *RT;
+			register32 *RD;
+			register32 *OP;
+		};
+
+	}
+}
 
 #endif /* _MVM_LATCH_ID_EX_H */

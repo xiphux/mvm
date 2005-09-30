@@ -22,12 +22,20 @@
 
 #include "stage.h"
 
-class stage5_wb: public stage
+namespace mvm
 {
-public:
-	stage5_wb();
-	virtual ~stage5_wb();
-	bool tick();
-};
+	namespace core
+	{
+
+		class stage5_wb: public stage
+		{
+		public:
+			stage5_wb();
+			virtual ~stage5_wb();
+			bool tick();
+		};
+
+	}
+}
 
 #endif /* _MVM_STAGE5_WB_H */

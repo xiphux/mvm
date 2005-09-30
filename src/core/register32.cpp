@@ -19,20 +19,20 @@
  */
 #include "register32.h"
 
-register32::register32()
+mvm::core::register32::register32()
 {
 }
 
-register32::~register32()
+mvm::core::register32::~register32()
 {
 }
 
-unsigned int register32::get()
+unsigned int mvm::core::register32::get()
 {
 	return data;
 }
 
-void register32::set(const unsigned int v)
+void mvm::core::register32::set(const unsigned int v)
 {
 	data = v;
 }

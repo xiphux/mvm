@@ -1,6 +1,6 @@
 /*
- *  console.h
- *  Interactive console class definition
+ *  Win32Cmd.h
+ *  Win32 commandline parser class definition
  *  Copyright (C) 2005 Christopher Han
  *
  *  This program is free software; you can redistribute it and/or modify
@@ -17,31 +17,26 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
  */
-#ifndef _MVM_CONSOLE_H
-#define _MVM_CONSOLE_H
+#ifndef _MVM_WIN32CMD_H
+#define _MVM_WIN32CMD_H
 
-#include <string>
-#include "consolecmd.h"
+#include "basecmd.h"
 
-#define COMMAND_NULL 0
-#define COMMAND_QUIT 1
-#define COMMAND_STEP 2
-#define COMMAND_RUN 3
-#define COMMAND_HELP 4
-#define COMMAND_LOAD 5
-#define COMMAND_LIST 6
-#define COMMAND_DEBUG 7
-
-class console
+namespace mvm
 {
-public:
-	console();
-	~console();
-	void draw_prompt();
-	void usage();
-	unsigned int read_command(std::string &cmd);
-private:
-	std::vector<consolecmd*> commands;
-};
+	namespace util
+	{
 
-#endif /* _MVM_CONSOLE_H */
+		class Win32Cmd: public BaseCmd
+		{
+		public:
+			Win32Cmd(int c, char **v);
+			virtual void parse();
+			virtual void usage(std::string program, std::string version);
+			~Win32Cmd();
+		};
+
+	}
+}
+
+#endif /* _MVM_WIN32CMD_H */

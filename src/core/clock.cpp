@@ -19,14 +19,14 @@
  */
 #include "clock.h"
 
-clock::clock()
+mvm::core::clock::clock()
 {
 }
 
-clock::~clock()
+mvm::core::clock::~clock()
 {
 }
 
-void clock::tick()
+void mvm::core::clock::tick()
 {
 }

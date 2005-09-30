@@ -19,16 +19,16 @@
  */
 #include "stage3_ex.h"
 
-stage3_ex::stage3_ex()
+mvm::core::stage3_ex::stage3_ex()
 {
 	instruction = 0;
 }
 
-stage3_ex::~stage3_ex()
+mvm::core::stage3_ex::~stage3_ex()
 {
 }
 
-bool stage3_ex::tick()
+bool mvm::core::stage3_ex::tick()
 {
 	if (!instruction)
 		return false;

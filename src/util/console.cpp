@@ -21,7 +21,7 @@
 #include "console.h"
 #include "basic/convenience.h"
 
-console::console()
+mvm::util::console::console()
 {
 	consolecmd *a = new consolecmd("quit","Exit to shell",COMMAND_QUIT);
 	a->addalias("exit");
@@ -47,7 +47,7 @@ console::console()
 	commands.push_back(g);
 }
 
-console::~console()
+mvm::util::console::~console()
 {
 	for (std::vector<consolecmd*>::iterator it = commands.begin(); it != commands.end(); it++) {
 		delete *it;
@@ -55,15 +55,15 @@ console::~console()
 	commands.clear();
 }
 
-void console::draw_prompt()
+void mvm::util::console::draw_prompt()
 {
 	std::cout << "Mvm:: ";
 }
 
-unsigned int console::read_command(std::string &cmd)
+unsigned int mvm::util::console::read_command(std::string &cmd)
 {
-	strip_leading_whitespace(cmd);
-	strip_trailing_whitespace(cmd);
+	mvm::basic::strip_leading_whitespace(cmd);
+	mvm::basic::strip_trailing_whitespace(cmd);
 	std::string tmp = cmd;
 	if (tmp.find_first_of(' ')!=std::string::npos)
 		tmp = tmp.substr(0,tmp.find_first_of(' '));
@@ -74,7 +74,7 @@ unsigned int console::read_command(std::string &cmd)
 	return COMMAND_NULL;
 }
 
-void console::usage()
+void mvm::util::console::usage()
 {
 	std::cout << " Known Mvm commands: " << std::endl << std::endl;
 	for (std::vector<consolecmd*>::iterator it = commands.begin(); it != commands.end(); it++) {

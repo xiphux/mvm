@@ -19,30 +19,30 @@
  */
 #include "instruction_memory.h"
 
-instruction_memory::instruction_memory()
+mvm::core::instruction_memory::instruction_memory()
 {
 }
 
-instruction_memory::~instruction_memory()
+mvm::core::instruction_memory::~instruction_memory()
 {
 	for (std::deque<instruction*>::iterator it = instructions.begin(); it != instructions.end(); it++)
 		delete *it;
 	instructions.clear();
 }
 
-void instruction_memory::push_instruction(instruction *inst)
+void mvm::core::instruction_memory::push_instruction(instruction *inst)
 {
 	instructions.push_back(inst);
 }
 
-instruction *instruction_memory::pop_instruction()
+mvm::core::instruction *mvm::core::instruction_memory::pop_instruction()
 {
 	instruction *f = instructions.front();
 	instructions.pop_front();
 	return f;
 }
 
-instruction *instruction_memory::fetch_instruction(const unsigned int addr)
+mvm::core::instruction *mvm::core::instruction_memory::fetch_instruction(const unsigned int addr)
 {
 	return instructions.at(addr>>2);
 }

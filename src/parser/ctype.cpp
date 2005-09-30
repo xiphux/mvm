@@ -20,12 +20,12 @@
 #include "basic/opcode.h"
 #include "ctype.h"
 
-ctype::ctype(const unsigned char o, const unsigned char fmt, const unsigned char t, const unsigned char s, const unsigned char d, const unsigned char f)
+mvm::parser::ctype::ctype(const unsigned char o, const unsigned char fmt, const unsigned char t, const unsigned char s, const unsigned char d, const unsigned char f)
 {
 	assemble(o,fmt,t,s,d,f);
 }
 
-ctype::ctype(unsigned int ins)
+mvm::parser::ctype::ctype(unsigned int ins)
 {
 	unsigned char f = ins & BITS6;
 	ins >>= 6;
@@ -41,26 +41,26 @@ ctype::ctype(unsigned int ins)
 	assemble(o,fmt,t,s,d,f);
 }
 
-ctype::ctype(std::string cmd, std::vector<std::string> params)
+mvm::parser::ctype::ctype(std::string cmd, std::vector<std::string> params)
 {
 	assemble(0,0,0,0,0,0);
 }
 
-ctype::~ctype()
+mvm::parser::ctype::~ctype()
 {
 }
 
-unsigned int ctype::instruction()
+unsigned int mvm::parser::ctype::instruction()
 {
 	return (((((((((((opcode&BITS6)<<5)|(format&BITS5))<<5)|(ft&BITS5))<<5)|(fs&BITS5))<<5)|(fd&BITS5))<<6)|(funct&BITS6));
 }
 
-unsigned int ctype::coprocessor()
+unsigned int mvm::parser::ctype::coprocessor()
 {
 	return opcode & 0x3;
 }
 
-void ctype::assemble(const unsigned char o, const unsigned char fmt, const unsigned char t, const unsigned char s, const unsigned char d, const unsigned char f)
+void mvm::parser::ctype::assemble(const unsigned char o, const unsigned char fmt, const unsigned char t, const unsigned char s, const unsigned char d, const unsigned char f)
 {
 	opcode = o;
 	format = fmt;
