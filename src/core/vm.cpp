@@ -23,6 +23,7 @@
 #include "../parser/ophandlers.h"
 #include "../parser/operation.h"
 #include "../basic/convenience.h"
+#include "../parser/ptype.h"
 #include "vm.h"
 
 mvm::core::vm::vm(const bool dbg)
@@ -53,16 +54,34 @@ bool mvm::core::vm::load_instructions(std::string const file, const bool load)
 			op = mvm::parser::assembly_to_op(buf);
 			if (op) {
 				in = new instruction(buf,op);
-				if (load)
-					dp->as->im->push_instruction(in);
-				else
-					delete in;
+				if (in) {
+					if (in->get_opcode()->pseudo()) {
+						int i = 0;
+						char tm[4];
+						mvm::parser::ptype *p = dynamic_cast<mvm::parser::ptype*>(in->get_opcode());
+						for (std::vector<mvm::parser::operation*>::iterator it = p->ops.begin(); it != p->ops.end(); it++) {
+							snprintf(tm,4,"%d",i+1);
+							std::string s = " (pseudo op step ";
+							s.append(tm).append(" : ").append(p->ins.at(i++)).append(")");
+
+							in = new instruction(buf.append(s),*it);
+							dp->as->im->push_instruction(in);
+						}
+					} else
+						dp->as->im->push_instruction(in);
+				}
 			}
 		}
 	}
 	infile.close();
-	if (!load)
+	if (!load) {
+		instruction *i;
+		while (!dp->as->im->instructions.empty()) {
+			i = dp->as->im->pop_instruction();
+			delete i;
+		}
 		return load_instructions(file,true);
+	}
 	return true;
 }
 

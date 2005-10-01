@@ -37,6 +37,7 @@ namespace mvm
 			unsigned int instruction(){return 0;}
 			virtual bool pseudo(){return true;}
 			std::vector<operation*> ops;
+			std::vector<std::string> ins;
 		private:
 			void translate();
 			std::string command;

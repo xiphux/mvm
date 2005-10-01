@@ -45,4 +45,6 @@ void mvm::parser::ptype::translate_move()
 	p.push_back(parms.at(1));
 	operation *o = new rtype("add",p);
 	ops.push_back(o);
+	std::string i = "addi "+p.at(0)+","+p.at(1)+","+p.at(2);
+	ins.push_back(i);
 }
