@@ -19,7 +19,7 @@
  */
 #include <iostream>
 #include "console.h"
-#include "basic/convenience.h"
+#include "../basic/convenience.h"
 
 mvm::util::console::console()
 {

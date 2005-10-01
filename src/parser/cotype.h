@@ -1,6 +1,6 @@
 /*
- *  instruction.h
- *  Instruction class definition
+ *  cotype.h
+ *  Coprocessor operation class definition
  *  Copyright (C) 2005 Christopher Han
  *
  *  This program is free software; you can redistribute it and/or modify
@@ -17,30 +17,38 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
  */
-#ifndef _MVM_INSTRUCTION_H
-#define _MVM_INSTRUCTION_H
+#ifndef _MVM_COTYPE_H
+#define _MVM_COTYPE_H
 
 #include <string>
-#include "../parser/operation.h"
+#include <vector>
+#include "operation.h"
 
 namespace mvm
 {
-	namespace core
+	namespace parser
 	{
 
-		class instruction
+		class cotype: public operation
 		{
 		public:
-			instruction(std::string i, mvm::parser::operation *o);
-			~instruction();
-			mvm::parser::operation *get_opcode();
-			std::string get_instruction();
+			cotype(const unsigned char o, const unsigned char fmt, const unsigned char t, const unsigned char s, const unsigned char d, const unsigned char f);
+			cotype(unsigned int ins);
+			cotype(std::string cmd, std::vector<std::string> params);
+			virtual ~cotype();
+			unsigned int instruction();
+			unsigned int coprocessor();
 		private:
-			std::string inst;
-			mvm::parser::operation *op;
+			void assemble(const unsigned char o, const unsigned char fmt, const unsigned char t, const unsigned char s, const unsigned char d, const unsigned char f);
+			unsigned char opcode;
+			unsigned char format;
+			unsigned char ft;
+			unsigned char fs;
+			unsigned char fd;
+			unsigned char funct;
 		};
 
 	}
 }
 
-#endif /* _MVM_INSTRUCTION_H */
+#endif /* _MVM_COTYPE_H */

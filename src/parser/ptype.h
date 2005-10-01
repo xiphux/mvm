@@ -1,6 +1,6 @@
 /*
- *  ctype.h
- *  Coprocessor operation class definition
+ *  ptype.h
+ *  Pseudo operation class definition
  *  Copyright (C) 2005 Christopher Han
  *
  *  This program is free software; you can redistribute it and/or modify
@@ -17,8 +17,8 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
  */
-#ifndef _MVM_CTYPE_H
-#define _MVM_CTYPE_H
+#ifndef _MVM_PTYPE_H
+#define _MVM_PTYPE_H
 
 #include <string>
 #include <vector>
@@ -29,26 +29,22 @@ namespace mvm
 	namespace parser
 	{
 
-		class ctype: public operation
+		class ptype: public operation
 		{
 		public:
-			ctype(const unsigned char o, const unsigned char fmt, const unsigned char t, const unsigned char s, const unsigned char d, const unsigned char f);
-			ctype(unsigned int ins);
-			ctype(std::string cmd, std::vector<std::string> params);
-			virtual ~ctype();
-			unsigned int instruction();
-			unsigned int coprocessor();
+			ptype(std::string cmd, std::vector<std::string> params);
+			virtual ~ptype();
+			unsigned int instruction(){return 0;}
+			virtual bool pseudo(){return true;}
+			std::vector<operation*> ops;
 		private:
-			void assemble(const unsigned char o, const unsigned char fmt, const unsigned char t, const unsigned char s, const unsigned char d, const unsigned char f);
-			unsigned char opcode;
-			unsigned char format;
-			unsigned char ft;
-			unsigned char fs;
-			unsigned char fd;
-			unsigned char funct;
+			void translate();
+			std::string command;
+			std::vector<std::string> parms;
+			void translate_move();
 		};
 
 	}
 }
 
-#endif /* _MVM_CTYPE_H */
+#endif /* _MVM_PTYPE_H */

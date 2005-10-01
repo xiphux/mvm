@@ -26,6 +26,7 @@
 #define TYPE_J 3
 #define TYPE_COPROC 4
 #define TYPE_MEM 5
+#define TYPE_P 6
 
 #define BITS5	0x1f		/* 0000000000000000000000011111 */
 #define BITS6	0x3f		/* 0000000000000000000000111111 */
@@ -44,8 +45,8 @@
 
 #define RTYPE(i) ((i)&0x3f==0x0)			/* opcode == 000000 */
 #define JTYPE(i) ((i)&0x3e==0x2)			/* opcode == 00001x */
-#define CTYPE(i) ((i)&0x3c==0x10)			/* opcode == 0100xx */
-#define ITYPE(i) (!(RTYPE(i)||JTYPE(i)||CTYPE(i)))	/* everything else */
+#define COTYPE(i) ((i)&0x3c==0x10)			/* opcode == 0100xx */
+#define ITYPE(i) (!(RTYPE(i)||JTYPE(i)||COTYPE(i)))	/* everything else */
 
 /*
  * R-Type instruction
@@ -154,23 +155,23 @@
  * 10-6 : fd - shift amount (5 bits)
  *  5-0 : funct - function code (6 bits)
  */
-#define CTYPE_FUNC_ADD_S	0x00	/* add.s fd,fs,ft	000000 */
-#define CTYPE_FMT_ADD_S		0x10	/* add.s fd,fs,ft	10000 */
-#define CTYPE_FUNC_CVT_S_W	0x20	/* cvt.s.w fd,fs,ft	100000 */
-#define CTYPE_FMT_CVT_S_W	0x14	/* cvt.s.w fd,fs,ft	10100 */
-#define CTYPE_FUNC_CVT_W_S	0x24	/* cvt.w.s fd,fs,ft	100100 */
-#define CTYPE_FMT_CVT_W_S	0x10	/* cvt.w.s fd,fs,ft	10000 */
-#define CTYPE_FUNC_DIV_S	0x03	/* div.s fd,fs,ft	000011 */
-#define CTYPE_FMT_DIV_S		0x10	/* div.s fd,fs,ft	10000 */
-#define CTYPE_FUNC_MFC1		0x00	/* mfc1 ft,fs		000000 */
-#define CTYPE_FMT_MFC1		0x00	/* mfc1 ft,fs		00000 */
-#define CTYPE_FUNC_MOV_S	0x06	/* mov.s fd,fs		000110 */
-#define CTYPE_FMT_MOV_S		0x10	/* mov.s fd,fs		10000 */
-#define CTYPE_FUNC_MTC1		0x00	/* mtc1 ft,fs		000000 */
-#define CTYPE_FMT_MTC1		0x04	/* mtc1 ft,fs		00100 */
-#define CTYPE_FUNC_MUL_S	0x02	/* mul.s fd,fs,ft	000010 */
-#define CTYPE_FMT_MUL_S		0x10	/* mul.s fd,fs,ft	10000 */
-#define CTYPE_FUNC_SUB_S	0x01	/* sub.s fd,fs,ft	000001 */
-#define CTYPE_FMT_SUB_S		0x10	/* sub.s fd,fs,ft	10000 */
+#define COTYPE_FUNC_ADD_S	0x00	/* add.s fd,fs,ft	000000 */
+#define COTYPE_FMT_ADD_S		0x10	/* add.s fd,fs,ft	10000 */
+#define COTYPE_FUNC_CVT_S_W	0x20	/* cvt.s.w fd,fs,ft	100000 */
+#define COTYPE_FMT_CVT_S_W	0x14	/* cvt.s.w fd,fs,ft	10100 */
+#define COTYPE_FUNC_CVT_W_S	0x24	/* cvt.w.s fd,fs,ft	100100 */
+#define COTYPE_FMT_CVT_W_S	0x10	/* cvt.w.s fd,fs,ft	10000 */
+#define COTYPE_FUNC_DIV_S	0x03	/* div.s fd,fs,ft	000011 */
+#define COTYPE_FMT_DIV_S		0x10	/* div.s fd,fs,ft	10000 */
+#define COTYPE_FUNC_MFC1		0x00	/* mfc1 ft,fs		000000 */
+#define COTYPE_FMT_MFC1		0x00	/* mfc1 ft,fs		00000 */
+#define COTYPE_FUNC_MOV_S	0x06	/* mov.s fd,fs		000110 */
+#define COTYPE_FMT_MOV_S		0x10	/* mov.s fd,fs		10000 */
+#define COTYPE_FUNC_MTC1		0x00	/* mtc1 ft,fs		000000 */
+#define COTYPE_FMT_MTC1		0x04	/* mtc1 ft,fs		00100 */
+#define COTYPE_FUNC_MUL_S	0x02	/* mul.s fd,fs,ft	000010 */
+#define COTYPE_FMT_MUL_S		0x10	/* mul.s fd,fs,ft	10000 */
+#define COTYPE_FUNC_SUB_S	0x01	/* sub.s fd,fs,ft	000001 */
+#define COTYPE_FMT_SUB_S		0x10	/* sub.s fd,fs,ft	10000 */
 
 #endif /* _MVM_OPCODE_H */

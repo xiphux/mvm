@@ -18,7 +18,7 @@
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
  */
 #include "alu_control_unit.h"
-#include "basic/opcode.h"
+#include "../basic/opcode.h"
 
 mvm::core::alu_control_unit::alu_control_unit()
 {

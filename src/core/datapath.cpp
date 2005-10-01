@@ -18,13 +18,13 @@
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
  */
 #include "datapath.h"
-#include "basic/convenience.h"
-#include "parser/rtype.h"
+#include "../basic/convenience.h"
+#include "../parser/rtype.h"
 
 mvm::core::datapath::datapath(): complete(false), debug(false), clock(0)
 {
 	ctrl = new control();
-	im = new instruction_memory();
+	as = new address_space();
 	pc = new PC();
 	IDmux = new idmux();
 	EXmux3 = new exmux3();
@@ -48,7 +48,7 @@ mvm::core::datapath::datapath(): complete(false), debug(false), clock(0)
 mvm::core::datapath::~datapath()
 {
 	delete ctrl;
-	delete im;
+	delete as;
 	delete pc;
 	delete IDmux;
 	delete EXmux3;
@@ -237,7 +237,7 @@ void mvm::core::datapath::tick()
 		/*
 		 * New instruction from instruction memory
 		 */
-		temp_instruction = im->fetch_instruction(pc->get_address());
+		temp_instruction = as->im->fetch_instruction(pc->get_address());
 	else
 		temp_instruction = inst;
 
@@ -297,71 +297,51 @@ void mvm::core::datapath::tick()
 	 */
 	if (ex_mem->M->get()&0x40000000) {
 		if (ex_mem->M->get()&0x1) {
-			if (ex_mem->RIS->get()%4) {
-				printf("Memory access error");
+			unsigned int ris = ex_mem->RIS->get();
+			if (ris%4) {
+				printf("Memory access error\n");
 			}
-			/*
-		byte1 = mid(insieme,1,8)
-		byte2 = mid(insieme,9,8)
-		byte3 = mid(insieme,17,8)
-		byte4 = mid(insieme,25,8)
-		prova = EX_MEM_RIS mod 4
-		if prova <> 0 then
-			response.Write "<div align=center><font color=red size=3><b>ERRORE: INDIRIZZO DI MEMORIA ERRATO!</b></font></div>"
-			response.End
-		end if
-		EX_MEM_RIS = cint(EX_MEM_RIS)
-		if EX_MEM_RIS =< 4996 then 
-			MemDati(EX_MEM_RIS) = byte1
-			MemDati(EX_MEM_RIS + 1) = byte2
-			MemDati(EX_MEM_RIS + 2) = byte3
-			MemDati(EX_MEM_RIS + 3) = byte4
-		end if
-			 */
+			unsigned char byte1 = (inst->get_opcode()->instruction()>>24)&0xff;
+			unsigned char byte2 = (inst->get_opcode()->instruction()>>16)&0xff;
+			unsigned char byte3 = (inst->get_opcode()->instruction()>>8)&0xff;
+			unsigned char byte4 = inst->get_opcode()->instruction()&0xff;
+			if (ris <= 4996) {
+				as->dm->write_data(ris,byte1);
+				as->dm->write_data(ris+1,byte2);
+				as->dm->write_data(ris+2,byte3);
+				as->dm->write_data(ris+3,byte4);
+			}
 		} else {
 			/*
 			 * Save byte
 			 */
-			/*
-		dato = IntToBin(EX_MEM_DataW,8,0)	'Save Byte
-		lungh = len(dato)
-		if lungh > 8 then
-			dato = right(dato,8)
-		end if
-		MemDati(EX_MEM_RIS) = dato
-		*/
+			unsigned char d = ex_mem->DataW->get()&0xff;
+			as->dm->write_data(ex_mem->RIS->get(),d);
 		}
 	}
 
 	/*
 	 * Load word (MemRead = 1)
 	 */
-	/*
-if left(EX_MEM_M,1) = "1" then				'Caso di una Load (MemRead = 1)
-	
-		if right(EX_MEM_M,1) = "1" then			'Load Word
-		prova = EX_MEM_RIS mod 4
-		if prova <> 0 then
-			response.Write "<div align=center><font color=red size=3><b>ERRORE: INDIRIZZO DI MEMORIA ERRATO!</b></font></div>"
-			response.End
-		end if
-		if EX_MEM_RIS =< 4996 then 
-			byte1 = MemDati(EX_MEM_RIS)
-			byte2 = MemDati(EX_MEM_RIS + 1)
-			byte3 = MemDati(EX_MEM_RIS + 2)
-			byte4 = MemDati(EX_MEM_RIS + 3)
-			temp_MEM_WB_DataR = byte1 & byte2 & byte3 & byte4
-			temp_MEM_WB_DataR = bintoInt(temp_MEM_WB_DataR,0)
-		else
-			temp_MEM_WB_DataR = 1
-		end if
-		
-	else
-		temp_MEM_WB_DataR = MemDati(EX_MEM_RIS)		'Load Byte
-		temp_MEM_WB_DataR = BinToInt(temp_MEM_WB_DataR,0)
-	end if
-end if
-	 */
+	if (ex_mem->M->get()&0x8fffffff) {
+		if (ex_mem->M->get()&0x1) {
+			unsigned int ris = ex_mem->RIS->get();
+			if (ris%4) {
+				printf("Memory access error\n");
+			}
+			if (ris <= 4996) {
+				unsigned char byte1 = as->dm->read_data(ris);
+				unsigned char byte2 = as->dm->read_data(ris+1);
+				unsigned char byte3 = as->dm->read_data(ris+2);
+				unsigned char byte4 = as->dm->read_data(ris+3);
+				temp_MEM_WB_DataR = (((((byte1<<8)&byte2)<<8)&byte3)<<8)&byte4;
+			} else {
+				temp_MEM_WB_DataR = 1;
+			}
+		} else {
+			temp_MEM_WB_DataR = as->dm->read_data(ex_mem->RIS->get());
+		}
+	}
 
 	/*
 	 * Forwarding unit 2b present only during branch

@@ -32,6 +32,8 @@ mvm::core::instruction_memory::~instruction_memory()
 
 void mvm::core::instruction_memory::push_instruction(instruction *inst)
 {
+	if (instructions.size() > TEXT_SEGMENT_COUNT)
+		return;
 	instructions.push_back(inst);
 }
 
@@ -44,5 +46,7 @@ mvm::core::instruction *mvm::core::instruction_memory::pop_instruction()
 
 mvm::core::instruction *mvm::core::instruction_memory::fetch_instruction(const unsigned int addr)
 {
+	if (addr>TEXT_SEGMENT_BYTES)
+		return NULL;
 	return instructions.at(addr>>2);
 }

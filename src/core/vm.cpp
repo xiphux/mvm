@@ -20,9 +20,9 @@
 #include <sys/stat.h>
 #include <iostream>
 #include <fstream>
-#include "parser/ophandlers.h"
-#include "parser/operation.h"
-#include "basic/convenience.h"
+#include "../parser/ophandlers.h"
+#include "../parser/operation.h"
+#include "../basic/convenience.h"
 #include "vm.h"
 
 mvm::core::vm::vm(const bool dbg)
@@ -54,7 +54,7 @@ bool mvm::core::vm::load_instructions(std::string const file, const bool load)
 			if (op) {
 				in = new instruction(buf,op);
 				if (load)
-					dp->im->push_instruction(in);
+					dp->as->im->push_instruction(in);
 				else
 					delete in;
 			}
@@ -86,7 +86,7 @@ void mvm::core::vm::reset()
 void mvm::core::vm::print_instructions()
 {
 	unsigned int i = 0;
-	for (std::deque<instruction*>::iterator it = dp->im->instructions.begin(); it != dp->im->instructions.end(); it++) {
+	for (std::deque<instruction*>::iterator it = dp->as->im->instructions.begin(); it != dp->as->im->instructions.end(); it++) {
 		for (std::map<std::string,unsigned int>::iterator it2 = dp->labels.begin(); it2 != dp->labels.end(); it2++) {
 			if (it2->second == i<<2)
 				std::cout << it2->first << ":" << std::endl;

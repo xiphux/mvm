@@ -30,6 +30,7 @@ namespace mvm
 		public:
 			virtual unsigned int instruction() = 0;
 			virtual ~operation(){}
+			virtual bool pseudo(){return false;}
 		};
 
 	}

@@ -1,6 +1,6 @@
 /*
- *  instruction_memory.h
- *  Instruction memory class definition
+ *  ptype.cpp
+ *  Pseudo operation class implementation
  *  Copyright (C) 2005 Christopher Han
  *
  *  This program is free software; you can redistribute it and/or modify
@@ -17,34 +17,32 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
  */
-#ifndef _MVM_INSTRUCTION_MEMORY_H
-#define _MVM_INSTRUCTION_MEMORY_H
+#include "ptype.h"
+#include "rtype.h"
 
-#include <deque>
-#include "instruction.h"
-
-#define TEXT_SEGMENT_START 0x400000
-#define TEXT_SEGMENT_END 0x10000000
-#define TEXT_SEGMENT_BYTES (TEXT_SEGMENT_END-TEXT_SEGMENT_START)
-#define TEXT_SEGMENT_COUNT (TEXT_SEGMENT_BYTES>>2)
-
-namespace mvm
+mvm::parser::ptype::ptype(std::string cmd, std::vector<std::string> params)
 {
-	namespace core
-	{
-
-		class instruction_memory
-		{
-		public:
-			instruction_memory();
-			~instruction_memory();
-			void push_instruction(instruction *inst);
-			instruction *pop_instruction();
-			instruction *fetch_instruction(const unsigned int addr);
-			std::deque<instruction*> instructions;
-		};
-
-	}
+	command = cmd;
+	parms = params;
+	translate();
 }
 
-#endif /* _MVM_INSTRUCTION_MEMORY_H */
+mvm::parser::ptype::~ptype()
+{
+}
+
+void mvm::parser::ptype::translate()
+{
+	if (command == "move")
+		translate_move();
+}
+
+void mvm::parser::ptype::translate_move()
+{
+	std::vector<std::string> p;
+	p.push_back(parms.at(0));
+	p.push_back("$0");
+	p.push_back(parms.at(1));
+	operation *o = new rtype("add",p);
+	ops.push_back(o);
+}

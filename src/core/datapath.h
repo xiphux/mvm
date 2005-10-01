@@ -21,20 +21,20 @@
 #define _MVM_DATAPATH_H
 
 #include <map>
-#include "basic/opcode.h"
-#include "core/instruction_memory.h"
-#include "core/alu.h"
-#include "core/alu_control_unit.h"
-#include "core/control.h"
-#include "core/exmux2.h"
-#include "core/exmux3.h"
-#include "core/idmux.h"
-#include "core/pc.h"
-#include "core/latch_if_id.h"
-#include "core/latch_id_ex.h"
-#include "core/latch_ex_mem.h"
-#include "core/latch_mem_wb.h"
-#include "core/register_file.h"
+#include "../basic/opcode.h"
+#include "address_space.h"
+#include "alu.h"
+#include "alu_control_unit.h"
+#include "control.h"
+#include "exmux2.h"
+#include "exmux3.h"
+#include "idmux.h"
+#include "pc.h"
+#include "latch_if_id.h"
+#include "latch_id_ex.h"
+#include "latch_ex_mem.h"
+#include "latch_mem_wb.h"
+#include "register_file.h"
 #include "stage1_if.h"
 #include "stage2_id.h"
 #include "stage3_ex.h"
@@ -63,7 +63,7 @@ namespace mvm
 
 			bool complete;
 			bool debug;
-			instruction_memory *im;
+			address_space *as;
 			PC *pc;
 			std::map<std::string,unsigned int> labels;
 		private:

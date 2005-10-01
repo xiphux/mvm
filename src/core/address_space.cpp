@@ -1,6 +1,6 @@
 /*
- *  instruction_memory.h
- *  Instruction memory class definition
+ *  address_space.cpp
+ *  Address space class implementation
  *  Copyright (C) 2005 Christopher Han
  *
  *  This program is free software; you can redistribute it and/or modify
@@ -17,34 +17,18 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
  */
-#ifndef _MVM_INSTRUCTION_MEMORY_H
-#define _MVM_INSTRUCTION_MEMORY_H
+#include "address_space.h"
 
-#include <deque>
-#include "instruction.h"
-
-#define TEXT_SEGMENT_START 0x400000
-#define TEXT_SEGMENT_END 0x10000000
-#define TEXT_SEGMENT_BYTES (TEXT_SEGMENT_END-TEXT_SEGMENT_START)
-#define TEXT_SEGMENT_COUNT (TEXT_SEGMENT_BYTES>>2)
-
-namespace mvm
+mvm::core::address_space::address_space()
 {
-	namespace core
-	{
-
-		class instruction_memory
-		{
-		public:
-			instruction_memory();
-			~instruction_memory();
-			void push_instruction(instruction *inst);
-			instruction *pop_instruction();
-			instruction *fetch_instruction(const unsigned int addr);
-			std::deque<instruction*> instructions;
-		};
-
-	}
+	im = new instruction_memory();
+	dm = new data_memory();
+	stk = new stack();
 }
 
-#endif /* _MVM_INSTRUCTION_MEMORY_H */
+mvm::core::address_space::~address_space()
+{
+	delete im;
+	delete dm;
+	delete stk;
+}

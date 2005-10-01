@@ -22,14 +22,15 @@
 
 #include <string>
 #include <vector>
-#include "basic/convenience.h"
-#include "basic/opcode.h"
+#include "../basic/convenience.h"
+#include "../basic/opcode.h"
 #include "operation.h"
 #include "rtype.h"
 #include "itype.h"
 #include "jtype.h"
-#include "ctype.h"
-#include "mvm.h"
+#include "cotype.h"
+#include "ptype.h"
+#include "../mvm.h"
 
 
 namespace mvm
@@ -44,7 +45,7 @@ namespace mvm
 				return TYPE_R;
 			else if (JTYPE(opcode))
 				return TYPE_J;
-			else if (CTYPE(opcode))
+			else if (COTYPE(opcode))
 				return TYPE_COPROC;
 			else if (ITYPE(opcode))
 				return TYPE_I;
@@ -55,7 +56,10 @@ namespace mvm
 		static unsigned int instruction_type(std::string ins)
 		{
 			transform(ins.begin(), ins.end(), ins.begin(), (int(*)(int))tolower);
-			if (ins == "add" ||
+			if (ins == "move" ||
+			    ins == "la")
+				return TYPE_P;
+			else if (ins == "add" ||
 			    ins == "addu" ||
 			    ins == "and" ||
 			    ins == "break" ||
@@ -281,11 +285,14 @@ namespace mvm
 					o = new itype(cmd,params);
 					break;
 				case TYPE_COPROC:
-					o = new ctype(cmd,params);
+					o = new cotype(cmd,params);
+					break;
+				case TYPE_P:
+					o = new ptype(cmd,params);
 					break;
 			}
 			if (o && !lastlabel.empty()) {
-				VM->dp->labels[lastlabel] = VM->dp->im->instructions.size()<<2;
+				VM->dp->labels[lastlabel] = VM->dp->as->im->instructions.size()<<2;
 				lastlabel.clear();
 			}
 			return o;

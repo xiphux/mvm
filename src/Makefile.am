@@ -1,2 +1,4 @@
+SUBDIRS = basic core parser util .
 bin_PROGRAMS = mvm
-mvm_SOURCES = basic/convenience.cpp parser/ctype.cpp parser/itype.cpp parser/jtype.cpp parser/rtype.cpp core/register32.cpp core/instruction_memory.cpp core/alu.cpp core/alu_control_unit.cpp core/control.cpp core/idmux.cpp core/exmux2.cpp core/exmux3.cpp core/pc.cpp core/latch_if_id.cpp core/latch_id_ex.cpp core/latch_ex_mem.cpp core/latch_mem_wb.cpp core/stage.cpp core/stage1_if.cpp core/stage2_id.cpp core/stage3_ex.cpp core/stage4_mem.cpp core/stage5_wb.cpp core/datapath.cpp core/vm.cpp core/instruction.cpp core/register_file.cpp util/basecmd.cpp util/posixcmd.cpp util/consolecmd.cpp util/console.cpp mvm.cpp
+mvm_SOURCES = mvm.cpp
+mvm_LDADD = basic/libmvm_basic.a core/libmvm_core.a parser/libmvm_parser.a util/libmvm_util.a
