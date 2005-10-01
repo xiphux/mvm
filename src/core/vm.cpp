@@ -61,7 +61,10 @@ bool mvm::core::vm::load_instructions(std::string const file, const bool load)
 						mvm::parser::ptype *p = dynamic_cast<mvm::parser::ptype*>(in->get_opcode());
 						for (std::vector<mvm::parser::operation*>::iterator it = p->ops.begin(); it != p->ops.end(); it++) {
 							snprintf(tm,4,"%d",i+1);
-							std::string s = " (pseudo op step ";
+							std::string s = "\t\t";
+							if (buf.size()<14)
+								s.append("\t");
+							s.append("(pseudo op step ");
 							s.append(tm).append(" : ").append(p->ins.at(i++)).append(")");
 
 							in = new instruction(buf.append(s),*it);

@@ -56,10 +56,14 @@ namespace mvm
 		static unsigned int instruction_type(std::string ins)
 		{
 			transform(ins.begin(), ins.end(), ins.begin(), (int(*)(int))tolower);
-			if (ins == "move" ||
-			    ins == "la")
+			if (
+			    ins == "move" ||
+			    ins == "la" ||
+			    ins == "li" ||
+			    ins == "lui")
 				return TYPE_P;
-			else if (ins == "add" ||
+			else if (
+			    ins == "add" ||
 			    ins == "addu" ||
 			    ins == "and" ||
 			    ins == "break" ||
@@ -88,7 +92,8 @@ namespace mvm
 			    ins == "syscall" ||
 			    ins == "xor")
 					return TYPE_R;
-			else if (ins == "addi" ||
+			else if (
+			    ins == "addi" ||
 			    ins == "addiu" ||
 			    ins == "andi" ||
 			    ins == "lui" ||
@@ -103,7 +108,8 @@ namespace mvm
 			    ins == "bltz" ||
 			    ins == "bne")
 					return TYPE_I;
-			else if (ins == "lb" ||
+			else if (
+			    ins == "lb" ||
 			    ins == "lbu" ||
 			    ins == "lh" ||
 			    ins == "lhu" ||
@@ -114,10 +120,12 @@ namespace mvm
 			    ins == "sw" ||
 			    ins == "swc1")
 					return TYPE_MEM;
-			else if (ins == "j" ||
+			else if (
+			    ins == "j" ||
 			    ins == "jal")
 					return TYPE_J;
-			else if (ins == "add.s" ||
+			else if (
+			    ins == "add.s" ||
 			    ins == "cvt.s.w" ||
 			    ins == "cvt.w.s" ||
 			    ins == "div.s" ||

@@ -43,6 +43,9 @@ namespace mvm
 			std::string command;
 			std::vector<std::string> parms;
 			void translate_move();
+			void translate_li();
+			void translate_lui();
+			void translate_la();
 		};
 
 	}

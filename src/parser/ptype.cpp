@@ -19,6 +19,7 @@
  */
 #include "ptype.h"
 #include "rtype.h"
+#include "itype.h"
 
 mvm::parser::ptype::ptype(std::string cmd, std::vector<std::string> params)
 {
@@ -35,6 +36,12 @@ void mvm::parser::ptype::translate()
 {
 	if (command == "move")
 		translate_move();
+	else if (command == "li")
+		translate_li();
+	else if (command == "lui")
+		translate_lui();
+	else if (command == "la")
+		translate_la();
 }
 
 void mvm::parser::ptype::translate_move()
@@ -45,6 +52,34 @@ void mvm::parser::ptype::translate_move()
 	p.push_back(parms.at(1));
 	operation *o = new rtype("add",p);
 	ops.push_back(o);
+	std::string i = "add "+p.at(0)+","+p.at(1)+","+p.at(2);
+	ins.push_back(i);
+}
+
+void mvm::parser::ptype::translate_li()
+{
+	std::vector<std::string> p;
+	p.push_back(parms.at(0));
+	p.push_back("$0");
+	p.push_back(parms.at(1));
+	operation *o = new itype("addi",p);
+	ops.push_back(o);
 	std::string i = "addi "+p.at(0)+","+p.at(1)+","+p.at(2);
 	ins.push_back(i);
+}
+
+void mvm::parser::ptype::translate_lui()
+{
+	std::vector<std::string> p;
+	p.push_back(parms.at(0));
+	p.push_back("$0");
+	p.push_back(parms.at(1));
+	operation *o = new itype("addiu",p);
+	ops.push_back(o);
+	std::string i = "addi "+p.at(0)+","+p.at(1)+","+p.at(2);
+	ins.push_back(i);
+}
+
+void mvm::parser::ptype::translate_la()
+{
 }
