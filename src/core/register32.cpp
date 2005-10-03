@@ -21,6 +21,7 @@
 
 mvm::core::register32::register32()
 {
+	data = 0;
 }
 
 mvm::core::register32::~register32()
