@@ -64,7 +64,7 @@ bool mvm::core::vm::load_instructions(std::string const file, const bool load)
 							std::string s = "\t\t";
 							if (buf.size()<14)
 								s.append("\t");
-							s.append("(pseudo op step ");
+							s.append("(pseudo step ");
 							s.append(tm).append(" : ").append(p->ins.at(i++)).append(")");
 
 							in = new instruction(buf.append(s),*it);

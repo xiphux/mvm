@@ -60,7 +60,9 @@ namespace mvm
 			    ins == "move" ||
 			    ins == "la" ||
 			    ins == "li" ||
-			    ins == "lui")
+			    ins == "lui" ||
+			    ins == "beqz" ||
+			    ins == "bnez")
 				return TYPE_P;
 			else if (
 			    ins == "add" ||
@@ -135,6 +137,7 @@ namespace mvm
 			    ins == "mul.s" ||
 			    ins == "sub.s")
 					return TYPE_COPROC;
+			printf("Unrecognized operation %s\n",ins.c_str());
 			return TYPE_NULL;
 		}
 
@@ -301,6 +304,7 @@ namespace mvm
 			}
 			if (o && !lastlabel.empty()) {
 				VM->dp->labels[lastlabel] = VM->dp->as->im->instructions.size()<<2;
+				printf("Last label %s: %d\n",lastlabel.c_str(),VM->dp->as->im->instructions.size());
 				lastlabel.clear();
 			}
 			return o;

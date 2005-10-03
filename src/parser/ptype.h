@@ -46,6 +46,8 @@ namespace mvm
 			void translate_li();
 			void translate_lui();
 			void translate_la();
+			void translate_beqz();
+			void translate_bnez();
 		};
 
 	}

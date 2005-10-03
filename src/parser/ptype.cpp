@@ -42,6 +42,10 @@ void mvm::parser::ptype::translate()
 		translate_lui();
 	else if (command == "la")
 		translate_la();
+	else if (command == "beqz")
+		translate_beqz();
+	else if (command == "bnez")
+		translate_bnez();
 }
 
 void mvm::parser::ptype::translate_move()
@@ -82,4 +86,26 @@ void mvm::parser::ptype::translate_lui()
 
 void mvm::parser::ptype::translate_la()
 {
+}
+
+void mvm::parser::ptype::translate_beqz()
+{
+	std::vector<std::string> p;
+	p.push_back(parms.at(0));
+	p.push_back("$0");
+	p.push_back(parms.at(1));
+	operation *o = new itype("beq",p);
+	std::string i = "beq "+p.at(0)+","+p.at(1)+","+p.at(2);
+	ins.push_back(i);
+}
+
+void mvm::parser::ptype::translate_bnez()
+{
+	std::vector<std::string> p;
+	p.push_back(parms.at(0));
+	p.push_back("$0");
+	p.push_back(parms.at(1));
+	operation *o = new itype("bne",p);
+	std::string i = "bne "+p.at(0)+","+p.at(1)+","+p.at(2);
+	ins.push_back(i);
 }

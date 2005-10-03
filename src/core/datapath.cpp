@@ -221,7 +221,7 @@ void mvm::core::datapath::tick()
 	 */
 	unsigned int ctrl_EX = id_ex->WB->get()>>31;
 	unsigned int exDest;
-	if (ctrl_EX && (isBne == 0x4 || isBne == 0x5)) {
+	if (ctrl_EX && (isBne == ITYPE_OP_BEQ || isBne == ITYPE_OP_BNE)) {
 		if (!(id_ex->EX->get()>>31))
 			exDest = id_ex->RT->get();
 		else
@@ -267,7 +267,7 @@ void mvm::core::datapath::tick()
 	/*
 	 * Possible new PC 1
 	 */
-	if (IsJump == 0x2 || IsJump == 0x3)
+	if (IsJump == JTYPE_OP_J || IsJump == JTYPE_OP_JAL)
 		NewPC1 = ADDR(inst->get_opcode()->instruction());
 	else
 		NewPC1 = temp_ID_EX_imm;
@@ -290,8 +290,6 @@ void mvm::core::datapath::tick()
 	/*
 	 * Given references to the memory
 	 */
-	//    Load
-	//
 	/*
 	 * Save to memory (MemWrite = 1)
 	 */
@@ -373,12 +371,12 @@ void mvm::core::datapath::tick()
 	 * If the two read data are equal
 	 */
 	if (bData1 == bData2) {
-		if (isBne == 5)
+		if (isBne == ITYPE_OP_BNE)
 			ctrl1 = 0;
 		else
 			ctrl1 = 1;
 	} else {
-		if (isBne == 5)
+		if (isBne == ITYPE_OP_BNE)
 			/*
 			 * BNE
 			 */
@@ -390,10 +388,10 @@ void mvm::core::datapath::tick()
 	/*
 	 * In the case of an unconditional jump, ctrl is always 1
 	 */
-	if (isBne == 2 || isBne == 3) {
+	if (isBne == JTYPE_OP_J || isBne == JTYPE_OP_JAL) {
 		ctrl1 = 1;
-		if (isBne == 3)
-			rf->set_register(31,pc->get_value());
+		if (isBne == JTYPE_OP_JAL)
+			rf->set_register(31,pc->get_address());
 	}
 
 	unsigned int isjr = inst->get_opcode()->instruction()&0x3f;
@@ -425,7 +423,7 @@ void mvm::core::datapath::tick()
 		 */
 		IDmux->set_signal1(ctrl1);
 		IDmux->set_signal2(ctrl2);
-		temp_PC = IDmux->mux(NewPC1,NewPC2);
+		temp_PC = IDmux->mux(NewPC1>>2,NewPC2);
 	} else
 		temp_PC = pc->get_value();
 	unsigned int ID_discard = ctrl->read_instruction(inst->get_opcode()->instruction(),SIGNAL_DISCARD);
