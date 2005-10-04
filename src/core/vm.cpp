@@ -58,6 +58,7 @@ bool mvm::core::vm::load_instructions(std::string const file, const bool load)
 					if (in->get_opcode()->pseudo()) {
 						int i = 0;
 						char tm[4];
+						instruction *in2;
 						mvm::parser::ptype *p = dynamic_cast<mvm::parser::ptype*>(in->get_opcode());
 						for (std::vector<mvm::parser::operation*>::iterator it = p->ops.begin(); it != p->ops.end(); it++) {
 							snprintf(tm,4,"%d",i+1);
@@ -66,10 +67,10 @@ bool mvm::core::vm::load_instructions(std::string const file, const bool load)
 								s.append("\t");
 							s.append("(pseudo step ");
 							s.append(tm).append(" : ").append(p->ins.at(i++)).append(")");
-
-							in = new instruction(buf.append(s),*it);
-							dp->as->im->push_instruction(in);
+							in2 = new instruction(buf.append(s),*it);
+							dp->as->im->push_instruction(in2);
 						}
+						delete in;
 					} else
 						dp->as->im->push_instruction(in);
 				}

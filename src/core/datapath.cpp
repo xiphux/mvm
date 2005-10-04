@@ -66,12 +66,15 @@ mvm::core::datapath::~datapath()
 	delete id_ex;
 	delete ex_mem;
 	delete mem_wb;
+	delete nop;
+	labels.clear();
 }
 
 void mvm::core::datapath::init()
 {
 	mvm::parser::operation *o = new mvm::parser::rtype(0);
-	inst = new instruction("nop",o);
+	nop = new instruction("nop",o);
+	inst = nop;
 }
 
 void mvm::core::datapath::advance_instructions()
@@ -337,6 +340,9 @@ void mvm::core::datapath::tick()
 				temp_MEM_WB_DataR = 1;
 			}
 		} else {
+			/*
+			 * Load byte
+			 */
 			temp_MEM_WB_DataR = as->dm->read_data(ex_mem->RIS->get());
 		}
 	}

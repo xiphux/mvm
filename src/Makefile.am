@@ -1,4 +1,4 @@
-SUBDIRS = basic core parser util .
+SUBDIRS = basic core parser util $(NCURSESSUBDIRS) .
 bin_PROGRAMS = mvm
 mvm_SOURCES = mvm.cpp
-mvm_LDADD = basic/libmvm_basic.a core/libmvm_core.a parser/libmvm_parser.a util/libmvm_util.a
+mvm_LDADD = basic/libmvm_basic.a core/libmvm_core.a parser/libmvm_parser.a util/libmvm_util.a @NCURSESOBJS@ @NCURSES_LIBS@

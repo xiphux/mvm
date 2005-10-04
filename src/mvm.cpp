@@ -22,13 +22,21 @@
 #include "parser/ophandlers.h"
 #include "util/console.h"
 #include "mvm.h"
+#ifdef NCURSES_GUI
+#include <signal.h>
+#include "gui/gui.h"
+#endif
 
 static bool complete = false;
 static bool debug = false;
 static bool loaded = false;
 mvm::core::vm *VM = 0;
 static mvm::util::console *con = 0;
+#ifdef NCURSES_GUI
+static mvm::gui::gui *maingui = 0;
+#endif
 static std::vector<std::string> files;
+unsigned int maxx,maxy;
 
 static inline void display_version_string()
 {
@@ -148,11 +156,53 @@ static inline void run_console()
 	delete con;
 }
 
+#ifdef NCURSES_GUI
+static void handle_resize(int sig)
+{
+	getmaxyx(stdscr,maxx,maxy);
+	maingui->resize(maxx,maxy);
+}
+
+static inline void run_gui()
+{
+	maxy = LINES;
+	maxx = COLS;
+	signal(SIGWINCH,handle_resize);
+	initscr();
+	clear();
+	start_color();
+	raw();
+	keypad(stdscr,TRUE);
+	noecho();
+	curs_set(0);
+	init_pair(1,COLOR_CYAN,COLOR_BLACK);
+	werase(stdscr);
+	maingui = new mvm::gui::gui(1,1,maxy,maxx);
+	attron(COLOR_PAIR(1));
+	box(stdscr,0,0);
+	if (!files.empty())
+		VM->load_instructions(files.at(0));
+	int ch;
+	while (!maingui->complete) {
+		maingui->draw();
+		refresh();
+		maingui->keypressed(getch());
+	}
+	attroff(COLOR_PAIR(1));
+	curs_set(1);
+	endwin();
+	return;
+}
+#endif
+
 int main(int argc, char **argv)
 {
 	mvm::util::BaseCmd *cmd = mvm::util::BaseCmd::initialize(argc,argv);
 	cmd->addoption('d',"debug",OPTPARM_NONE,"","Enable debugging output");
 	cmd->addoption('b',"batch",OPTPARM_NONE,"","Run entire file (no console)");
+#ifdef NCURSES_GUI
+	cmd->addoption('g',"gui",OPTPARM_NONE,"","Use ncurses gui");
+#endif
 	cmd->parse();
 	if (cmd->result("help")) {
 		cmd->usage("Mvm",VERSION_STRING);
@@ -180,6 +230,7 @@ int main(int argc, char **argv)
 		if (files.empty()) {
 			fprintf(stderr,"Error: no input file given\n");
 			delete cmd;
+			delete VM;
 			return 1;
 		}
 		for (std::vector<std::string>::iterator it = files.begin(); it != files.end(); it++) {
@@ -188,7 +239,14 @@ int main(int argc, char **argv)
 			VM->reset();
 		}
 	} else
+#ifdef NCURSES_GUI
+	if (cmd->result("gui")) {
+		run_gui();
+		delete maingui;
+	} else
+#endif
 		run_console();
+	delete VM;
 	delete cmd;
 	return 0;
 }

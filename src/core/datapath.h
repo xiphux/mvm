@@ -113,6 +113,7 @@ namespace mvm
 			unsigned int MemIstrDim;
 			instruction *inst;
 			unsigned int ctrl1;
+			instruction *nop;
 		};
 
 	}

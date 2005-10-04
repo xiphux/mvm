@@ -30,6 +30,8 @@ mvm::parser::ptype::ptype(std::string cmd, std::vector<std::string> params)
 
 mvm::parser::ptype::~ptype()
 {
+	for (std::vector<operation*>::iterator it = ops.begin(); it != ops.end(); it++)
+		delete *it;
 }
 
 void mvm::parser::ptype::translate()
