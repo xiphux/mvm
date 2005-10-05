@@ -74,6 +74,8 @@ namespace mvm
 			struct win_s rm;
 			struct win_s ideq;
 			struct win_s se;
+			struct win_s exmux6;
+			struct win_s exmux5;
 			struct win_s exmux4;
 			struct win_s exmux3;
 			struct win_s exmux2;
@@ -84,6 +86,8 @@ namespace mvm
 			struct win_s fwd;
 			struct win_s memwblatch;
 			struct win_s wbmux;
+			struct win_s idmux;
+			struct win_s idor;
 		};
 
 	}

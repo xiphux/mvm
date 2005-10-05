@@ -246,9 +246,9 @@ void mvm::gui::gui::drawcomponents()
 	/*
 	 * Hazard Detection Unit
 	 */
-	hdu.height = 4;
+	hdu.height = 5;
 	hdu.width = 10;
-	hdu.starty = y0+4;
+	hdu.starty = y0+3;
 	hdu.startx = x0+40;
 	hdu.border.ls = ACS_VLINE;
 	hdu.border.rs = ACS_VLINE;
@@ -259,9 +259,9 @@ void mvm::gui::gui::drawcomponents()
 	hdu.border.bl = ACS_LLCORNER;
 	hdu.border.br = ACS_LRCORNER;
 	drawprimitive(&hdu);
-	mvwprintw(stdscr,y0+5,x0+42,"Hazard");
-	mvwprintw(stdscr,y0+6,x0+41,"Detection");
-	mvwprintw(stdscr,y0+7,x0+43,"Unit");
+	mvwprintw(stdscr,y0+4,x0+42,"Hazard");
+	mvwprintw(stdscr,y0+5,x0+41,"Detection");
+	mvwprintw(stdscr,y0+6,x0+43,"Unit");
 
 	/*
 	 * Control unit
@@ -341,6 +341,44 @@ void mvm::gui::gui::drawcomponents()
 	ideq.border.br = ACS_LRCORNER;
 	drawprimitive(&ideq);
 	mvwprintw(stdscr,vmidpoint(pci)+6,x0+70,"=");
+
+	/*
+	 * ID MUX
+	 */
+	idmux.height = 4;
+	idmux.width = 3;
+	idmux.starty = y0+10;
+	idmux.startx = x0+67;
+	idmux.border.ls = ACS_VLINE;
+	idmux.border.rs = ACS_VLINE;
+	idmux.border.ts = ACS_HLINE;
+	idmux.border.bs = ACS_HLINE;
+	idmux.border.tl = ACS_ULCORNER;
+	idmux.border.tr = ACS_URCORNER;
+	idmux.border.bl = ACS_LLCORNER;
+	idmux.border.br = ACS_LRCORNER;
+	drawprimitive(&idmux);
+	mvwprintw(stdscr,y0+11,x0+68,"M");
+	mvwprintw(stdscr,y0+12,x0+68,"U");
+	mvwprintw(stdscr,y0+13,x0+68,"X");
+
+	/*
+	 * ID OR
+	 */
+	idor.height = 2;
+	idor.width = 3;
+	idor.starty = y0+5;
+	idor.startx = x0+66;
+	idor.border.ls = ACS_VLINE;
+	idor.border.rs = ACS_VLINE;
+	idor.border.ts = ACS_HLINE;
+	idor.border.bs = ACS_HLINE;
+	idor.border.tl = ACS_ULCORNER;
+	idor.border.tr = ACS_URCORNER;
+	idor.border.bl = ACS_LLCORNER;
+	idor.border.br = ACS_LRCORNER;
+	drawprimitive(&idor);
+	mvwprintw(stdscr,vmidpoint(idor),hmidpoint(idor),"OR");
 
 	/*
 	 * Sign Extension
@@ -467,6 +505,46 @@ void mvm::gui::gui::drawcomponents()
 	mvwprintw(stdscr,y0+18,x0+89,"M");
 	mvwprintw(stdscr,y0+19,x0+89,"U");
 	mvwprintw(stdscr,y0+20,x0+89,"X");
+
+	/*
+	 * EX MUX 5
+	 */
+	exmux5.height = 4;
+	exmux5.width = 3;
+	exmux5.starty = y0+11;
+	exmux5.startx = x0+107;
+	exmux5.border.ls = ACS_VLINE;
+	exmux5.border.rs = ACS_VLINE;
+	exmux5.border.ts = ACS_HLINE;
+	exmux5.border.bs = ACS_HLINE;
+	exmux5.border.tl = ACS_ULCORNER;
+	exmux5.border.tr = ACS_URCORNER;
+	exmux5.border.bl = ACS_LLCORNER;
+	exmux5.border.br = ACS_LRCORNER;
+	drawprimitive(&exmux5);
+	mvwprintw(stdscr,y0+12,x0+108,"M");
+	mvwprintw(stdscr,y0+13,x0+108,"U");
+	mvwprintw(stdscr,y0+14,x0+108,"X");
+
+	/*
+	 * EX MUX 6
+	 */
+	exmux6.height = 4;
+	exmux6.width = 3;
+	exmux6.starty = y0+7;
+	exmux6.startx = x0+102;
+	exmux6.border.ls = ACS_VLINE;
+	exmux6.border.rs = ACS_VLINE;
+	exmux6.border.ts = ACS_HLINE;
+	exmux6.border.bs = ACS_HLINE;
+	exmux6.border.tl = ACS_ULCORNER;
+	exmux6.border.tr = ACS_URCORNER;
+	exmux6.border.bl = ACS_LLCORNER;
+	exmux6.border.br = ACS_LRCORNER;
+	drawprimitive(&exmux6);
+	mvwprintw(stdscr,y0+8,x0+103,"M");
+	mvwprintw(stdscr,y0+9,x0+103,"U");
+	mvwprintw(stdscr,y0+10,x0+103,"X");
 
 	/*
 	 * ALU Control Unit
@@ -610,7 +688,7 @@ void mvm::gui::gui::drawcomponents()
 	mvwprintw(stdscr,y0+14,x0+153,"WB");
 
 	/*
-	 * EX MUX 3
+	 * WB MUX
 	 */
 	wbmux.height = 4;
 	wbmux.width = 3;
@@ -892,13 +970,13 @@ void mvm::gui::gui::drawdatapaths()
 	for (i = 48; i <= 60; i++)
 		mvwaddch(stdscr,y0+17,x0+i,ACS_HLINE);
 	mvwaddch(stdscr,y0+17,x0+61,ACS_LRCORNER);
-	for (i = 16; i >= 4; i--)
+	for (i = 16; i >= 3; i--)
 		mvwaddch(stdscr,y0+i,x0+61,ACS_VLINE);
-	mvwaddch(stdscr,y0+3,x0+61,ACS_URCORNER);
+	mvwaddch(stdscr,y0+2,x0+61,ACS_URCORNER);
 	for (i = 60; i >= 13; i--)
-		mvwaddch(stdscr,y0+3,x0+i,ACS_HLINE);
-	mvwaddch(stdscr,y0+3,x0+12,ACS_ULCORNER);
-	for (i = 4; i <= 11; i++)
+		mvwaddch(stdscr,y0+2,x0+i,ACS_HLINE);
+	mvwaddch(stdscr,y0+2,x0+12,ACS_ULCORNER);
+	for (i = 3; i <= 11; i++)
 		mvwaddch(stdscr,y0+i,x0+12,ACS_VLINE);
 	mvwaddch(stdscr,y0+12,x0+12,ACS_LLCORNER);
 	mvwaddch(stdscr,y0+12,x0+13,ACS_HLINE);
@@ -1240,5 +1318,472 @@ void mvm::gui::gui::drawcontrolpaths()
 	mvwaddch(stdscr,y0+6,x0+15,ACS_TTEE);
 	for (i = 7; i <= 10; i++)
 		mvwaddch(stdscr,y0+i,x0+15,ACS_VLINE);
-	mvwaddch(stdscr,y0+11,x0+15,ACS_BTEE);
+	mvwaddch(stdscr,y0+11,x0+15,ACS_DARROW);
+
+	/*
+	 * Hazard Detection Unit -> IF/ID Latch
+	 */
+	mvwaddch(stdscr,y0+5,x0+40,ACS_RTEE);
+	for (i = 39; i >= 29; i--)
+		mvwaddch(stdscr,y0+5,x0+i,ACS_HLINE);
+	mvwaddch(stdscr,y0+5,x0+28,ACS_ULCORNER);
+	for (i = 6; i <= 15; i++)
+		mvwaddch(stdscr,y0+i,x0+28,ACS_VLINE);
+	mvwaddch(stdscr,y0+16,x0+28,ACS_DARROW);
+
+	/*
+	 * Hazard Detection Unit -> PC
+	 */
+	mvwaddch(stdscr,y0+4,x0+40,ACS_RTEE);
+	for (i = 39; i >= 23; i--)
+		mvwaddch(stdscr,y0+4,x0+i,ACS_HLINE);
+	mvwaddch(stdscr,y0+4,x0+22,ACS_ULCORNER);
+	mvwaddch(stdscr,y0+5,x0+22,ACS_VLINE);
+	mvwaddch(stdscr,y0+6,x0+22,ACS_VLINE);
+	mvwaddch(stdscr,y0+7,x0+22,ACS_LRCORNER);
+	for (i = 21; i >= 4; i--)
+		mvwaddch(stdscr,y0+7,x0+i,ACS_HLINE);
+	mvwaddch(stdscr,y0+7,x0+3,ACS_ULCORNER);
+	for (i = 8; i <= 24; i++)
+		mvwaddch(stdscr,y0+i,x0+3,ACS_VLINE);
+	mvwaddch(stdscr,y0+25,x0+3,ACS_LLCORNER);
+	mvwaddch(stdscr,y0+25,x0+4,ACS_HLINE);
+	mvwaddch(stdscr,y0+25,x0+5,ACS_URCORNER);
+	mvwaddch(stdscr,y0+26,x0+5,ACS_DARROW);
+	
+	/*
+	 * Control Unit -> IF MUX
+	 */
+	mvwaddch(stdscr,y0+10,x0+39,ACS_RTEE);
+	mvwaddch(stdscr,y0+10,x0+38,ACS_LLCORNER);
+	mvwaddch(stdscr,y0+9,x0+38,ACS_URCORNER);
+	for (i = 37; i >= 18; i--)
+		mvwaddch(stdscr,y0+9,x0+i,ACS_HLINE);
+	mvwaddch(stdscr,y0+9,x0+17,ACS_ULCORNER);
+	mvwaddch(stdscr,y0+10,x0+17,ACS_VLINE);
+	mvwaddch(stdscr,y0+11,x0+17,ACS_DARROW);
+
+	/*
+	 * Control Unit -> IF AND (Jump)
+	 */
+	mvwaddch(stdscr,y0+11,x0+39,ACS_RTEE);
+	for (i = 38; i >= 31; i--)
+		mvwaddch(stdscr,y0+11,x0+i,ACS_HLINE);
+	mvwaddch(stdscr,y0+11,x0+30,ACS_LLCORNER);
+	for (i = 10; i >= 4; i--)
+		mvwaddch(stdscr,y0+i,x0+30,ACS_VLINE);
+	mvwaddch(stdscr,y0+3,x0+30,ACS_URCORNER);
+	for (i = 29; i >= 18; i--)
+		mvwaddch(stdscr,y0+3,x0+i,ACS_HLINE);
+	mvwaddch(stdscr,y0+3,x0+17,ACS_ULCORNER);
+	mvwaddch(stdscr,y0+4,x0+17,ACS_DARROW);
+
+	/*
+	 * Control Unit -> ID MUX
+	 */
+	mvwaddch(stdscr,y0+11,x0+47,ACS_LTEE);
+	for (i = 48; i <= 66; i++)
+		mvwaddch(stdscr,y0+11,x0+i,ACS_HLINE);
+	mvwaddch(stdscr,y0+11,x0+67,ACS_RARROW);
+
+	/*
+	 * 0 -> ID MUX
+	 */
+	mvwaddch(stdscr,y0+13,x0+65,'0');
+	mvwaddch(stdscr,y0+13,x0+66,ACS_HLINE);
+	mvwaddch(stdscr,y0+13,x0+67,ACS_RARROW);
+
+	/*
+	 * ID OR -> ID MUX
+	 */
+	mvwaddch(stdscr,y0+7,x0+68,ACS_TTEE);
+	mvwaddch(stdscr,y0+8,x0+68,ACS_VLINE);
+	mvwaddch(stdscr,y0+9,x0+68,ACS_VLINE);
+	mvwaddch(stdscr,y0+10,x0+68,ACS_DARROW);
+
+	/*
+	 * Control Unit -> IF/ID Latch
+	 */
+	mvwaddch(stdscr,y0+10,x0+47,ACS_LTEE);
+	for (i = 48; i <= 51; i++)
+		mvwaddch(stdscr,y0+10,x0+i,ACS_HLINE);
+	mvwaddch(stdscr,y0+10,x0+52,ACS_LRCORNER);
+	for (i = 9; i >= 2; i--)
+		mvwaddch(stdscr,y0+i,x0+52,ACS_VLINE);
+	mvwaddch(stdscr,y0+1,x0+52,ACS_URCORNER);
+	for (i = 51; i >= 2; i--)
+		mvwaddch(stdscr,y0+1,x0+i,ACS_HLINE);
+	mvwaddch(stdscr,y0+1,x0+1,ACS_ULCORNER);
+	for (i = 2; i <= 34; i++)
+		mvwaddch(stdscr,y0+i,x0+1,ACS_VLINE);
+	mvwaddch(stdscr,y0+35,x0+1,ACS_LLCORNER);
+	for (i = 2; i <= 24; i++)
+		mvwaddch(stdscr,y0+35,x0+i,ACS_HLINE);
+	mvwaddch(stdscr,y0+35,x0+25,ACS_RARROW);
+
+	/*
+	 * Control Unit -> ID OR
+	 */
+	mvwaddch(stdscr,y0+12,x0+47,ACS_LTEE);
+	for (i = 48; i <= 56; i++)
+		mvwaddch(stdscr,y0+12,x0+i,ACS_HLINE);
+	mvwaddch(stdscr,y0+12,x0+57,ACS_LRCORNER);
+	for (i = 11; i >= 4; i--)
+		mvwaddch(stdscr,y0+i,x0+57,ACS_VLINE);
+	mvwaddch(stdscr,y0+3,x0+57,ACS_ULCORNER);
+	for (i = 58; i <= 67; i++)
+		mvwaddch(stdscr,y0+3,x0+i,ACS_HLINE);
+	mvwaddch(stdscr,y0+3,x0+68,ACS_URCORNER);
+	mvwaddch(stdscr,y0+4,x0+68,ACS_VLINE);
+	mvwaddch(stdscr,y0+5,x0+68,ACS_DARROW);
+
+	/*
+	 * Hazard Unit -> ID OR
+	 */
+	mvwaddch(stdscr,y0+4,x0+50,ACS_LTEE);
+	for (i = 51; i <= 66; i++)
+		mvwaddch(stdscr,y0+4,x0+i,ACS_HLINE);
+	mvwaddch(stdscr,y0+4,x0+67,ACS_URCORNER);
+	mvwaddch(stdscr,y0+5,x0+67,ACS_DARROW);
+	
+	/*
+	 * ID MUX -> ID/EX Latch
+	 */
+	mvwaddch(stdscr,y0+12,x0+70,ACS_LTEE);
+	mvwaddch(stdscr,y0+12,x0+71,ACS_HLINE);
+	mvwaddch(stdscr,y0+12,x0+72,ACS_PLUS);
+	mvwaddch(stdscr,y0+12,x0+73,ACS_HLINE);
+	mvwaddch(stdscr,y0+12,x0+74,ACS_HLINE);
+	mvwaddch(stdscr,y0+12,x0+75,ACS_RARROW);
+	mvwaddch(stdscr,y0+11,x0+72,ACS_VLINE);
+	mvwaddch(stdscr,y0+13,x0+72,ACS_VLINE);
+	mvwaddch(stdscr,y0+10,x0+72,ACS_VLINE);
+	mvwaddch(stdscr,y0+14,x0+72,ACS_VLINE);
+	mvwaddch(stdscr,y0+9,x0+72,ACS_VLINE);
+	mvwaddch(stdscr,y0+15,x0+72,ACS_VLINE);
+	mvwaddch(stdscr,y0+8,x0+72,ACS_ULCORNER);
+	mvwaddch(stdscr,y0+8,x0+73,ACS_HLINE);
+	mvwaddch(stdscr,y0+8,x0+74,ACS_HLINE);
+	mvwaddch(stdscr,y0+8,x0+75,ACS_RARROW);
+	mvwaddch(stdscr,y0+16,x0+72,ACS_LLCORNER);
+	mvwaddch(stdscr,y0+16,x0+73,ACS_HLINE);
+	mvwaddch(stdscr,y0+16,x0+74,ACS_HLINE);
+	mvwaddch(stdscr,y0+16,x0+75,ACS_RARROW);
+
+	/*
+	 * ID/EX.M -> EX MUX 5
+	 */
+	mvwaddch(stdscr,y0+12,x0+81,ACS_LTEE);
+	for (i = 82; i <= 106; i++)
+		mvwaddch(stdscr,y0+12,x0+i,ACS_HLINE);
+	mvwaddch(stdscr,y0+12,x0+107,ACS_RARROW);
+
+	/*
+	 * 0 -> EX MUX 5
+	 */
+	mvwaddch(stdscr,y0+14,x0+107,ACS_RARROW);
+	mvwaddch(stdscr,y0+14,x0+106,ACS_HLINE);
+	mvwaddch(stdscr,y0+14,x0+105,'0');
+
+	/*
+	 * ID/EX.M -> Register Memory
+	 */
+	mvwaddch(stdscr,y0+12,x0+83,ACS_BTEE);
+	for (i = 11; i >= 2; i--)
+		mvwaddch(stdscr,y0+i,x0+83,ACS_VLINE);
+	mvwaddch(stdscr,y0+1,x0+83,ACS_URCORNER);
+	for (i = 82; i >= 54; i--)
+		mvwaddch(stdscr,y0+1,x0+i,ACS_HLINE);
+	mvwaddch(stdscr,y0+1,x0+53,ACS_ULCORNER);
+	mvwaddch(stdscr,y0+2,x0+53,ACS_VLINE);
+	mvwaddch(stdscr,y0+3,x0+53,ACS_VLINE);
+	mvwaddch(stdscr,y0+4,x0+53,ACS_VLINE);
+	mvwaddch(stdscr,y0+5,x0+53,ACS_LRCORNER);
+	mvwaddch(stdscr,y0+5,x0+52,ACS_HLINE);
+	mvwaddch(stdscr,y0+5,x0+51,ACS_HLINE);
+	mvwaddch(stdscr,y0+5,x0+50,ACS_LARROW);
+
+	/*
+	 * EX MUX 5 -> EX/MEM.M
+	 */
+	mvwaddch(stdscr,y0+13,x0+110,ACS_LTEE);
+	mvwaddch(stdscr,y0+13,x0+111,ACS_HLINE);
+	mvwaddch(stdscr,y0+13,x0+112,ACS_URCORNER);
+	mvwaddch(stdscr,y0+14,x0+112,ACS_VLINE);
+	mvwaddch(stdscr,y0+15,x0+112,ACS_LLCORNER);
+	mvwaddch(stdscr,y0+15,x0+113,ACS_HLINE);
+	mvwaddch(stdscr,y0+15,x0+114,ACS_HLINE);
+	mvwaddch(stdscr,y0+15,x0+115,ACS_RARROW);
+
+	/*
+	 * ID/EX.WB -> EX MUX 6
+	 */
+	mvwaddch(stdscr,y0+8,x0+81,ACS_LTEE);
+	for (i = 82; i <= 101; i++)
+		mvwaddch(stdscr,y0+8,x0+i,ACS_HLINE);
+	mvwaddch(stdscr,y0+8,x0+102,ACS_RARROW);
+	
+	/*
+	 * 0 -> EX MUX 6
+	 */
+	mvwaddch(stdscr,y0+10,x0+100,'0');
+	mvwaddch(stdscr,y0+10,x0+101,ACS_HLINE);
+	mvwaddch(stdscr,y0+10,x0+102,ACS_RARROW);
+
+	/*
+	 * EX MUX 6 -> EX/MEM.WB
+	 */
+	mvwaddch(stdscr,y0+9,x0+105,ACS_LTEE);
+	for (i = 106; i <= 111; i++)
+		mvwaddch(stdscr,y0+9,x0+i,ACS_HLINE);
+	mvwaddch(stdscr,y0+9,x0+112,ACS_URCORNER);
+	mvwaddch(stdscr,y0+10,x0+112,ACS_VLINE);
+	mvwaddch(stdscr,y0+11,x0+112,ACS_LLCORNER);
+	mvwaddch(stdscr,y0+11,x0+113,ACS_HLINE);
+	mvwaddch(stdscr,y0+11,x0+114,ACS_HLINE);
+	mvwaddch(stdscr,y0+11,x0+115,ACS_RARROW);
+
+	/*
+	 * Control Unit -> EX MUX 6
+	 */
+	mvwaddch(stdscr,y0+13,x0+47,ACS_LTEE);
+	for (i = 48; i <= 54; i++)
+		mvwaddch(stdscr,y0+13,x0+i,ACS_HLINE);
+	mvwaddch(stdscr,y0+13,x0+55,ACS_LRCORNER);
+	for (i = 12; i >= 9; i--)
+		mvwaddch(stdscr,y0+i,x0+55,ACS_VLINE);
+	mvwaddch(stdscr,y0+8,x0+55,ACS_ULCORNER);
+	for (i = 56; i <= 70; i++)
+		mvwaddch(stdscr,y0+8,x0+i,ACS_HLINE);
+	mvwaddch(stdscr,y0+8,x0+71,ACS_LRCORNER);
+	for (i = 7; i >= 4; i--)
+		mvwaddch(stdscr,y0+i,x0+71,ACS_VLINE);
+	mvwaddch(stdscr,y0+3,x0+71,ACS_ULCORNER);
+	for (i = 72; i <= 102; i++)
+		mvwaddch(stdscr,y0+3,x0+i,ACS_HLINE);
+	mvwaddch(stdscr,y0+3,x0+103,ACS_URCORNER);
+	for (i = 4; i <= 6; i++)
+		mvwaddch(stdscr,y0+i,x0+103,ACS_VLINE);
+	mvwaddch(stdscr,y0+7,x0+103,ACS_DARROW);
+
+	/*
+	 * Control Unit -> EX MUX 5
+	 */
+	mvwaddch(stdscr,y0+5,x0+103,ACS_LTEE);
+	mvwaddch(stdscr,y0+5,x0+104,ACS_HLINE);
+	mvwaddch(stdscr,y0+5,x0+105,ACS_HLINE);
+	mvwaddch(stdscr,y0+5,x0+106,ACS_HLINE);
+	mvwaddch(stdscr,y0+5,x0+107,ACS_HLINE);
+	mvwaddch(stdscr,y0+5,x0+108,ACS_URCORNER);
+	for (i = 6; i <= 10; i++)
+		mvwaddch(stdscr,y0+i,x0+108,ACS_VLINE);
+	mvwaddch(stdscr,y0+11,x0+108,ACS_DARROW);
+
+	/*
+	 * EX/MEM.M -> Data Memory (MemWrite)
+	 */
+	mvwaddch(stdscr,y0+15,x0+122,ACS_LTEE);
+	for (i = 123; i <= 135; i++)
+		mvwaddch(stdscr,y0+15,x0+i,ACS_HLINE);
+	mvwaddch(stdscr,y0+15,x0+136,ACS_URCORNER);
+	for (i = 16; i <= 19; i++)
+		mvwaddch(stdscr,y0+i,x0+136,ACS_VLINE);
+	mvwaddch(stdscr,y0+20,x0+136,ACS_DARROW);
+
+	/*
+	 * EX/MEM.M -> Data Memory (MemRead)
+	 */
+	mvwaddch(stdscr,y0+14,x0+122,ACS_LTEE);
+	for (i = 123; i <= 146; i++)
+		mvwaddch(stdscr,y0+14,x0+i,ACS_HLINE);
+	mvwaddch(stdscr,y0+14,x0+147,ACS_URCORNER);
+	for (i = 15; i <= 30; i++)
+		mvwaddch(stdscr,y0+i,x0+147,ACS_VLINE);
+	mvwaddch(stdscr,y0+31,x0+147,ACS_LRCORNER);
+	for (i = 146; i >= 137; i--)
+		mvwaddch(stdscr,y0+31,x0+i,ACS_HLINE);
+	mvwaddch(stdscr,y0+31,x0+136,ACS_LLCORNER);
+	mvwaddch(stdscr,y0+30,x0+136,ACS_UARROW);
+
+	/*
+	 * EX/MEM.WB -> MEM/WB.WB
+	 */
+	mvwaddch(stdscr,y0+11,x0+122,ACS_LTEE);
+	for (i = 123; i <= 148; i++)
+		mvwaddch(stdscr,y0+11,x0+i,ACS_HLINE);
+	mvwaddch(stdscr,y0+11,x0+149,ACS_URCORNER);
+	mvwaddch(stdscr,y0+12,x0+149,ACS_VLINE);
+	mvwaddch(stdscr,y0+13,x0+149,ACS_VLINE);
+	mvwaddch(stdscr,y0+14,x0+149,ACS_LLCORNER);
+	mvwaddch(stdscr,y0+14,x0+150,ACS_RARROW);
+
+	/*
+	 * EX/MEM.WB -> Forwarding unit
+	 */
+	mvwaddch(stdscr,y0+11,x0+123,ACS_TTEE);
+	for (i = 12; i <= 38; i++)
+		mvwaddch(stdscr,y0+i,x0+123,ACS_VLINE);
+	mvwaddch(stdscr,y0+39,x0+123,ACS_LRCORNER);
+	for (i = 122; i >= 115; i--)
+		mvwaddch(stdscr,y0+39,x0+i,ACS_HLINE);
+	mvwaddch(stdscr,y0+39,x0+114,ACS_LLCORNER);
+	mvwaddch(stdscr,y0+38,x0+114,ACS_VLINE);
+	mvwaddch(stdscr,y0+37,x0+114,ACS_VLINE);
+	mvwaddch(stdscr,y0+36,x0+114,ACS_URCORNER);
+	mvwaddch(stdscr,y0+36,x0+113,ACS_HLINE);
+	mvwaddch(stdscr,y0+36,x0+112,ACS_HLINE);
+	mvwaddch(stdscr,y0+36,x0+111,ACS_LARROW);
+
+	/*
+	 * MEM/WB.WB -> Register Memory (RegWrite)
+	 */
+	mvwaddch(stdscr,y0+14,x0+157,ACS_LTEE);
+	mvwaddch(stdscr,y0+14,x0+158,ACS_HLINE);
+	mvwaddch(stdscr,y0+14,x0+159,ACS_HLINE);
+	mvwaddch(stdscr,y0+14,x0+160,ACS_LRCORNER);
+	for (i = 13; i >= 3; i--)
+		mvwaddch(stdscr,y0+i,x0+160,ACS_VLINE);
+	mvwaddch(stdscr,y0+2,x0+160,ACS_URCORNER);
+	for (i = 159; i >= 63; i--)
+		mvwaddch(stdscr,y0+2,x0+i,ACS_HLINE);
+	mvwaddch(stdscr,y0+2,x0+62,ACS_ULCORNER);
+	for (i = 3; i <= 19; i++)
+		mvwaddch(stdscr,y0+i,x0+62,ACS_VLINE);
+	mvwaddch(stdscr,y0+20,x0+62,ACS_DARROW);
+
+	/*
+	 * MEM/WB.WB -> Forwarding Unit
+	 */
+	mvwaddch(stdscr,y0+14,x0+160,ACS_RTEE);
+	for (i = 15; i <= 42; i++)
+		mvwaddch(stdscr,y0+i,x0+160,ACS_VLINE);
+	mvwaddch(stdscr,y0+43,x0+160,ACS_LRCORNER);
+	for (i = 159; i >= 114; i--)
+		mvwaddch(stdscr,y0+43,x0+i,ACS_HLINE);
+	mvwaddch(stdscr,y0+43,x0+113,ACS_LLCORNER);
+	for (i = 42; i >= 40; i--)
+		mvwaddch(stdscr,y0+i,x0+113,ACS_VLINE);
+	mvwaddch(stdscr,y0+39,x0+113,ACS_URCORNER);
+	mvwaddch(stdscr,y0+39,x0+112,ACS_HLINE);
+	mvwaddch(stdscr,y0+39,x0+111,ACS_LARROW);
+
+	/*
+	 * MEM/WB.WB -> WB MUX
+	 */
+	mvwaddch(stdscr,y0+15,x0+157,ACS_LTEE);
+	for (i = 158; i <= 161; i++)
+		mvwaddch(stdscr,y0+15,x0+i,ACS_HLINE);
+	mvwaddch(stdscr,y0+15,x0+162,ACS_URCORNER);
+	for (i = 16; i <= 25; i++)
+		mvwaddch(stdscr,y0+i,x0+162,ACS_VLINE);
+	mvwaddch(stdscr,y0+26,x0+162,ACS_DARROW);
+
+	/*
+	 * ALU Control Unit -> ALU
+	 */
+	mvwaddch(stdscr,y0+26,x0+106,ACS_BTEE);
+	mvwaddch(stdscr,y0+25,x0+106,ACS_VLINE);
+	mvwaddch(stdscr,y0+24,x0+106,ACS_UARROW);
+
+	/*
+	 * ID/EX.EX -> EX MUX 4
+	 */
+	mvwaddch(stdscr,y0+17,x0+81,ACS_LTEE);
+	mvwaddch(stdscr,y0+17,x0+82,ACS_HLINE);
+	mvwaddch(stdscr,y0+17,x0+83,ACS_HLINE);
+	mvwaddch(stdscr,y0+17,x0+84,ACS_URCORNER);
+	for (i = 18; i <= 30; i++)
+		mvwaddch(stdscr,y0+i,x0+84,ACS_VLINE);
+	mvwaddch(stdscr,y0+31,x0+84,ACS_LLCORNER);
+	for (i = 85; i <= 88; i++)
+		mvwaddch(stdscr,y0+31,x0+i,ACS_HLINE);
+	mvwaddch(stdscr,y0+31,x0+89,ACS_URCORNER);
+	mvwaddch(stdscr,y0+32,x0+89,ACS_DARROW);
+
+	/*
+	 * ID/EX.EX -> ALU Control Unit
+	 */
+	mvwaddch(stdscr,y0+15,x0+81,ACS_LTEE);
+	for (i = 82; i <= 99; i++)
+		mvwaddch(stdscr,y0+15,x0+i,ACS_HLINE);
+	mvwaddch(stdscr,y0+15,x0+100,ACS_URCORNER);
+	for (i = 16; i <= 26; i++)
+		mvwaddch(stdscr,y0+i,x0+100,ACS_VLINE);
+	mvwaddch(stdscr,y0+27,x0+100,ACS_LLCORNER);
+	mvwaddch(stdscr,y0+27,x0+101,ACS_RARROW);
+
+	/*
+	 * ID/EX.EX -> EX MUX 3
+	 */
+	mvwaddch(stdscr,y0+16,x0+81,ACS_LTEE);
+	for (i = 82; i <= 94; i++)
+		mvwaddch(stdscr,y0+16,x0+i,ACS_HLINE);
+	mvwaddch(stdscr,y0+16,x0+95,ACS_URCORNER);
+	for (i = 17; i <= 22; i++)
+		mvwaddch(stdscr,y0+i,x0+95,ACS_VLINE);
+	mvwaddch(stdscr,y0+23,x0+95,ACS_DARROW);
+
+	/*
+	 * Forwarding Unit -> EX MUX 2
+	 */
+	mvwaddch(stdscr,y0+36,x0+100,ACS_TTEE);
+	for (i = 99; i >= 95; i--)
+		mvwaddch(stdscr,y0+36,x0+i,ACS_HLINE);
+	mvwaddch(stdscr,y0+36,x0+94,ACS_LLCORNER);
+	for (i = 35; i >= 31; i--)
+		mvwaddch(stdscr,y0+i,x0+94,ACS_VLINE);
+	mvwaddch(stdscr,y0+30,x0+94,ACS_URCORNER);
+	for (i = 93; i >= 90; i--)
+		mvwaddch(stdscr,y0+30,x0+i,ACS_HLINE);
+	mvwaddch(stdscr,y0+30,x0+89,ACS_LLCORNER);
+	mvwaddch(stdscr,y0+29,x0+89,ACS_VLINE);
+	mvwaddch(stdscr,y0+28,x0+89,ACS_VLINE);
+	mvwaddch(stdscr,y0+27,x0+89,ACS_UARROW);
+
+	/*
+	 * Forwarding Unit -> EX MUX 1
+	 */
+	mvwaddch(stdscr,y0+39,x0+100,ACS_BTEE);
+	mvwaddch(stdscr,y0+39,x0+99,ACS_HLINE);
+	mvwaddch(stdscr,y0+39,x0+98,ACS_LLCORNER);
+	for (i = 38; i >= 23; i--)
+		mvwaddch(stdscr,y0+i,x0+98,ACS_VLINE);
+	mvwaddch(stdscr,y0+22,x0+98,ACS_URCORNER);
+	for (i = 97; i >= 90; i--)
+		mvwaddch(stdscr,y0+22,x0+i,ACS_HLINE);
+	mvwaddch(stdscr,y0+22,x0+89,ACS_LLCORNER);
+	mvwaddch(stdscr,y0+21,x0+89,ACS_UARROW);
+
+	/*
+	 * ID Equals -> ID AND
+	 */
+	mvwaddch(stdscr,vmidpoint(pci)+6,x0+72,ACS_LTEE);
+	mvwaddch(stdscr,vmidpoint(pci)+6,x0+73,ACS_LRCORNER);
+	for (i = vmidpoint(pci)+5; i >= vmidpoint(pci); i--)
+		mvwaddch(stdscr,i,x0+73,ACS_VLINE);
+	mvwaddch(stdscr,vmidpoint(pci)-1,x0+73,ACS_URCORNER);
+	for (i = 72; i >= 34; i--)
+		mvwaddch(stdscr,vmidpoint(pci)-1,x0+i,ACS_HLINE);
+	mvwaddch(stdscr,vmidpoint(pci)-1,x0+33,ACS_LLCORNER);
+	mvwaddch(stdscr,vmidpoint(pci)-2,x0+33,ACS_VLINE);
+	mvwaddch(stdscr,vmidpoint(pci)-3,x0+33,ACS_VLINE);
+	mvwaddch(stdscr,vmidpoint(pci)-4,x0+33,ACS_VLINE);
+	mvwaddch(stdscr,y0+14,x0+33,ACS_VLINE);
+	mvwaddch(stdscr,y0+13,x0+33,ACS_URCORNER);
+	for (i = 32; i >= 26; i--)
+		mvwaddch(stdscr,y0+13,x0+i,ACS_HLINE);
+	mvwaddch(stdscr,y0+13,x0+25,ACS_LLCORNER);
+	for (i = y0+12; i >= y0+9; i--)
+		mvwaddch(stdscr,i,x0+25,ACS_VLINE);
+	mvwaddch(stdscr,y0+8,x0+25,ACS_URCORNER);
+	for (i = 24; i >= 10; i--)
+		mvwaddch(stdscr,y0+8,x0+i,ACS_HLINE);
+	mvwaddch(stdscr,y0+8,x0+9,ACS_LLCORNER);
+	for (i = 7; i >= 4; i--)
+		mvwaddch(stdscr,y0+i,x0+9,ACS_VLINE);
+	mvwaddch(stdscr,y0+3,x0+9,ACS_ULCORNER);
+	for (i = 10; i <= 14; i++)
+		mvwaddch(stdscr,y0+3,x0+i,ACS_HLINE);
+	mvwaddch(stdscr,y0+3,x0+15,ACS_URCORNER);
+	mvwaddch(stdscr,y0+4,x0+15,ACS_DARROW);
 }
