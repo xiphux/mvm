@@ -304,7 +304,6 @@ namespace mvm
 			}
 			if (o && !lastlabel.empty()) {
 				VM->dp->labels[lastlabel] = VM->dp->as->im->instructions.size()<<2;
-				printf("Last label %s: %d\n",lastlabel.c_str(),VM->dp->as->im->instructions.size());
 				lastlabel.clear();
 			}
 			return o;

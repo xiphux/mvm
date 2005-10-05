@@ -30,16 +30,16 @@ namespace mvm
 		class gui
 		{
 		public:
-			gui(unsigned int sy, unsigned int sx, unsigned int my, unsigned int mx);
+			gui(const int sy, const int sx, const int my, const int mx);
 			virtual ~gui();
 			void keypressed(int ch);
 			void draw();
-			void resize(unsigned int my, unsigned int mx);
+			void resize(const int my, const int mx);
 			void refresh();
 			bool complete;
 		private:
 			WINDOW *dpwin;
-			unsigned int x0,y0,x1,y1;
+			int x0,y0,x1,y1;
 			struct win_border_s {
 				chtype ls;
 				chtype rs;
@@ -55,7 +55,6 @@ namespace mvm
 				int width,height;
 				struct win_border_s border;
 			};
-			void movedp(const unsigned int dir);
 			void drawprimitive(struct win_s *w, bool border = true);
 			void drawcomponents();
 			void drawdatapaths();

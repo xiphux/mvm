@@ -22,15 +22,12 @@
 #define vmidpoint(b)	((b).starty+(b).height/2)
 #define hmidpoint(b)	((b).startx+(b).width/2)
 
-#define MOVE_NONE 0
-#define MOVE_UP 1
-#define MOVE_DOWN 2
-#define MOVE_LEFT 3
-#define MOVE_RIGHT 4
-
 #define SCROLLAMT 5
 
-mvm::gui::gui::gui(unsigned int sy, unsigned int sx, unsigned int my, unsigned int mx): complete(false)
+#define XMAX (170)
+#define YMAX (45)
+
+mvm::gui::gui::gui(const int sy,const  int sx, const int my, const int mx): complete(false)
 {
 	x0 = sx;
 	y0 = sy;
@@ -62,35 +59,16 @@ void mvm::gui::gui::keypressed(int ch)
 			complete = true;
 			break;
 		case KEY_LEFT:
-			movedp(MOVE_LEFT);
+			if (x0<0){x0+=SCROLLAMT;}
 			break;
 		case KEY_RIGHT:
-			movedp(MOVE_RIGHT);
+			if ((x0+XMAX)>=x1){x0-=SCROLLAMT;}
 			break;
 		case KEY_UP:
-			movedp(MOVE_UP);
+			if (y0<0){y0+=SCROLLAMT;}
 			break;
 		case KEY_DOWN:
-			movedp(MOVE_DOWN);
-			break;
-	}
-}
-
-void mvm::gui::gui::movedp(const unsigned int dir)
-{
-	int newx,newy;
-	switch (dir) {
-		case MOVE_LEFT:
-			x0+=SCROLLAMT;
-			break;
-		case MOVE_RIGHT:
-			x0-=SCROLLAMT;
-			break;
-		case MOVE_UP:
-			y0+=SCROLLAMT;
-			break;
-		case MOVE_DOWN:
-			y0-=SCROLLAMT;
+			if ((y0+YMAX)>=y1){y0-=SCROLLAMT;}
 			break;
 	}
 }
@@ -107,6 +85,7 @@ void mvm::gui::gui::draw()
 	wattron(stdscr,COLOR_PAIR(3));
 	drawcontrolpaths();
 	wattroff(stdscr,COLOR_PAIR(3));
+
 	touchwin(stdscr);
 }
 
@@ -734,10 +713,11 @@ void mvm::gui::gui::drawprimitive(struct win_s *p, bool border)
 	}
 }
 
-void mvm::gui::gui::resize(unsigned int my, unsigned int mx)
+void mvm::gui::gui::resize(const int my, const int mx)
 {
 	x1 = mx;
 	y1 = my;
+	draw();
 }
 
 void mvm::gui::gui::drawdatapaths()

@@ -36,7 +36,7 @@ static mvm::util::console *con = 0;
 static mvm::gui::gui *maingui = 0;
 #endif
 static std::vector<std::string> files;
-unsigned int maxx,maxy;
+static unsigned int maxx,maxy;
 
 static inline void display_version_string()
 {
@@ -165,9 +165,6 @@ static void handle_resize(int sig)
 
 static inline void run_gui()
 {
-	maxy = LINES;
-	maxx = COLS;
-	signal(SIGWINCH,handle_resize);
 	initscr();
 	clear();
 	start_color();
@@ -176,7 +173,10 @@ static inline void run_gui()
 	noecho();
 	curs_set(0);
 	werase(stdscr);
-	maingui = new mvm::gui::gui(1,1,maxy,maxx);
+	signal(SIGWINCH,handle_resize);
+	maxy = LINES;
+	maxx = COLS;
+	maingui = new mvm::gui::gui(0,0,maxy,maxx);
 	//box(stdscr,0,0);
 	if (!files.empty())
 		VM->load_instructions(files.at(0));
