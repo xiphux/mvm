@@ -38,6 +38,7 @@ namespace mvm
 			void tick();
 			void reset();
 			void print_instructions();
+			void regs();
 			void set_debug(const bool d);
 			datapath *dp;
 		};

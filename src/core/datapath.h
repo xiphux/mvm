@@ -65,6 +65,7 @@ namespace mvm
 			bool debug;
 			address_space *as;
 			PC *pc;
+			register_file *rf;
 			std::map<std::string,unsigned int> labels;
 		private:
 			bool stall;
@@ -77,7 +78,6 @@ namespace mvm
 			exmux2 *EXmux5;
 			ALU *alu;
 			alu_control_unit *acu;
-			register_file *rf;
 
 			stage1_if *stage1;
 			stage2_id *stage2;

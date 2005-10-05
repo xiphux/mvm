@@ -126,3 +126,10 @@ void mvm::core::vm::set_debug(const bool d)
 {
 	dp->debug = d;
 }
+
+void mvm::core::vm::regs()
+{
+	for (int i = 0; i < 32; i++) {
+		std::cout << "$" << mvm::parser::readable_register(i) << ": " << dp->rf->get_register(i) << std::endl;
+	}
+}

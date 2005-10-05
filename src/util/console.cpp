@@ -45,6 +45,8 @@ mvm::util::console::console()
 	commands.push_back(f);
 	consolecmd *g = new consolecmd("debug","Enable/Disable debugging",COMMAND_DEBUG);
 	commands.push_back(g);
+	consolecmd *h = new consolecmd("regs","Display contents of registers",COMMAND_REGS);
+	commands.push_back(h);
 }
 
 mvm::util::console::~console()

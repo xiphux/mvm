@@ -110,6 +110,8 @@ static inline void process_input(std::string &command)
 			con->usage();
 		else if (ret == COMMAND_DEBUG)
 			trydebug(command);
+		else if (ret == COMMAND_REGS)
+			VM->regs();
 		else if (ret == COMMAND_LOAD) {
 			if (command.size()<=5)
 				std::cout << " Usage: " << command << " [FILENAME]" << std::endl;
