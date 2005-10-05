@@ -32,9 +32,10 @@ namespace mvm
 		public:
 			gui(unsigned int sy, unsigned int sx, unsigned int my, unsigned int mx);
 			virtual ~gui();
-			void keypressed(char ch);
+			void keypressed(int ch);
 			void draw();
 			void resize(unsigned int my, unsigned int mx);
+			void refresh();
 			bool complete;
 		private:
 			WINDOW *dpwin;
@@ -54,16 +55,35 @@ namespace mvm
 				int width,height;
 				struct win_border_s border;
 			};
+			void movedp(const unsigned int dir);
 			void drawprimitive(struct win_s *w, bool border = true);
 			void drawcomponents();
 			void drawdatapaths();
 			void drawcontrolpaths();
+			void drawbackground();
+			struct win_s bgbox;
 			struct win_s ifidlatch;
+			struct win_s idexlatch;
 			struct win_s im;
 			struct win_s pc;
-			struct win_s bbox;
 			struct win_s pci;
 			struct win_s ifmux;
+			struct win_s ifand;
+			struct win_s hdu;
+			struct win_s cu;
+			struct win_s rm;
+			struct win_s ideq;
+			struct win_s se;
+			struct win_s exmux4;
+			struct win_s exmux3;
+			struct win_s exmux2;
+			struct win_s exmux1;
+			struct win_s acu;
+			struct win_s alu;
+			struct win_s dm;
+			struct win_s fwd;
+			struct win_s memwblatch;
+			struct win_s wbmux;
 		};
 
 	}

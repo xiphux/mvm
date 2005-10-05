@@ -171,24 +171,21 @@ static inline void run_gui()
 	initscr();
 	clear();
 	start_color();
-	raw();
+	cbreak();
 	keypad(stdscr,TRUE);
 	noecho();
 	curs_set(0);
-	init_pair(1,COLOR_CYAN,COLOR_BLACK);
 	werase(stdscr);
 	maingui = new mvm::gui::gui(1,1,maxy,maxx);
-	attron(COLOR_PAIR(1));
-	box(stdscr,0,0);
+	//box(stdscr,0,0);
 	if (!files.empty())
 		VM->load_instructions(files.at(0));
 	int ch;
 	while (!maingui->complete) {
 		maingui->draw();
-		refresh();
+		maingui->refresh();
 		maingui->keypressed(getch());
 	}
-	attroff(COLOR_PAIR(1));
 	curs_set(1);
 	endwin();
 	return;
