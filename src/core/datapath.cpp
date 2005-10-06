@@ -21,7 +21,7 @@
 #include "../basic/convenience.h"
 #include "../parser/rtype.h"
 
-mvm::core::datapath::datapath(): complete(false), debug(false), clock(0)
+mvm::core::datapath::datapath(): complete(false), debug(false), align(4), clock(0)
 {
 	ctrl = new control();
 	as = new address_space();
@@ -179,9 +179,15 @@ void mvm::core::datapath::tick()
 	/*
 	 * Save only if RegWrite = 1
 	 */
-	if (mem_wb->WB->get()&0x8fffffff)
-		mem_wb->RegW->set(WBdata);
+	if (mem_wb->WB->get()&0x80000000)
+		rf->set_register(mem_wb->RegW->get(),WBdata);
 
+	/*
+	 * Temporarily prevent segfaults
+	 */
+	if (!inst)
+		inst = nop;
+	
 	/*
 	 * Value of register RS
 	 */
@@ -283,12 +289,12 @@ void mvm::core::datapath::tick()
 	/*
 	 * Read data 1 corresponds to the value of RS
 	 */
-	temp_ID_EX_Data1 = RL1;
+	temp_ID_EX_Data1 = rf->get_register(RL1);
 
 	/*
 	 * Read data 2 corresponds to the value of RT
 	 */
-	temp_ID_EX_Data2 = RL2;
+	temp_ID_EX_Data2 = rf->get_register(RL2);
 
 	/*
 	 * Given references to the memory
@@ -299,7 +305,7 @@ void mvm::core::datapath::tick()
 	if (ex_mem->M->get()&0x40000000) {
 		if (ex_mem->M->get()&0x1) {
 			unsigned int ris = ex_mem->RIS->get();
-			if (ris%4) {
+			if (ris%align) {
 				printf("Memory access error\n");
 			}
 			unsigned char byte1 = (inst->get_opcode()->instruction()>>24)&0xff;
@@ -308,9 +314,9 @@ void mvm::core::datapath::tick()
 			unsigned char byte4 = inst->get_opcode()->instruction()&0xff;
 			if (ris <= 4996) {
 				as->dm->write_data(ris,byte1);
-				as->dm->write_data(ris+1,byte2);
-				as->dm->write_data(ris+2,byte3);
-				as->dm->write_data(ris+3,byte4);
+				as->dm->write_data(ris+(1<<2),byte2);
+				as->dm->write_data(ris+(2<<2),byte3);
+				as->dm->write_data(ris+(3<<2),byte4);
 			}
 		} else {
 			/*
@@ -324,17 +330,17 @@ void mvm::core::datapath::tick()
 	/*
 	 * Load word (MemRead = 1)
 	 */
-	if (ex_mem->M->get()&0x8fffffff) {
+	if (ex_mem->M->get()&0x80000000) {
 		if (ex_mem->M->get()&0x1) {
 			unsigned int ris = ex_mem->RIS->get();
-			if (ris%4) {
+			if (ris%align) {
 				printf("Memory access error\n");
 			}
 			if (ris <= 4996) {
 				unsigned char byte1 = as->dm->read_data(ris);
-				unsigned char byte2 = as->dm->read_data(ris+1);
-				unsigned char byte3 = as->dm->read_data(ris+2);
-				unsigned char byte4 = as->dm->read_data(ris+3);
+				unsigned char byte2 = as->dm->read_data(ris+(1<<2));
+				unsigned char byte3 = as->dm->read_data(ris+(2<<2));
+				unsigned char byte4 = as->dm->read_data(ris+(3<<2));
 				temp_MEM_WB_DataR = (((((byte1<<8)&byte2)<<8)&byte3)<<8)&byte4;
 			} else {
 				temp_MEM_WB_DataR = 1;
@@ -509,10 +515,12 @@ void mvm::core::datapath::print_debug()
 	mvm::basic::binaryprint(id_ex->EX->get(),true);
 	printf("PC: ");
 	mvm::basic::binaryprint(pc->get_value(),true);
-	printf("instruction: ");
-	printf("%s\n",inst->get_instruction().c_str());
-	printf("instruction (opcode): ");
-	mvm::basic::binaryprint(inst->get_opcode()->instruction(),true);
+	if (inst) {
+		printf("instruction: ");
+		printf("%s\n",inst->get_instruction().c_str());
+		printf("instruction (opcode): ");
+		mvm::basic::binaryprint(inst->get_opcode()->instruction(),true);
+	}
 	printf("if_id->PCpiu4: ");
 	mvm::basic::binaryprint(if_id->PCpiu4->get(),true);
 	printf("id_ex->imm: ");

@@ -47,6 +47,8 @@ mvm::util::console::console()
 	commands.push_back(g);
 	consolecmd *h = new consolecmd("regs","Display contents of registers",COMMAND_REGS);
 	commands.push_back(h);
+	consolecmd *i = new consolecmd("mem","Display contents of memory",COMMAND_MEM);
+	commands.push_back(i);
 }
 
 mvm::util::console::~console()

@@ -18,6 +18,7 @@
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
  */
 #include "data_memory.h"
+#include <iostream>
 
 mvm::core::data_memory::data_memory()
 {
@@ -40,11 +41,37 @@ unsigned char mvm::core::data_memory::read_data(const unsigned int addr)
 void mvm::core::data_memory::write_data(const unsigned int addr, const unsigned char input)
 {
 	for (std::vector<struct databyte>::iterator it = data.begin(); it != data.end(); it++) {
-		if (it->addr = addr)
+		if (it->addr == addr)
 			data.erase(it);
 	}
 	struct databyte b;
 	b.addr = addr;
 	b.data = input;
 	data.push_back(b);
+}
+
+unsigned int mvm::core::data_memory::free_address(const unsigned int align)
+{
+	unsigned int addr = 0;
+	for (std::vector<struct databyte>::iterator it = data.begin(); it != data.end(); it++) {
+		if (it->addr > addr)
+			addr = it->addr;
+	}
+	addr+=align;
+	while (addr%align)
+		addr++;
+	return addr;
+}
+
+void mvm::core::data_memory::dump()
+{
+	for (std::vector<struct databyte>::iterator it = data.begin(); it != data.end(); it++) {
+		std::cout << "Databyte address " << it->addr << ": ";
+		int mask = 0x80;
+		for (int i = 0; i < 8; i++) {
+			std::cout << (it->data&mask?1:0);
+			mask>>=1;
+		}
+		std::cout << std::endl;
+	}
 }

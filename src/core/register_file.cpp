@@ -23,6 +23,8 @@ mvm::core::register_file::register_file()
 {
 	for (int i = 0; i < 32; i++)
 		regs[i] = new register32();
+	regs[29]->set(4996);
+	regs[30]->set(4996);
 }
 
 mvm::core::register_file::~register_file()

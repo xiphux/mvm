@@ -66,16 +66,23 @@ namespace mvm
 			address_space *as;
 			PC *pc;
 			register_file *rf;
+			exmux3 *EXmux3;
+			exmux3 *EXmux4;
+			exmux2 *EXmux5;
+			latch_ex_mem *ex_mem;
+			latch_mem_wb *mem_wb;
+			latch_if_id *if_id;
+			latch_id_ex *id_ex;
+			instruction *inst;
+
 			std::map<std::string,unsigned int> labels;
+			unsigned int align;
 		private:
 			bool stall;
 			unsigned int clock;
 
 			control *ctrl;
 			idmux *IDmux;
-			exmux3 *EXmux3;
-			exmux3 *EXmux4;
-			exmux2 *EXmux5;
 			ALU *alu;
 			alu_control_unit *acu;
 
@@ -84,11 +91,6 @@ namespace mvm
 			stage3_ex *stage3;
 			stage4_mem *stage4;
 			stage5_wb *stage5;
-
-			latch_if_id *if_id;
-			latch_id_ex *id_ex;
-			latch_ex_mem *ex_mem;
-			latch_mem_wb *mem_wb;
 
 			unsigned int temp_IF_ID_PCpiu4;
 			unsigned int temp_IF_ID_IFdiscard;
@@ -111,7 +113,6 @@ namespace mvm
 			unsigned int temp_MEM_WB_DataR;
 			unsigned int temp_MEM_WB_RegW;
 			unsigned int MemIstrDim;
-			instruction *inst;
 			unsigned int ctrl1;
 			instruction *nop;
 		};

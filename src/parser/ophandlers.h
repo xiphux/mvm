@@ -32,6 +32,9 @@
 #include "ptype.h"
 #include "../mvm.h"
 
+#define MODE_NONE 0
+#define MODE_DATA 1
+#define MODE_TEXT 2
 
 namespace mvm
 {
@@ -39,6 +42,7 @@ namespace mvm
 	{
 		
 		static std::string lastlabel;
+		static unsigned int mode = MODE_NONE;
 		static unsigned int opcode_type(const unsigned char opcode)
 		{
 			if (RTYPE(opcode))
@@ -336,6 +340,112 @@ namespace mvm
 			return 0;
 		}
 
+		static void read_mode(std::string &sect)
+		{
+			std::string lab;
+			std::string::size_type idx = sect.find_first_of('\t');
+			if (idx == std::string::npos)
+				idx = sect.find_first_of(' ');
+			if (idx != std::string::npos) {
+				lab = sect.substr(0,idx);
+				if (sect.size()>idx) {
+					sect = sect.substr(idx+1);
+					mvm::basic::strip_leading_whitespace(sect);
+				}
+				if (lab.size()>=6) {
+					if (lab.size()>=7) {
+						if (lab == ".asciiz") {
+							if (lastlabel.empty()) {
+								printf("Error: ASCII string allocated with no string pointer (leak)!\n");
+							}
+							std::string::size_type left,right;
+							left = sect.find_first_of('"');
+							right = sect.find_last_of('"');
+							if (left < right && left != std::string::npos && right != std::string::npos) {
+								left++;
+								std::string str = sect.substr(left,right-left);
+								if (!str.empty()) {
+									unsigned int ad = VM->dp->as->dm->free_address(VM->dp->align);
+									for (std::string::iterator it = str.begin(); it != str.end(); it++) {
+										VM->dp->as->dm->write_data(ad,*it);
+										ad+=4;
+									}
+									VM->dp->as->dm->write_data(ad,'\0');
+									if (!lastlabel.empty()) {
+										VM->dp->labels[lastlabel] = ad;
+										lastlabel.clear();
+									}
+								}
+							}
+							return;
+						}
+					}
+					if (lab == ".space") {
+						if (lastlabel.empty()) {
+							printf("Error: memory allocated with no memory pointer (leak)!\n");
+						}
+						unsigned int sz = atoi(sect.c_str());
+						unsigned int fr = VM->dp->as->dm->free_address(VM->dp->align);
+						for (unsigned int i = 0; i < sz; i+=4) {
+							VM->dp->as->dm->write_data(i+fr,'\0');
+						}
+						if (!lastlabel.empty()) {
+							VM->dp->labels[lastlabel] = fr;
+							lastlabel.clear();
+						}
+						return;
+					}
+					if (lab == ".align") {
+						VM->dp->align = atoi(sect.c_str());
+						return;
+					}
+				}
+				if (!sect.empty() && lab == ".word") {
+					std::vector<std::string> words = mvm::basic::tokenize(sect,',');
+					if (!words.empty()) {
+						unsigned int ad = VM->dp->as->dm->free_address(VM->dp->align);
+						if (lastlabel.empty()) {
+							printf("Error: data allocated with no data pointer (leak)!\n");
+						} else {
+							VM->dp->labels[lastlabel] = ad;
+							lastlabel.clear();
+						}
+						unsigned int tmp;
+						for (std::vector<std::string>::iterator it = words.begin(); it != words.end(); it++) {
+							tmp = atoi(it->c_str());
+							unsigned char byte1 = (tmp>>24)&0xff;
+							unsigned char byte2 = (tmp>>16)&0xff;
+							unsigned char byte3 = (tmp>>8)&0xff;
+							unsigned char byte4 = tmp&0xff;
+							VM->dp->as->dm->write_data(ad,byte1);
+							ad+=4;
+							VM->dp->as->dm->write_data(ad,byte2);
+							ad+=4;
+							VM->dp->as->dm->write_data(ad,byte3);
+							ad+=4;
+							VM->dp->as->dm->write_data(ad,byte4);
+							ad+=4;
+						}
+					}
+					return;
+				}
+			}
+			if (lab == ".data" || sect == ".data") {
+				mode = MODE_DATA;
+				lab.clear();
+				sect.clear();
+				return;
+			}
+			if (lab == ".text" || sect == ".text") {
+				mode = MODE_TEXT;
+				lab.clear();
+				sect.clear();
+				return;
+			}
+			
+			printf("Unrecognized directive %s\n",lab.c_str());
+		}
+
 		static operation *assembly_to_op(std::string op)
 		{
 			operation *o = NULL;
@@ -349,33 +459,38 @@ namespace mvm
 			}
 			if (op.empty())
 				return NULL;
-			std::string cmd = extract_operation(op);
-			mvm::basic::strip_leading_whitespace(op);
-			std::vector<std::string> params = mvm::basic::tokenize(op,',');
-			unsigned int type = instruction_type(cmd);
-			switch (type) {
-				case TYPE_R:
-					o = new rtype(cmd,params);
-					break;
-				case TYPE_I:
-					o = new itype(cmd,params);
-					break;
-				case TYPE_J:
-					o = new jtype(cmd,params);
-					break;
-				case TYPE_MEM:
-					o = new itype(cmd,params);
-					break;
-				case TYPE_COPROC:
-					o = new cotype(cmd,params);
-					break;
-				case TYPE_P:
-					o = new ptype(cmd,params);
-					break;
+			while (!op.empty() && op.at(0) == '.') {
+				read_mode(op);
 			}
-			if (o && !lastlabel.empty()) {
-				VM->dp->labels[lastlabel] = VM->dp->as->im->instructions.size()<<2;
-				lastlabel.clear();
+			if (mode == MODE_TEXT) {
+				std::string cmd = extract_operation(op);
+				mvm::basic::strip_leading_whitespace(op);
+				std::vector<std::string> params = mvm::basic::tokenize(op,',');
+				unsigned int type = instruction_type(cmd);
+				switch (type) {
+					case TYPE_R:
+						o = new rtype(cmd,params);
+						break;
+					case TYPE_I:
+						o = new itype(cmd,params);
+						break;
+					case TYPE_J:
+						o = new jtype(cmd,params);
+						break;
+					case TYPE_MEM:
+						o = new itype(cmd,params);
+						break;
+					case TYPE_COPROC:
+						o = new cotype(cmd,params);
+						break;
+					case TYPE_P:
+						o = new ptype(cmd,params);
+						break;
+				}
+				if (o && !lastlabel.empty()) {
+					VM->dp->labels[lastlabel] = VM->dp->as->im->instructions.size()<<2;
+					lastlabel.clear();
+				}
 			}
 			return o;
 		}

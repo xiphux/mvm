@@ -18,6 +18,7 @@
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
  */
 #include "gui.h"
+#include "../mvm.h"
 
 #define vmidpoint(b)	((b).starty+(b).height/2)
 #define hmidpoint(b)	((b).startx+(b).width/2)
@@ -69,6 +70,12 @@ void mvm::gui::gui::keypressed(int ch)
 			break;
 		case KEY_DOWN:
 			if ((y0+YMAX)>=y1){y0-=SCROLLAMT;}
+			break;
+		case KEY_F(5):
+			if (VM->dp->as->im->instructions.size()>1){VM->tick();}
+			break;
+		case KEY_F(1):
+			showregs = !showregs;
 			break;
 	}
 }
@@ -981,6 +988,8 @@ void mvm::gui::gui::drawdatapaths()
 	/*
 	 * ID/EX Latch -> EX MUX 2
 	 */
+	if (!VM->dp->EXmux4->get_signal1()&&!VM->dp->EXmux4->get_signal2())
+		attron(A_BOLD);
 	mvwaddch(stdscr,y0+28,x0+81,ACS_LTEE);
 	mvwaddch(stdscr,y0+28,x0+82,ACS_LRCORNER);
 	for (i = 27; i >= 25; i--)
@@ -989,14 +998,18 @@ void mvm::gui::gui::drawdatapaths()
 	for (i = 83; i <= 87; i++)
 		mvwaddch(stdscr,y0+24,x0+i,ACS_HLINE);
 	mvwaddch(stdscr,y0+24,x0+88,ACS_RARROW);
+	attroff(A_BOLD);
 
 	/*
 	 * EX MUX 2 -> EX MUX 3
 	 */
+	if (!(VM->dp->EXmux4->get_signal1()&&VM->dp->EXmux4->get_signal2()) && VM->dp->EXmux5->get_signal())
+		attron(A_BOLD);
 	mvwaddch(stdscr,y0+24,x0+91,ACS_LTEE);
 	mvwaddch(stdscr,y0+24,x0+92,ACS_HLINE);
 	mvwaddch(stdscr,y0+24,x0+93,ACS_HLINE);
 	mvwaddch(stdscr,y0+24,x0+94,ACS_RARROW);
+	attroff(A_BOLD);
 
 	/*
 	 * ID/EX Latch -> ALU Control Unit
@@ -1026,6 +1039,8 @@ void mvm::gui::gui::drawdatapaths()
 	/*
 	 * EX MUX 2 -> EX/MEM Latch
 	 */
+	if (!(VM->dp->EXmux4->get_signal1()&&VM->dp->EXmux4->get_signal2()))
+		attron(A_BOLD);
 	mvwaddch(stdscr,y0+24,x0+92,ACS_TTEE);
 	for (i = 25; i <= 33; i++)
 		mvwaddch(stdscr,y0+i,x0+92,ACS_VLINE);
@@ -1033,6 +1048,7 @@ void mvm::gui::gui::drawdatapaths()
 	for (i = 93; i <= 114; i++)
 		mvwaddch(stdscr,y0+34,x0+i,ACS_HLINE);
 	mvwaddch(stdscr,y0+34,x0+115,ACS_RARROW);
+	attroff(A_BOLD);
 
 	/*
 	 * ID/EX Latch -> Hazard Detection Unit
@@ -1089,6 +1105,7 @@ void mvm::gui::gui::drawdatapaths()
 	/*
 	 * EX MUX 3 -> ALU
 	 */
+	attron(A_BOLD);
 	mvwaddch(stdscr,y0+25,x0+97,ACS_LTEE);
 	mvwaddch(stdscr,y0+25,x0+98,ACS_HLINE);
 	mvwaddch(stdscr,y0+25,x0+99,ACS_LRCORNER);
@@ -1097,10 +1114,13 @@ void mvm::gui::gui::drawdatapaths()
 	mvwaddch(stdscr,y0+23,x0+100,ACS_HLINE);
 	mvwaddch(stdscr,y0+23,x0+101,ACS_HLINE);
 	mvwaddch(stdscr,y0+23,x0+102,ACS_RARROW);
+	attroff(A_BOLD);
 
 	/*
 	 * EX MUX 1 -> ALU
 	 */
+	if (!(VM->dp->EXmux3->get_signal1()&&VM->dp->EXmux3->get_signal2()))
+		attron(A_BOLD);
 	mvwaddch(stdscr,y0+19,x0+91,ACS_LTEE);
 	for (i = 92; i <= 98; i++)
 		mvwaddch(stdscr,y0+19,x0+i,ACS_HLINE);
@@ -1110,6 +1130,7 @@ void mvm::gui::gui::drawdatapaths()
 	mvwaddch(stdscr,y0+21,x0+100,ACS_HLINE);
 	mvwaddch(stdscr,y0+21,x0+101,ACS_HLINE);
 	mvwaddch(stdscr,y0+21,x0+102,ACS_RARROW);
+	attroff(A_BOLD);
 
 	/*
 	 * EX/MEM Latch -> Data Memory (Address)
@@ -1164,6 +1185,8 @@ void mvm::gui::gui::drawdatapaths()
 	/*
 	 * EX/MEM Latch -> EX MUX 1
 	 */
+	if (VM->dp->EXmux3->get_signal1()&&!VM->dp->EXmux3->get_signal2())
+		attron(A_BOLD);
 	mvwaddch(stdscr,vmidpoint(pci)+6,x0+126,ACS_TTEE);
 	for (i = vmidpoint(pci)+7-y0; i <= 39; i++)
 		mvwaddch(stdscr,y0+i,x0+126,ACS_VLINE);
@@ -1177,6 +1200,7 @@ void mvm::gui::gui::drawdatapaths()
 	mvwaddch(stdscr,y0+20,x0+86,ACS_HLINE);
 	mvwaddch(stdscr,y0+20,x0+87,ACS_HLINE);
 	mvwaddch(stdscr,y0+20,x0+88,ACS_RARROW);
+	attroff(A_BOLD);
 
 	/*
 	 * EX/MEM Latch -> MEM/WB Latch (2)
@@ -1255,31 +1279,42 @@ void mvm::gui::gui::drawdatapaths()
 	/*
 	 * EX/MEM Latch -> EX MUX 2
 	 */
+	if (VM->dp->EXmux4->get_signal1()&&!VM->dp->EXmux4->get_signal2())
+		attron(A_BOLD);
 	mvwaddch(stdscr,y0+26,x0+85,ACS_LTEE);
 	mvwaddch(stdscr,y0+26,x0+86,ACS_HLINE);
 	mvwaddch(stdscr,y0+26,x0+87,ACS_HLINE);
 	mvwaddch(stdscr,y0+26,x0+88,ACS_RARROW);
+	attroff(A_BOLD);
 
 	/*
 	 * WB MUX -> EX MUX 1
 	 */
+	if (!VM->dp->EXmux3->get_signal1()&&VM->dp->EXmux3->get_signal2())
+		attron(A_BOLD);
 	mvwaddch(stdscr,y0+41,x0+86,ACS_BTEE);
 	for (i = 40; i >= 20; i--)
 		mvwaddch(stdscr,y0+i,x0+86,ACS_VLINE);
 	mvwaddch(stdscr,y0+19,x0+86,ACS_ULCORNER);
 	mvwaddch(stdscr,y0+19,x0+87,ACS_HLINE);
 	mvwaddch(stdscr,y0+19,x0+88,ACS_RARROW);
+	attroff(A_BOLD);
 
 	/*
-	 * WB MUX -> EX MUX2
+	 * WB MUX -> EX MUX 2
 	 */
+	if (!VM->dp->EXmux4->get_signal1()&&VM->dp->EXmux4->get_signal2())
+		attron(A_BOLD);
 	mvwaddch(stdscr,y0+25,x0+86,ACS_LTEE);
 	mvwaddch(stdscr,y0+25,x0+87,ACS_HLINE);
 	mvwaddch(stdscr,y0+25,x0+88,ACS_RARROW);
+	attroff(A_BOLD);
 
 	/*
 	 * ID/EX Latch -> EX MUX 1
 	 */
+	if (!VM->dp->EXmux3->get_signal1()&&!VM->dp->EXmux3->get_signal2())
+		attron(A_BOLD);
 	mvwaddch(stdscr,y0+19,x0+81,ACS_LTEE);
 	mvwaddch(stdscr,y0+19,x0+82,ACS_HLINE);
 	mvwaddch(stdscr,y0+19,x0+83,ACS_LRCORNER);
@@ -1287,6 +1322,7 @@ void mvm::gui::gui::drawdatapaths()
 	for (i = 84; i <= 87; i++)
 		mvwaddch(stdscr,y0+18,x0+i,ACS_HLINE);
 	mvwaddch(stdscr,y0+18,x0+88,ACS_RARROW);
+	attroff(A_BOLD);
 }
 
 void mvm::gui::gui::drawcontrolpaths()
@@ -1562,6 +1598,8 @@ void mvm::gui::gui::drawcontrolpaths()
 	/*
 	 * EX/MEM.M -> Data Memory (MemWrite)
 	 */
+	if (VM->dp->ex_mem->M->get()&0x40000000)
+		attron(A_BOLD);
 	mvwaddch(stdscr,y0+15,x0+122,ACS_LTEE);
 	for (i = 123; i <= 135; i++)
 		mvwaddch(stdscr,y0+15,x0+i,ACS_HLINE);
@@ -1569,10 +1607,13 @@ void mvm::gui::gui::drawcontrolpaths()
 	for (i = 16; i <= 19; i++)
 		mvwaddch(stdscr,y0+i,x0+136,ACS_VLINE);
 	mvwaddch(stdscr,y0+20,x0+136,ACS_DARROW);
+	attroff(A_BOLD);
 
 	/*
 	 * EX/MEM.M -> Data Memory (MemRead)
 	 */
+	if (VM->dp->ex_mem->M->get()&0x80000000)
+		attron(A_BOLD);
 	mvwaddch(stdscr,y0+14,x0+122,ACS_LTEE);
 	for (i = 123; i <= 146; i++)
 		mvwaddch(stdscr,y0+14,x0+i,ACS_HLINE);
@@ -1584,6 +1625,7 @@ void mvm::gui::gui::drawcontrolpaths()
 		mvwaddch(stdscr,y0+31,x0+i,ACS_HLINE);
 	mvwaddch(stdscr,y0+31,x0+136,ACS_LLCORNER);
 	mvwaddch(stdscr,y0+30,x0+136,ACS_UARROW);
+	attroff(A_BOLD);
 
 	/*
 	 * EX/MEM.WB -> MEM/WB.WB
@@ -1617,6 +1659,8 @@ void mvm::gui::gui::drawcontrolpaths()
 	/*
 	 * MEM/WB.WB -> Register Memory (RegWrite)
 	 */
+	if (VM->dp->mem_wb->WB->get()&0x80000000)
+		attron(A_BOLD);
 	mvwaddch(stdscr,y0+14,x0+157,ACS_LTEE);
 	mvwaddch(stdscr,y0+14,x0+158,ACS_HLINE);
 	mvwaddch(stdscr,y0+14,x0+159,ACS_HLINE);
@@ -1630,6 +1674,7 @@ void mvm::gui::gui::drawcontrolpaths()
 	for (i = 3; i <= 19; i++)
 		mvwaddch(stdscr,y0+i,x0+62,ACS_VLINE);
 	mvwaddch(stdscr,y0+20,x0+62,ACS_DARROW);
+	attroff(A_BOLD);
 
 	/*
 	 * MEM/WB.WB -> Forwarding Unit
@@ -1695,6 +1740,8 @@ void mvm::gui::gui::drawcontrolpaths()
 	/*
 	 * ID/EX.EX -> EX MUX 3
 	 */
+	if (!VM->dp->EXmux5->get_signal())
+		attron(A_BOLD);
 	mvwaddch(stdscr,y0+16,x0+81,ACS_LTEE);
 	for (i = 82; i <= 94; i++)
 		mvwaddch(stdscr,y0+16,x0+i,ACS_HLINE);
@@ -1702,6 +1749,7 @@ void mvm::gui::gui::drawcontrolpaths()
 	for (i = 17; i <= 22; i++)
 		mvwaddch(stdscr,y0+i,x0+95,ACS_VLINE);
 	mvwaddch(stdscr,y0+23,x0+95,ACS_DARROW);
+	attroff(A_BOLD);
 
 	/*
 	 * Forwarding Unit -> EX MUX 2

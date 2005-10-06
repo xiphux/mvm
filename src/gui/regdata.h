@@ -1,6 +1,6 @@
 /*
- *  data_memory.h
- *  Data memory class definition
+ *  regdata.h
+ *  Register data list class definition
  *  Copyright (C) 2005 Christopher Han
  *
  *  This program is free software; you can redistribute it and/or modify
@@ -17,34 +17,29 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
  */
-#ifndef _MVM_DATA_MEMORY_H
-#define _MVM_DATA_MEMORY_H
+#ifndef _MVM_REGDATA_H
+#define _MVM_REGDATA_H
 
-#include <vector>
+#include "base.h"
 
 namespace mvm
 {
-	namespace core
+	namespace gui
 	{
 
-		class data_memory
+		class regdata
 		{
 		public:
-			data_memory();
-			~data_memory();
-			unsigned char read_data(const unsigned int addr);
-			void write_data(const unsigned int addr, const unsigned char input);
-			unsigned int free_address(const unsigned int align = 4);
-			void dump();
+			regdata(const int sy,const int sx, const int my, const int mx);
+			virtual ~regdata();
+			void reprint();
+			void refresh();
 		private:
-			struct databyte {
-				unsigned int addr;
-				unsigned char data;
-			};
-			std::vector<struct databyte> data;
+			WINDOW *regwin;
+			int x0,y0,x1,y1;
 		};
-	
-	}	
+
+	}
 }
 
-#endif /* _MVM_DATA_MEMORY_H */
+#endif /* _MVM_REGDATA_H */

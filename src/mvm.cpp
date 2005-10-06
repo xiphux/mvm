@@ -25,6 +25,7 @@
 #ifdef NCURSES_GUI
 #include <signal.h>
 #include "gui/gui.h"
+#include "gui/regdata.h"
 #endif
 
 static bool complete = false;
@@ -37,6 +38,7 @@ static mvm::gui::gui *maingui = 0;
 #endif
 static std::vector<std::string> files;
 static unsigned int maxx,maxy;
+bool showregs = false;
 
 static inline void display_version_string()
 {
@@ -112,6 +114,8 @@ static inline void process_input(std::string &command)
 			trydebug(command);
 		else if (ret == COMMAND_REGS)
 			VM->regs();
+		else if (ret == COMMAND_MEM)
+			VM->dp->as->dm->dump();
 		else if (ret == COMMAND_LOAD) {
 			if (command.size()<=5)
 				std::cout << " Usage: " << command << " [FILENAME]" << std::endl;
@@ -179,6 +183,7 @@ static inline void run_gui()
 	maxy = LINES;
 	maxx = COLS;
 	maingui = new mvm::gui::gui(0,0,maxy,maxx);
+	mvm::gui::regdata *rd = new mvm::gui::regdata(60,50,0,0);
 	//box(stdscr,0,0);
 	if (!files.empty())
 		VM->load_instructions(files.at(0));
@@ -186,6 +191,10 @@ static inline void run_gui()
 	while (!maingui->complete) {
 		maingui->draw();
 		maingui->refresh();
+		if (showregs) {
+			rd->reprint();
+			rd->refresh();
+		}
 		maingui->keypressed(getch());
 	}
 	curs_set(1);

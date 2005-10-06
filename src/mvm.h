@@ -23,5 +23,6 @@
 #include "core/vm.h"
 
 extern mvm::core::vm *VM;
+extern bool showregs;
 
 #endif /* _MVM_MVM_H */

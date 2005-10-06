@@ -32,6 +32,7 @@
 #define COMMAND_LIST 6
 #define COMMAND_DEBUG 7
 #define COMMAND_REGS 8
+#define COMMAND_MEM 9
 
 namespace mvm
 {
