@@ -37,6 +37,7 @@ namespace mvm
 			void resize(const int my, const int mx);
 			void refresh();
 			bool complete;
+			bool automate;
 		private:
 			WINDOW *dpwin;
 			int x0,y0,x1,y1;

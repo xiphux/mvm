@@ -196,6 +196,8 @@ static inline void run_gui()
 			rd->refresh();
 		}
 		maingui->keypressed(getch());
+		if (maingui->automate)
+			VM->tick();
 	}
 	curs_set(1);
 	endwin();

@@ -28,7 +28,7 @@
 #define XMAX (170)
 #define YMAX (45)
 
-mvm::gui::gui::gui(const int sy,const  int sx, const int my, const int mx): complete(false)
+mvm::gui::gui::gui(const int sy,const  int sx, const int my, const int mx): complete(false), automate(false)
 {
 	x0 = sx;
 	y0 = sy;
@@ -75,7 +75,11 @@ void mvm::gui::gui::keypressed(int ch)
 			if (VM->dp->as->im->instructions.size()>1){VM->tick();}
 			break;
 		case KEY_F(6):
-			VM->run();
+			automate = !automate;
+			if (automate)
+				halfdelay(5);
+			else
+				cbreak();
 			break;
 		case KEY_F(1):
 			showregs = !showregs;
