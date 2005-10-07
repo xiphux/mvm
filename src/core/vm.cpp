@@ -37,7 +37,7 @@ mvm::core::vm::~vm()
 	delete dp;
 }
 
-bool mvm::core::vm::load_instructions(std::string const file, const bool load)
+bool mvm::core::vm::load_instructions(std::string const file, const bool preprocess)
 {
 	std::ifstream infile;
 	infile.open(file.c_str(),std::ios::in);
@@ -78,13 +78,10 @@ bool mvm::core::vm::load_instructions(std::string const file, const bool load)
 		}
 	}
 	infile.close();
-	if (!load) {
-		instruction *i;
-		while (!dp->as->im->instructions.empty()) {
-			i = dp->as->im->pop_instruction();
-			delete i;
-		}
-		return load_instructions(file,true);
+	if (preprocess) {
+		delete dp->as;
+		dp->as = new address_space();
+		return load_instructions(file,false);
 	}
 	return true;
 }

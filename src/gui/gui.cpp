@@ -74,6 +74,9 @@ void mvm::gui::gui::keypressed(int ch)
 		case KEY_F(5):
 			if (VM->dp->as->im->instructions.size()>1){VM->tick();}
 			break;
+		case KEY_F(6):
+			VM->run();
+			break;
 		case KEY_F(1):
 			showregs = !showregs;
 			break;
@@ -733,40 +736,54 @@ void mvm::gui::gui::drawdatapaths()
 	/*
 	 * PC -> Instruction Memory
 	 */
+	if (!VM->dp->stall)
+		attron(A_BOLD);
 	mvwaddch(stdscr,vmidpoint(pc),x0+7,ACS_LTEE);
 	mvwaddch(stdscr,vmidpoint(pc),x0+8,ACS_BTEE);
 	mvwaddch(stdscr,vmidpoint(pc),x0+9,ACS_HLINE);
 	mvwaddch(stdscr,vmidpoint(pc),x0+10,ACS_RARROW);
+	attroff(A_BOLD);
 
 	/*
 	 * Instruction Memory -> IF/ID Latch
 	 */
+	if (!VM->dp->stall)
+		attron(A_BOLD);
 	mvwaddch(stdscr,y0+29,x0+22,ACS_LTEE);
 	mvwaddch(stdscr,y0+29,x0+23,ACS_HLINE);
 	mvwaddch(stdscr,y0+29,x0+24,ACS_HLINE);
 	mvwaddch(stdscr,y0+29,x0+25,ACS_RARROW);
+	attroff(A_BOLD);
 
 	/*
 	 * PC -> PC Incrementer
 	 */
+	if (!VM->dp->stall)
+		attron(A_BOLD);
 	mvwaddch(stdscr,y0+18,x0+8,ACS_ULCORNER);
 	for (i = 19; i <= 26; i++)
 		mvwaddch(stdscr,y0+i,x0+8,ACS_VLINE);
 	for (i = 9; i <= 12; i++)
 		mvwaddch(stdscr,y0+18,x0+i,ACS_HLINE);
 	mvwaddch(stdscr,y0+18,x0+13,ACS_RARROW);
+	attroff(A_BOLD);
 
 	/*
 	 * 4 -> PC Incrementer
 	 */
+	if (!VM->dp->stall)
+		attron(A_BOLD);
 	mvwaddch(stdscr,y0+20,x0+13,ACS_RARROW);
 	mvwaddch(stdscr,y0+20,x0+12,ACS_HLINE);
 	mvwaddch(stdscr,y0+20,x0+11,ACS_HLINE);
 	mvwaddch(stdscr,y0+20,x0+10,'4');
+	attroff(A_BOLD);
 
 	/*
 	 * PC Incrementer -> IF/ID Latch
 	 */
+	if (!VM->dp->temp_ctrl1)
+		attron(A_BOLD);
 	mvwaddch(stdscr,vmidpoint(pci),x0+19,ACS_LTEE);
 	mvwaddch(stdscr,vmidpoint(pci),x0+20,ACS_HLINE);
 	mvwaddch(stdscr,vmidpoint(pci),x0+21,ACS_BTEE);
@@ -774,10 +791,13 @@ void mvm::gui::gui::drawdatapaths()
 	mvwaddch(stdscr,vmidpoint(pci),x0+23,ACS_HLINE);
 	mvwaddch(stdscr,vmidpoint(pci),x0+24,ACS_HLINE);
 	mvwaddch(stdscr,vmidpoint(pci),x0+25,ACS_RARROW);
+	attroff(A_BOLD);
 
 	/*
 	 * PC Incrementer -> IF MUX
 	 */
+	if (!VM->dp->IDmux->get_signal1()&&!VM->dp->IDmux->get_signal2())
+		attron(A_BOLD);
 	mvwaddch(stdscr,y0+18,x0+21,ACS_VLINE);
 	mvwaddch(stdscr,y0+17,x0+21,ACS_VLINE);
 	mvwaddch(stdscr,y0+16,x0+21,ACS_URCORNER);
@@ -788,18 +808,24 @@ void mvm::gui::gui::drawdatapaths()
 	mvwaddch(stdscr,y0+14,x0+12,ACS_ULCORNER);
 	mvwaddch(stdscr,y0+14,x0+13,ACS_HLINE);
 	mvwaddch(stdscr,y0+14,x0+14,ACS_RARROW);
+	attroff(A_BOLD);
 
 	/*
 	 * 40000040 -> IF MUX
 	 */
+	if (!VM->dp->IDmux->get_signal1()&&VM->dp->IDmux->get_signal2())
+		attron(A_BOLD);
 	mvwaddch(stdscr,y0+13,x0+14,ACS_RARROW);
 	mvwaddch(stdscr,y0+13,x0+13,ACS_HLINE);
 	mvwaddch(stdscr,y0+13,x0+12,ACS_HLINE);
 	mvwprintw(stdscr,y0+13,x0+4,"40000040");
+	attroff(A_BOLD);
 
 	/*
 	 * IF MUX -> PC
 	 */
+	if (!(VM->dp->IDmux->get_signal1()&&VM->dp->IDmux->get_signal2()))
+		attron(A_BOLD);
 	mvwaddch(stdscr,y0+13,x0+18,ACS_LTEE);
 	mvwaddch(stdscr,y0+13,x0+19,ACS_HLINE);
 	mvwaddch(stdscr,y0+13,x0+20,ACS_LRCORNER);
@@ -814,83 +840,108 @@ void mvm::gui::gui::drawdatapaths()
 	mvwaddch(stdscr,y0+27,x0+2,ACS_LLCORNER);
 	mvwaddch(stdscr,y0+27,x0+3,ACS_HLINE);
 	mvwaddch(stdscr,y0+27,x0+4,ACS_RARROW);
+	attroff(A_BOLD);
 
 	/*
 	 * IF/ID Latch -> Hazard Detection Unit
 	 */
+	if (VM->dp->stall)
+		attron(A_BOLD);
 	mvwaddch(stdscr,y0+6,x0+32,ACS_ULCORNER);
 	for (i = 33; i <= 39; i++)
 		mvwaddch(stdscr,y0+6,x0+i,ACS_HLINE);
 	mvwaddch(stdscr,y0+6,x0+40,ACS_RARROW);
 	for (i = 7; i <= 29; i++)
 		mvwaddch(stdscr,y0+i,x0+32,ACS_VLINE);
+	attroff(A_BOLD);
 
 	/*
 	 * IF/ID Latch -> Control Unit
 	 */
+	attron(A_BOLD);
 	mvwaddch(stdscr,y0+14,x0+32,ACS_LTEE);
 	for (i = 33; i <=38; i++)
 		mvwaddch(stdscr,y0+14,x0+i,ACS_HLINE);
 	mvwaddch(stdscr,y0+14,x0+39,ACS_RARROW);
 	mvwaddch(stdscr,y0+29,x0+32,ACS_LRCORNER);
 	mvwaddch(stdscr,y0+29,x0+31,ACS_LTEE);
+	attroff(A_BOLD);
 
 	/*
 	 * IF/ID Latch -> Register Memory (Read Register 1)
 	 */
+	attron(A_BOLD);
 	mvwaddch(stdscr,vmidpoint(pci)+3,x0+32,ACS_LTEE);
 	for (i = 33; i <= 49; i++)
 		mvwaddch(stdscr,vmidpoint(pci)+3,x0+i,ACS_HLINE);
 	mvwaddch(stdscr,vmidpoint(pci)+3,x0+50,ACS_RARROW);
+	attroff(A_BOLD);
 
 	/*
 	 * IF/ID Latch -> Register Memory (Read Register 2)
 	 */
+	attron(A_BOLD);
 	mvwaddch(stdscr,vmidpoint(pci)+4,x0+32,ACS_LTEE);
 	for (i = 33; i <= 49; i++)
 		mvwaddch(stdscr,vmidpoint(pci)+4,x0+i,ACS_HLINE);
 	mvwaddch(stdscr,vmidpoint(pci)+4,x0+50,ACS_RARROW);
+	attroff(A_BOLD);
 
 	/*
 	 * Register Memory (Read Data 1) -> ID/EX Latch
 	 */
+	if (VM->dp->ctrl_MEM)
+		attron(A_BOLD);
 	mvwaddch(stdscr,vmidpoint(pci)+2,x0+67,ACS_LTEE);
 	for (i = 68; i <= 74; i++)
 		mvwaddch(stdscr,vmidpoint(pci)+2,x0+i,ACS_HLINE);
 	mvwaddch(stdscr,vmidpoint(pci)+2,x0+75,ACS_RARROW);
+	attroff(A_BOLD);
 
 	/*
 	 * Register Memory (Read Data 2) -> ID/EX Latch
 	 */
+	if (VM->dp->ctrl_MEM)
+		attron(A_BOLD);
 	mvwaddch(stdscr,vmidpoint(pci)+9,x0+67,ACS_LTEE);
 	for (i = 68; i <= 74; i++)
 		mvwaddch(stdscr,vmidpoint(pci)+9,x0+i,ACS_HLINE);
 	mvwaddch(stdscr,vmidpoint(pci)+9,x0+75,ACS_RARROW);
+	attroff(A_BOLD);
 
 	/*
 	 * Register Memory (Read Data 1) -> ID Equals
 	 */
+	if (VM->dp->ctrl_MEM)
+		attron(A_BOLD);
 	mvwaddch(stdscr,vmidpoint(pci)+2,x0+71,ACS_TTEE);
 	mvwaddch(stdscr,vmidpoint(pci)+3,x0+71,ACS_VLINE);
 	mvwaddch(stdscr,vmidpoint(pci)+4,x0+71,ACS_DARROW);
+	attroff(A_BOLD);
 
 	/*
 	 * Register Memory (Read Data 2) -> ID Equals
 	 */
+	if (VM->dp->ctrl_MEM)
+		attron(A_BOLD);
 	mvwaddch(stdscr,vmidpoint(pci)+9,x0+71,ACS_BTEE);
 	mvwaddch(stdscr,vmidpoint(pci)+8,x0+71,ACS_UARROW);
+	attroff(A_BOLD);
 
 	/*
 	 * IF/ID Latch -> ID/EX Latch
 	 */
+	attron(A_BOLD);
 	mvwaddch(stdscr,vmidpoint(pci),x0+32,ACS_LTEE);
 	for (i = 33; i <= 74; i++)
 		mvwaddch(stdscr,vmidpoint(pci),x0+i,ACS_HLINE);
 	mvwaddch(stdscr,vmidpoint(pci),x0+75,ACS_RARROW);
+	attroff(A_BOLD);
 
 	/*
 	 * IF/ID Latch -> ID/EX Latch [Instruction 15-11]
 	 */
+	attron(A_BOLD);
 	mvwaddch(stdscr,y0+35,x0+32,ACS_LLCORNER);
 	for (i = 33; i <= 75; i++)
 		mvwaddch(stdscr,y0+35,x0+i,ACS_HLINE);
@@ -898,18 +949,22 @@ void mvm::gui::gui::drawdatapaths()
 	mvwaddch(stdscr,y0+29,x0+32,ACS_RTEE);
 	for (i = 30; i <= 34; i++)
 		mvwaddch(stdscr,y0+i,x0+32,ACS_VLINE);
+	attroff(A_BOLD);
 
 	/*
 	 * IF/ID Latch -> ID/EX Latch [Instruction 20-16]
 	 */
+	attron(A_BOLD);
 	mvwaddch(stdscr,y0+34,x0+32,ACS_LTEE);
 	for (i = 33; i <= 74; i++)
 		mvwaddch(stdscr,y0+34,x0+i,ACS_HLINE);
 	mvwaddch(stdscr,y0+34,x0+75,ACS_RARROW);
+	attroff(A_BOLD);
 
 	/*
 	 * IF/ID Latch -> ID/EX Latch [Instruction 20-16]
 	 */
+	attron(A_BOLD);
 	mvwaddch(stdscr,vmidpoint(pci)+4,x0+34,ACS_TTEE);
 	for (i = vmidpoint(pci)+5-y0; i <= 32; i++)
 		mvwaddch(stdscr,y0+i,x0+34,ACS_VLINE);
@@ -917,10 +972,12 @@ void mvm::gui::gui::drawdatapaths()
 	for (i = 35; i <= 74; i++)
 		mvwaddch(stdscr,y0+33,x0+i,ACS_HLINE);
 	mvwaddch(stdscr,y0+33,x0+75,ACS_RARROW);
+	attroff(A_BOLD);
 
 	/*
 	 * IF/ID Latch -> ID/EX Latch [Instruction 25-21]
 	 */
+	attron(A_BOLD);
 	mvwaddch(stdscr,vmidpoint(pci)+3,x0+33,ACS_TTEE);
 	for (i = vmidpoint(pci)+4-y0; i <= 31; i++)
 		mvwaddch(stdscr,y0+i,x0+33,ACS_VLINE);
@@ -928,28 +985,35 @@ void mvm::gui::gui::drawdatapaths()
 	for (i = 34; i <= 74; i++)
 		mvwaddch(stdscr,y0+32,x0+i,ACS_HLINE);
 	mvwaddch(stdscr,y0+32,x0+75,ACS_RARROW);
+	attroff(A_BOLD);
 
 	/*
 	 * IF/ID Latch -> Sign Extension
 	 */
+	attron(A_BOLD);
 	mvwaddch(stdscr,y0+30,x0+32,ACS_LTEE);
 	for (i = 33; i <= 37; i++)
 		mvwaddch(stdscr,y0+30,x0+i,ACS_HLINE);
 	mvwaddch(stdscr,y0+30,x0+38,ACS_RARROW);
+	attroff(A_BOLD);
 
 	/*
 	 * Sign Extension -> ID/EX Latch
 	 */
+	attron(A_BOLD);
 	mvwaddch(stdscr,y0+30,x0+45,ACS_LTEE);
 	mvwaddch(stdscr,y0+30,x0+46,ACS_URCORNER);
 	mvwaddch(stdscr,y0+31,x0+46,ACS_LLCORNER);
 	for (i = 47; i <= 74; i++)
 		mvwaddch(stdscr,y0+31,x0+i,ACS_HLINE);
 	mvwaddch(stdscr,y0+31,x0+75,ACS_RARROW);
+	attroff(A_BOLD);
 
 	/*
 	 * Sign Extension -> IF MUX
 	 */
+	if (VM->dp->IDmux->get_signal1()&&!VM->dp->IDmux->get_signal2())
+		attron(A_BOLD);
 	mvwaddch(stdscr,y0+31,x0+47,ACS_BTEE);
 	for (i = 30; i >= 18; i--)
 		mvwaddch(stdscr,y0+i,x0+47,ACS_VLINE);
@@ -968,22 +1032,29 @@ void mvm::gui::gui::drawdatapaths()
 	mvwaddch(stdscr,y0+12,x0+12,ACS_LLCORNER);
 	mvwaddch(stdscr,y0+12,x0+13,ACS_HLINE);
 	mvwaddch(stdscr,y0+12,x0+14,ACS_RARROW);
+	attroff(A_BOLD);
 
 	/*
-	 * ID/EX Latch -> EX MUX 4 (3)
+	 * ID/EX Latch -> EX MUX 4 (3) RT
 	 */
+	if (!(VM->dp->id_ex->EX->get()&0x8fffffff))
+		attron(A_BOLD);
 	mvwaddch(stdscr,y0+35,x0+81,ACS_LTEE);
 	for (i = 82; i <= 87; i++)
 		mvwaddch(stdscr,y0+35,x0+i,ACS_HLINE);
 	mvwaddch(stdscr,y0+35,x0+88,ACS_RARROW);
+	attroff(A_BOLD);
 
 	/*
-	 * ID/EX Latch -> EX MUX 4 (2)
+	 * ID/EX Latch -> EX MUX 4 (2) RD
 	 */
+	if (VM->dp->id_ex->EX->get()&0x8fffffff)
+		attron(A_BOLD);
 	mvwaddch(stdscr,y0+34,x0+81,ACS_LTEE);
 	for (i = 82; i <= 87; i++)
 		mvwaddch(stdscr,y0+34,x0+i,ACS_HLINE);
 	mvwaddch(stdscr,y0+34,x0+88,ACS_RARROW);
+	attroff(A_BOLD);
 
 	/*
 	 * ID/EX Latch -> EX MUX 2
@@ -1014,27 +1085,34 @@ void mvm::gui::gui::drawdatapaths()
 	/*
 	 * ID/EX Latch -> ALU Control Unit
 	 */
+	if (VM->dp->id_ex->EX->get()&0x60000000)
+		attron(A_BOLD);
 	mvwaddch(stdscr,y0+29,x0+81,ACS_LTEE);
 	for (i = 82; i <= 100; i++)
 		mvwaddch(stdscr,y0+29,x0+i,ACS_HLINE);
 	mvwaddch(stdscr,y0+29,x0+101,ACS_RARROW);
+	attroff(A_BOLD);
 
 	/*
 	 * ID/EX Latch -> EX MUX 3
 	 */
+	attron(A_BOLD);
 	mvwaddch(stdscr,y0+29,x0+93,ACS_BTEE);
 	mvwaddch(stdscr,y0+28,x0+93,ACS_VLINE);
 	mvwaddch(stdscr,y0+27,x0+93,ACS_VLINE);
 	mvwaddch(stdscr,y0+26,x0+93,ACS_ULCORNER);
 	mvwaddch(stdscr,y0+26,x0+94,ACS_RARROW);
+	attroff(A_BOLD);
 
 	/*
 	 * EX MUX 4 -> EX/MEM Latch
 	 */
+	attron(A_BOLD);
 	mvwaddch(stdscr,y0+35,x0+91,ACS_LTEE);
 	for (i = 92; i <= 114; i++)
 		mvwaddch(stdscr,y0+35,x0+i,ACS_HLINE);
 	mvwaddch(stdscr,y0+35,x0+115,ACS_RARROW);
+	attroff(A_BOLD);
 
 	/*
 	 * EX MUX 2 -> EX/MEM Latch
@@ -1053,6 +1131,8 @@ void mvm::gui::gui::drawdatapaths()
 	/*
 	 * ID/EX Latch -> Hazard Detection Unit
 	 */
+	if (VM->dp->id_ex->M->get()>>31)
+		attron(A_BOLD);
 	mvwaddch(stdscr,y0+34,x0+82,ACS_TTEE);
 	mvwaddch(stdscr,y0+35,x0+82,ACS_VLINE);
 	mvwaddch(stdscr,y0+36,x0+82,ACS_VLINE);
@@ -1066,10 +1146,12 @@ void mvm::gui::gui::drawdatapaths()
 	mvwaddch(stdscr,y0+7,x0+38,ACS_HLINE);
 	mvwaddch(stdscr,y0+7,x0+39,ACS_HLINE);
 	mvwaddch(stdscr,y0+7,x0+40,ACS_RARROW);
+	attroff(A_BOLD);
 
 	/*
 	 * ID/EX Latch -> Forwarding Unit (1)
 	 */
+	/* FIXME: needs bold case */
 	mvwaddch(stdscr,y0+33,x0+81,ACS_LTEE);
 	mvwaddch(stdscr,y0+33,x0+82,ACS_HLINE);
 	mvwaddch(stdscr,y0+33,x0+83,ACS_URCORNER);
@@ -1083,6 +1165,7 @@ void mvm::gui::gui::drawdatapaths()
 	/*
 	 * ID/EX Latch -> Forwarding Unit (2)
 	 */
+	/* FIXME: needs bold case */
 	mvwaddch(stdscr,y0+32,x0+81,ACS_LTEE);
 	mvwaddch(stdscr,y0+32,x0+82,ACS_HLINE);
 	mvwaddch(stdscr,y0+32,x0+83,ACS_HLINE);
@@ -1097,10 +1180,12 @@ void mvm::gui::gui::drawdatapaths()
 	/*
 	 * ALU -> EX/MEM Latch
 	 */
+	attron(A_BOLD);
 	mvwaddch(stdscr,y0+22,x0+110,ACS_LTEE);
 	for (i = 111; i <= 114; i++)
 		mvwaddch(stdscr,y0+22,x0+i,ACS_HLINE);
 	mvwaddch(stdscr,y0+22,x0+115,ACS_RARROW);
+	attroff(A_BOLD);
 
 	/*
 	 * EX MUX 3 -> ALU
@@ -1135,14 +1220,19 @@ void mvm::gui::gui::drawdatapaths()
 	/*
 	 * EX/MEM Latch -> Data Memory (Address)
 	 */
+	if (VM->dp->ex_mem->M->get()&0xc0000000)
+		attron(A_BOLD);
 	mvwaddch(stdscr,vmidpoint(pci)+6,x0+122,ACS_LTEE);
 	for (i = 123; i <= 127; i++)
 		mvwaddch(stdscr,vmidpoint(pci)+6,x0+i,ACS_HLINE);
 	mvwaddch(stdscr,vmidpoint(pci)+6,x0+128,ACS_RARROW);
+	attroff(A_BOLD);
 
 	/*
 	 * EX/MEM Latch -> Data Memory (Written Value)
 	 */
+	if (VM->dp->ex_mem->M->get()&0x40000000)
+		attron(A_BOLD);
 	mvwaddch(stdscr,y0+34,x0+122,ACS_LTEE);
 	mvwaddch(stdscr,y0+34,x0+123,ACS_HLINE);
 	mvwaddch(stdscr,y0+34,x0+124,ACS_LRCORNER);
@@ -1153,34 +1243,43 @@ void mvm::gui::gui::drawdatapaths()
 	mvwaddch(stdscr,y0+29,x0+126,ACS_HLINE);
 	mvwaddch(stdscr,y0+29,x0+127,ACS_HLINE);
 	mvwaddch(stdscr,y0+29,x0+128,ACS_RARROW);
+	attroff(A_BOLD);
 
 	/*
 	 * Data Memory -> MEM/WB Latch
 	 */
+	if (VM->dp->ex_mem->M->get()&0x80000000)
+		attron(A_BOLD);
 	mvwaddch(stdscr,vmidpoint(pci)+8,x0+145,ACS_LTEE);
 	mvwaddch(stdscr,vmidpoint(pci)+8,x0+146,ACS_HLINE);
 	mvwaddch(stdscr,vmidpoint(pci)+8,x0+147,ACS_HLINE);
 	mvwaddch(stdscr,vmidpoint(pci)+8,x0+148,ACS_HLINE);
 	mvwaddch(stdscr,vmidpoint(pci)+8,x0+149,ACS_HLINE);
 	mvwaddch(stdscr,vmidpoint(pci)+8,x0+150,ACS_RARROW);
+	attroff(A_BOLD);
 
 	/*
 	 * EX/MEM Latch -> MEM/WB Latch
 	 */
+	attron(A_BOLD);
 	mvwaddch(stdscr,y0+35,x0+122,ACS_LTEE);
 	for (i = 123; i <= 149; i++)
 		mvwaddch(stdscr,y0+35,x0+i,ACS_HLINE);
 	mvwaddch(stdscr,y0+35,x0+150,ACS_RARROW);
+	attroff(A_BOLD);
 
 	/*
 	 * EX/MEM Latch -> Forwarding Unit
 	 */
+	if (VM->dp->ex_mem->RegW->get()==VM->dp->id_ex->RS->get())
+		attron(A_BOLD);
 	mvwaddch(stdscr,y0+35,x0+124,ACS_TTEE);
 	mvwaddch(stdscr,y0+36,x0+124,ACS_VLINE);
 	mvwaddch(stdscr,y0+37,x0+124,ACS_LRCORNER);
 	for (i = 123; i >= 112; i--)
 		mvwaddch(stdscr,y0+37,x0+i,ACS_HLINE);
 	mvwaddch(stdscr,y0+37,x0+111,ACS_LARROW);
+	attroff(A_BOLD);
 
 	/*
 	 * EX/MEM Latch -> EX MUX 1
@@ -1205,14 +1304,19 @@ void mvm::gui::gui::drawdatapaths()
 	/*
 	 * EX/MEM Latch -> MEM/WB Latch (2)
 	 */
+	if (VM->dp->ex_mem->WB->get()&0x1)
+		attron(A_BOLD);
 	mvwaddch(stdscr,y0+33,x0+126,ACS_LTEE);
 	for (i = 127; i <= 149; i++)
 		mvwaddch(stdscr,y0+33,x0+i,ACS_HLINE);
 	mvwaddch(stdscr,y0+33,x0+150,ACS_RARROW);
+	attroff(A_BOLD);
 
 	/*
 	 * MEM/WB Latch -> Forwarding Unit
 	 */
+	if (VM->dp->mem_wb->RegW->get()==VM->dp->id_ex->RS->get())
+		attron(A_BOLD);
 	mvwaddch(stdscr,y0+35,x0+157,ACS_LTEE);
 	mvwaddch(stdscr,y0+35,x0+158,ACS_URCORNER);
 	mvwaddch(stdscr,y0+36,x0+158,ACS_VLINE);
@@ -1221,19 +1325,25 @@ void mvm::gui::gui::drawdatapaths()
 	for (i = 157; i >= 112; i--)
 		mvwaddch(stdscr,y0+38,x0+i,ACS_HLINE);
 	mvwaddch(stdscr,y0+38,x0+111,ACS_LARROW);
+	attroff(A_BOLD);
 
 	/*
 	 * MEM/WB Latch -> WB MUX
 	 */
+	if (VM->dp->mem_wb->WB->get()&0x1)
+		attron(A_BOLD);
 	mvwaddch(stdscr,vmidpoint(pci)+8,x0+157,ACS_LTEE);
 	mvwaddch(stdscr,vmidpoint(pci)+8,x0+158,ACS_HLINE);
 	mvwaddch(stdscr,vmidpoint(pci)+8,x0+159,ACS_HLINE);
 	mvwaddch(stdscr,vmidpoint(pci)+8,x0+160,ACS_HLINE);
 	mvwaddch(stdscr,vmidpoint(pci)+8,x0+161,ACS_RARROW);
+	attroff(A_BOLD);
 
 	/*
 	 * MEM/WB Latch -> WB MUX (2)
 	 */
+	if (!(VM->dp->mem_wb->WB->get()&0x1))
+		attron(A_BOLD);
 	mvwaddch(stdscr,y0+33,x0+157,ACS_LTEE);
 	mvwaddch(stdscr,y0+33,x0+158,ACS_HLINE);
 	mvwaddch(stdscr,y0+33,x0+159,ACS_LRCORNER);
@@ -1242,10 +1352,13 @@ void mvm::gui::gui::drawdatapaths()
 	mvwaddch(stdscr,vmidpoint(pci)+10,x0+159,ACS_ULCORNER);
 	mvwaddch(stdscr,vmidpoint(pci)+10,x0+160,ACS_HLINE);
 	mvwaddch(stdscr,vmidpoint(pci)+10,x0+161,ACS_RARROW);
+	attroff(A_BOLD);
 
 	/*
 	 * WB MUX -> Register Memory (Write Data)
 	 */
+	if (VM->dp->mem_wb->WB->get()&0x80000000)
+		attron(A_BOLD);
 	mvwaddch(stdscr,y0+28,x0+164,ACS_LTEE);
 	mvwaddch(stdscr,y0+28,x0+165,ACS_HLINE);
 	mvwaddch(stdscr,y0+28,x0+166,ACS_URCORNER);
@@ -1259,10 +1372,13 @@ void mvm::gui::gui::drawdatapaths()
 		mvwaddch(stdscr,y0+i,x0+49,ACS_VLINE);
 	mvwaddch(stdscr,y0+29,x0+49,ACS_ULCORNER);
 	mvwaddch(stdscr,y0+29,x0+50,ACS_RARROW);
+	attroff(A_BOLD);
 
 	/*
 	 * MEM/WB Latch -> Register Memory (Write Register)
 	 */
+	if (VM->dp->mem_wb->WB->get()&0x80000000)
+		attron(A_BOLD);
 	mvwaddch(stdscr,y0+38,x0+140,ACS_TTEE);
 	for (i = 39; i <= 41; i++)
 		mvwaddch(stdscr,y0+i,x0+140,ACS_VLINE);
@@ -1275,6 +1391,7 @@ void mvm::gui::gui::drawdatapaths()
 	mvwaddch(stdscr,y0+27,x0+48,ACS_ULCORNER);
 	mvwaddch(stdscr,y0+27,x0+49,ACS_HLINE);
 	mvwaddch(stdscr,y0+27,x0+50,ACS_RARROW);
+	attroff(A_BOLD);
 
 	/*
 	 * EX/MEM Latch -> EX MUX 2
@@ -1331,14 +1448,19 @@ void mvm::gui::gui::drawcontrolpaths()
 	/*
 	 * IF AND -> IF MUX
 	 */
+	if (VM->dp->temp_ctrl1&VM->dp->jump)
+		attron(A_BOLD);
 	mvwaddch(stdscr,y0+6,x0+15,ACS_TTEE);
 	for (i = 7; i <= 10; i++)
 		mvwaddch(stdscr,y0+i,x0+15,ACS_VLINE);
 	mvwaddch(stdscr,y0+11,x0+15,ACS_DARROW);
+	attroff(A_BOLD);
 
 	/*
 	 * Hazard Detection Unit -> IF/ID Latch
 	 */
+	if (VM->dp->temp_ctrl1&VM->dp->jump)
+		attron(A_BOLD);
 	mvwaddch(stdscr,y0+5,x0+40,ACS_RTEE);
 	for (i = 39; i >= 29; i--)
 		mvwaddch(stdscr,y0+5,x0+i,ACS_HLINE);
@@ -1346,10 +1468,13 @@ void mvm::gui::gui::drawcontrolpaths()
 	for (i = 6; i <= 15; i++)
 		mvwaddch(stdscr,y0+i,x0+28,ACS_VLINE);
 	mvwaddch(stdscr,y0+16,x0+28,ACS_DARROW);
+	attroff(A_BOLD);
 
 	/*
 	 * Hazard Detection Unit -> PC
 	 */
+	if (!VM->dp->stall)
+		attron(A_BOLD);
 	mvwaddch(stdscr,y0+4,x0+40,ACS_RTEE);
 	for (i = 39; i >= 23; i--)
 		mvwaddch(stdscr,y0+4,x0+i,ACS_HLINE);
@@ -1366,10 +1491,13 @@ void mvm::gui::gui::drawcontrolpaths()
 	mvwaddch(stdscr,y0+25,x0+4,ACS_HLINE);
 	mvwaddch(stdscr,y0+25,x0+5,ACS_URCORNER);
 	mvwaddch(stdscr,y0+26,x0+5,ACS_DARROW);
+	attroff(A_BOLD);
 	
 	/*
 	 * Control Unit -> IF MUX
 	 */
+	if (!VM->dp->stall)
+		attron(A_BOLD);
 	mvwaddch(stdscr,y0+10,x0+39,ACS_RTEE);
 	mvwaddch(stdscr,y0+10,x0+38,ACS_LLCORNER);
 	mvwaddch(stdscr,y0+9,x0+38,ACS_URCORNER);
@@ -1378,10 +1506,13 @@ void mvm::gui::gui::drawcontrolpaths()
 	mvwaddch(stdscr,y0+9,x0+17,ACS_ULCORNER);
 	mvwaddch(stdscr,y0+10,x0+17,ACS_VLINE);
 	mvwaddch(stdscr,y0+11,x0+17,ACS_DARROW);
+	attroff(A_BOLD);
 
 	/*
 	 * Control Unit -> IF AND (Jump)
 	 */
+	if (VM->dp->jump)
+		attron(A_BOLD);
 	mvwaddch(stdscr,y0+11,x0+39,ACS_RTEE);
 	for (i = 38; i >= 31; i--)
 		mvwaddch(stdscr,y0+11,x0+i,ACS_HLINE);
@@ -1393,33 +1524,45 @@ void mvm::gui::gui::drawcontrolpaths()
 		mvwaddch(stdscr,y0+3,x0+i,ACS_HLINE);
 	mvwaddch(stdscr,y0+3,x0+17,ACS_ULCORNER);
 	mvwaddch(stdscr,y0+4,x0+17,ACS_DARROW);
+	attroff(A_BOLD);
 
 	/*
 	 * Control Unit -> ID MUX
 	 */
+	if (!VM->dp->ID_MuxCtrl)
+		attron(A_BOLD);
 	mvwaddch(stdscr,y0+11,x0+47,ACS_LTEE);
 	for (i = 48; i <= 66; i++)
 		mvwaddch(stdscr,y0+11,x0+i,ACS_HLINE);
 	mvwaddch(stdscr,y0+11,x0+67,ACS_RARROW);
+	attroff(A_BOLD);
 
 	/*
 	 * 0 -> ID MUX
 	 */
+	if (VM->dp->ID_MuxCtrl)
+		attron(A_BOLD);
 	mvwaddch(stdscr,y0+13,x0+65,'0');
 	mvwaddch(stdscr,y0+13,x0+66,ACS_HLINE);
 	mvwaddch(stdscr,y0+13,x0+67,ACS_RARROW);
+	attroff(A_BOLD);
 
 	/*
 	 * ID OR -> ID MUX
 	 */
+	if (VM->dp->ID_MuxCtrl)
+		attron(A_BOLD);
 	mvwaddch(stdscr,y0+7,x0+68,ACS_TTEE);
 	mvwaddch(stdscr,y0+8,x0+68,ACS_VLINE);
 	mvwaddch(stdscr,y0+9,x0+68,ACS_VLINE);
 	mvwaddch(stdscr,y0+10,x0+68,ACS_DARROW);
+	attroff(A_BOLD);
 
 	/*
 	 * Control Unit -> IF/ID Latch
 	 */
+	if (VM->dp->temp_ctrl1&VM->dp->jump)
+		attron(A_BOLD);
 	mvwaddch(stdscr,y0+10,x0+47,ACS_LTEE);
 	for (i = 48; i <= 51; i++)
 		mvwaddch(stdscr,y0+10,x0+i,ACS_HLINE);
@@ -1436,10 +1579,13 @@ void mvm::gui::gui::drawcontrolpaths()
 	for (i = 2; i <= 24; i++)
 		mvwaddch(stdscr,y0+35,x0+i,ACS_HLINE);
 	mvwaddch(stdscr,y0+35,x0+25,ACS_RARROW);
+	attroff(A_BOLD);
 
 	/*
 	 * Control Unit -> ID OR
 	 */
+	if (VM->dp->ID_discard)
+		attron(A_BOLD);
 	mvwaddch(stdscr,y0+12,x0+47,ACS_LTEE);
 	for (i = 48; i <= 56; i++)
 		mvwaddch(stdscr,y0+12,x0+i,ACS_HLINE);
@@ -1452,19 +1598,25 @@ void mvm::gui::gui::drawcontrolpaths()
 	mvwaddch(stdscr,y0+3,x0+68,ACS_URCORNER);
 	mvwaddch(stdscr,y0+4,x0+68,ACS_VLINE);
 	mvwaddch(stdscr,y0+5,x0+68,ACS_DARROW);
+	attroff(A_BOLD);
 
 	/*
 	 * Hazard Unit -> ID OR
 	 */
+	if (VM->dp->stall)
+		attron(A_BOLD);
 	mvwaddch(stdscr,y0+4,x0+50,ACS_LTEE);
 	for (i = 51; i <= 66; i++)
 		mvwaddch(stdscr,y0+4,x0+i,ACS_HLINE);
 	mvwaddch(stdscr,y0+4,x0+67,ACS_URCORNER);
 	mvwaddch(stdscr,y0+5,x0+67,ACS_DARROW);
+	attroff(A_BOLD);
 	
 	/*
 	 * ID MUX -> ID/EX Latch
 	 */
+	if (!VM->dp->ID_MuxCtrl)
+		attron(A_BOLD);
 	mvwaddch(stdscr,y0+12,x0+70,ACS_LTEE);
 	mvwaddch(stdscr,y0+12,x0+71,ACS_HLINE);
 	mvwaddch(stdscr,y0+12,x0+72,ACS_PLUS);
@@ -1485,25 +1637,33 @@ void mvm::gui::gui::drawcontrolpaths()
 	mvwaddch(stdscr,y0+16,x0+73,ACS_HLINE);
 	mvwaddch(stdscr,y0+16,x0+74,ACS_HLINE);
 	mvwaddch(stdscr,y0+16,x0+75,ACS_RARROW);
+	attroff(A_BOLD);
 
 	/*
 	 * ID/EX.M -> EX MUX 5
 	 */
+	if (!VM->dp->stall)
+		attron(A_BOLD);
 	mvwaddch(stdscr,y0+12,x0+81,ACS_LTEE);
 	for (i = 82; i <= 106; i++)
 		mvwaddch(stdscr,y0+12,x0+i,ACS_HLINE);
 	mvwaddch(stdscr,y0+12,x0+107,ACS_RARROW);
+	attroff(A_BOLD);
 
 	/*
 	 * 0 -> EX MUX 5
 	 */
+	if (VM->dp->stall)
+		attron(A_BOLD);
 	mvwaddch(stdscr,y0+14,x0+107,ACS_RARROW);
 	mvwaddch(stdscr,y0+14,x0+106,ACS_HLINE);
 	mvwaddch(stdscr,y0+14,x0+105,'0');
+	attroff(A_BOLD);
 
 	/*
 	 * ID/EX.M -> Register Memory
 	 */
+	/* FIXME: needs bold case */
 	mvwaddch(stdscr,y0+12,x0+83,ACS_BTEE);
 	for (i = 11; i >= 2; i--)
 		mvwaddch(stdscr,y0+i,x0+83,ACS_VLINE);
@@ -1522,6 +1682,8 @@ void mvm::gui::gui::drawcontrolpaths()
 	/*
 	 * EX MUX 5 -> EX/MEM.M
 	 */
+	if (!VM->dp->stall)
+		attron(A_BOLD);
 	mvwaddch(stdscr,y0+13,x0+110,ACS_LTEE);
 	mvwaddch(stdscr,y0+13,x0+111,ACS_HLINE);
 	mvwaddch(stdscr,y0+13,x0+112,ACS_URCORNER);
@@ -1530,25 +1692,34 @@ void mvm::gui::gui::drawcontrolpaths()
 	mvwaddch(stdscr,y0+15,x0+113,ACS_HLINE);
 	mvwaddch(stdscr,y0+15,x0+114,ACS_HLINE);
 	mvwaddch(stdscr,y0+15,x0+115,ACS_RARROW);
+	attroff(A_BOLD);
 
 	/*
 	 * ID/EX.WB -> EX MUX 6
 	 */
+	if (!VM->dp->stall)
+		attron(A_BOLD);
 	mvwaddch(stdscr,y0+8,x0+81,ACS_LTEE);
 	for (i = 82; i <= 101; i++)
 		mvwaddch(stdscr,y0+8,x0+i,ACS_HLINE);
 	mvwaddch(stdscr,y0+8,x0+102,ACS_RARROW);
+	attroff(A_BOLD);
 	
 	/*
 	 * 0 -> EX MUX 6
 	 */
+	if (VM->dp->stall)
+		attron(A_BOLD);
 	mvwaddch(stdscr,y0+10,x0+100,'0');
 	mvwaddch(stdscr,y0+10,x0+101,ACS_HLINE);
 	mvwaddch(stdscr,y0+10,x0+102,ACS_RARROW);
+	attroff(A_BOLD);
 
 	/*
 	 * EX MUX 6 -> EX/MEM.WB
 	 */
+	if (!VM->dp->stall)
+		attron(A_BOLD);
 	mvwaddch(stdscr,y0+9,x0+105,ACS_LTEE);
 	for (i = 106; i <= 111; i++)
 		mvwaddch(stdscr,y0+9,x0+i,ACS_HLINE);
@@ -1558,10 +1729,12 @@ void mvm::gui::gui::drawcontrolpaths()
 	mvwaddch(stdscr,y0+11,x0+113,ACS_HLINE);
 	mvwaddch(stdscr,y0+11,x0+114,ACS_HLINE);
 	mvwaddch(stdscr,y0+11,x0+115,ACS_RARROW);
+	attroff(A_BOLD);
 
 	/*
 	 * Control Unit -> EX MUX 6
 	 */
+	if (VM->dp->stall)
 	mvwaddch(stdscr,y0+13,x0+47,ACS_LTEE);
 	for (i = 48; i <= 54; i++)
 		mvwaddch(stdscr,y0+13,x0+i,ACS_HLINE);
@@ -1585,6 +1758,8 @@ void mvm::gui::gui::drawcontrolpaths()
 	/*
 	 * Control Unit -> EX MUX 5
 	 */
+	if (VM->dp->stall)
+		attron(A_BOLD);
 	mvwaddch(stdscr,y0+5,x0+103,ACS_LTEE);
 	mvwaddch(stdscr,y0+5,x0+104,ACS_HLINE);
 	mvwaddch(stdscr,y0+5,x0+105,ACS_HLINE);
@@ -1594,6 +1769,7 @@ void mvm::gui::gui::drawcontrolpaths()
 	for (i = 6; i <= 10; i++)
 		mvwaddch(stdscr,y0+i,x0+108,ACS_VLINE);
 	mvwaddch(stdscr,y0+11,x0+108,ACS_DARROW);
+	attroff(A_BOLD);
 
 	/*
 	 * EX/MEM.M -> Data Memory (MemWrite)
@@ -1630,6 +1806,7 @@ void mvm::gui::gui::drawcontrolpaths()
 	/*
 	 * EX/MEM.WB -> MEM/WB.WB
 	 */
+	attron(A_BOLD);
 	mvwaddch(stdscr,y0+11,x0+122,ACS_LTEE);
 	for (i = 123; i <= 148; i++)
 		mvwaddch(stdscr,y0+11,x0+i,ACS_HLINE);
@@ -1638,10 +1815,13 @@ void mvm::gui::gui::drawcontrolpaths()
 	mvwaddch(stdscr,y0+13,x0+149,ACS_VLINE);
 	mvwaddch(stdscr,y0+14,x0+149,ACS_LLCORNER);
 	mvwaddch(stdscr,y0+14,x0+150,ACS_RARROW);
+	attroff(A_BOLD);
 
 	/*
 	 * EX/MEM.WB -> Forwarding unit
 	 */
+	if (VM->dp->ctrl_MEM)
+		attron(A_BOLD);
 	mvwaddch(stdscr,y0+11,x0+123,ACS_TTEE);
 	for (i = 12; i <= 38; i++)
 		mvwaddch(stdscr,y0+i,x0+123,ACS_VLINE);
@@ -1655,6 +1835,7 @@ void mvm::gui::gui::drawcontrolpaths()
 	mvwaddch(stdscr,y0+36,x0+113,ACS_HLINE);
 	mvwaddch(stdscr,y0+36,x0+112,ACS_HLINE);
 	mvwaddch(stdscr,y0+36,x0+111,ACS_LARROW);
+	attroff(A_BOLD);
 
 	/*
 	 * MEM/WB.WB -> Register Memory (RegWrite)
@@ -1679,6 +1860,8 @@ void mvm::gui::gui::drawcontrolpaths()
 	/*
 	 * MEM/WB.WB -> Forwarding Unit
 	 */
+	if (VM->dp->mem_wb->WB->get()>>31)
+		attron(A_BOLD);
 	mvwaddch(stdscr,y0+14,x0+160,ACS_RTEE);
 	for (i = 15; i <= 42; i++)
 		mvwaddch(stdscr,y0+i,x0+160,ACS_VLINE);
@@ -1691,10 +1874,13 @@ void mvm::gui::gui::drawcontrolpaths()
 	mvwaddch(stdscr,y0+39,x0+113,ACS_URCORNER);
 	mvwaddch(stdscr,y0+39,x0+112,ACS_HLINE);
 	mvwaddch(stdscr,y0+39,x0+111,ACS_LARROW);
+	attroff(A_BOLD);
 
 	/*
 	 * MEM/WB.WB -> WB MUX
 	 */
+	if (VM->dp->mem_wb->WB->get()&0x80000000)
+		attron(A_BOLD);
 	mvwaddch(stdscr,y0+15,x0+157,ACS_LTEE);
 	for (i = 158; i <= 161; i++)
 		mvwaddch(stdscr,y0+15,x0+i,ACS_HLINE);
@@ -1702,17 +1888,22 @@ void mvm::gui::gui::drawcontrolpaths()
 	for (i = 16; i <= 25; i++)
 		mvwaddch(stdscr,y0+i,x0+162,ACS_VLINE);
 	mvwaddch(stdscr,y0+26,x0+162,ACS_DARROW);
+	attroff(A_BOLD);
 
 	/*
 	 * ALU Control Unit -> ALU
 	 */
+	attron(A_BOLD);
 	mvwaddch(stdscr,y0+26,x0+106,ACS_BTEE);
 	mvwaddch(stdscr,y0+25,x0+106,ACS_VLINE);
 	mvwaddch(stdscr,y0+24,x0+106,ACS_UARROW);
+	attroff(A_BOLD);
 
 	/*
 	 * ID/EX.EX -> EX MUX 4
 	 */
+	if (VM->dp->id_ex->EX->get()&0x8fffffff)
+		attron(A_BOLD);
 	mvwaddch(stdscr,y0+17,x0+81,ACS_LTEE);
 	mvwaddch(stdscr,y0+17,x0+82,ACS_HLINE);
 	mvwaddch(stdscr,y0+17,x0+83,ACS_HLINE);
@@ -1724,10 +1915,13 @@ void mvm::gui::gui::drawcontrolpaths()
 		mvwaddch(stdscr,y0+31,x0+i,ACS_HLINE);
 	mvwaddch(stdscr,y0+31,x0+89,ACS_URCORNER);
 	mvwaddch(stdscr,y0+32,x0+89,ACS_DARROW);
+	attroff(A_BOLD);
 
 	/*
 	 * ID/EX.EX -> ALU Control Unit
 	 */
+	if (VM->dp->id_ex->EX->get())
+		attron(A_BOLD);
 	mvwaddch(stdscr,y0+15,x0+81,ACS_LTEE);
 	for (i = 82; i <= 99; i++)
 		mvwaddch(stdscr,y0+15,x0+i,ACS_HLINE);
@@ -1736,6 +1930,7 @@ void mvm::gui::gui::drawcontrolpaths()
 		mvwaddch(stdscr,y0+i,x0+100,ACS_VLINE);
 	mvwaddch(stdscr,y0+27,x0+100,ACS_LLCORNER);
 	mvwaddch(stdscr,y0+27,x0+101,ACS_RARROW);
+	attroff(A_BOLD);
 
 	/*
 	 * ID/EX.EX -> EX MUX 3
@@ -1754,6 +1949,8 @@ void mvm::gui::gui::drawcontrolpaths()
 	/*
 	 * Forwarding Unit -> EX MUX 2
 	 */
+	if (!(VM->dp->EXmux4->get_signal1()&&VM->dp->EXmux4->get_signal2()))
+		attron(A_BOLD);
 	mvwaddch(stdscr,y0+36,x0+100,ACS_TTEE);
 	for (i = 99; i >= 95; i--)
 		mvwaddch(stdscr,y0+36,x0+i,ACS_HLINE);
@@ -1767,10 +1964,13 @@ void mvm::gui::gui::drawcontrolpaths()
 	mvwaddch(stdscr,y0+29,x0+89,ACS_VLINE);
 	mvwaddch(stdscr,y0+28,x0+89,ACS_VLINE);
 	mvwaddch(stdscr,y0+27,x0+89,ACS_UARROW);
+	attroff(A_BOLD);
 
 	/*
 	 * Forwarding Unit -> EX MUX 1
 	 */
+	if (!(VM->dp->EXmux3->get_signal1()&&VM->dp->EXmux3->get_signal2()))
+		attron(A_BOLD);
 	mvwaddch(stdscr,y0+39,x0+100,ACS_BTEE);
 	mvwaddch(stdscr,y0+39,x0+99,ACS_HLINE);
 	mvwaddch(stdscr,y0+39,x0+98,ACS_LLCORNER);
@@ -1781,10 +1981,13 @@ void mvm::gui::gui::drawcontrolpaths()
 		mvwaddch(stdscr,y0+22,x0+i,ACS_HLINE);
 	mvwaddch(stdscr,y0+22,x0+89,ACS_LLCORNER);
 	mvwaddch(stdscr,y0+21,x0+89,ACS_UARROW);
+	attroff(A_BOLD);
 
 	/*
 	 * ID Equals -> ID AND
 	 */
+	if (VM->dp->collision)
+		attron(A_BOLD);
 	mvwaddch(stdscr,vmidpoint(pci)+6,x0+72,ACS_LTEE);
 	mvwaddch(stdscr,vmidpoint(pci)+6,x0+73,ACS_LRCORNER);
 	for (i = vmidpoint(pci)+5; i >= vmidpoint(pci); i--)
@@ -1814,4 +2017,5 @@ void mvm::gui::gui::drawcontrolpaths()
 		mvwaddch(stdscr,y0+3,x0+i,ACS_HLINE);
 	mvwaddch(stdscr,y0+3,x0+15,ACS_URCORNER);
 	mvwaddch(stdscr,y0+4,x0+15,ACS_DARROW);
+	attroff(A_BOLD);
 }

@@ -11,7 +11,7 @@ CFLAGS="$CFLAGS $MYCFLAGS"
 CXXFLAGS="$CXXFLAGS $MYCFLAGS -fvisibility-inlines-hidden"
 LDFLAGS="$LDFLAGS $MYLDFLAGS"
 AC_PROG_CXX
-AC_PROG_RANLIB
+#AC_PROG_RANLIB
 AC_HEADER_STDBOOL
 AC_C_CONST
 AC_C_INLINE
@@ -31,15 +31,11 @@ if test "$USENCURSES" = 1 ; then
 		echo 'You need the ncurses or curses libraries!'
 		USENCURSES=0
 	fi
-	AC_SUBST(NCURSES_LIBS)
-	NCURSESOBJS="gui/gui.o gui/regdata.o"
-	NCURSESSUBDIR="gui"
 fi
-AC_SUBST(NCURSESOBJS)
-AC_SUBST(NCURSESSUBDIR)
 if test "$USENCURSES" = 1 ; then
+	AC_SUBST(NCURSES_LIBS)
 	AC_DEFINE([NCURSES_GUI],[],[Use NCurses GUI])
-	LDFLAGS="$LDFLAGS $MYLDFLAGS"
 fi
-AC_CONFIG_FILES([Makefile src/Makefile src/basic/Makefile src/core/Makefile src/parser/Makefile src/util/Makefile src/gui/Makefile])
+AM_CONDITIONAL(NCURSES_DATAPATH, test x$USENCURSES = x1)
+AC_CONFIG_FILES([Makefile src/Makefile])
 AC_OUTPUT

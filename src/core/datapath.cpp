@@ -21,7 +21,7 @@
 #include "../basic/convenience.h"
 #include "../parser/rtype.h"
 
-mvm::core::datapath::datapath(): complete(false), debug(false), align(4), clock(0)
+mvm::core::datapath::datapath(): complete(false), debug(false), align(4), ID_MuxCtrl(0), clock(0)
 {
 	ctrl = new control();
 	as = new address_space();
@@ -143,7 +143,7 @@ int mvm::core::datapath::execute_alu(const unsigned int wbdata)
 	/*
 	 * AluOP is the second and third bit of register ID/EX.M
 	 */
-	int AluOP = id_ex->EX->get()&0xcfffffff;
+	int AluOP = id_ex->EX->get()&0x60000000;
 	/*
 	 * Function field tells instruction
 	 */
@@ -314,9 +314,9 @@ void mvm::core::datapath::tick()
 			unsigned char byte4 = inst->get_opcode()->instruction()&0xff;
 			if (ris <= 4996) {
 				as->dm->write_data(ris,byte1);
-				as->dm->write_data(ris+(1<<2),byte2);
-				as->dm->write_data(ris+(2<<2),byte3);
-				as->dm->write_data(ris+(3<<2),byte4);
+				as->dm->write_data(ris+1,byte2);
+				as->dm->write_data(ris+2,byte3);
+				as->dm->write_data(ris+3,byte4);
 			}
 		} else {
 			/*
@@ -338,9 +338,9 @@ void mvm::core::datapath::tick()
 			}
 			if (ris <= 4996) {
 				unsigned char byte1 = as->dm->read_data(ris);
-				unsigned char byte2 = as->dm->read_data(ris+(1<<2));
-				unsigned char byte3 = as->dm->read_data(ris+(2<<2));
-				unsigned char byte4 = as->dm->read_data(ris+(3<<2));
+				unsigned char byte2 = as->dm->read_data(ris+1);
+				unsigned char byte3 = as->dm->read_data(ris+2);
+				unsigned char byte4 = as->dm->read_data(ris+3);
 				temp_MEM_WB_DataR = (((((byte1<<8)&byte2)<<8)&byte3)<<8)&byte4;
 			} else {
 				temp_MEM_WB_DataR = 1;
@@ -361,7 +361,7 @@ void mvm::core::datapath::tick()
 	/*
 	 * RegWrite in the state MEM
 	 */
-	unsigned int ctrl_MEM = ex_mem->WB->get()>>31;
+	ctrl_MEM = ex_mem->WB->get()>>31;
 	unsigned int bData1 = temp_ID_EX_Data1;
 	unsigned int bData2 = temp_ID_EX_Data2;
 	if (ctrl_MEM) {
@@ -383,11 +383,13 @@ void mvm::core::datapath::tick()
 	 * If the two read data are equal
 	 */
 	if (bData1 == bData2) {
+		collision = true;
 		if (isBne == ITYPE_OP_BNE)
 			ctrl1 = 0;
 		else
 			ctrl1 = 1;
 	} else {
+		collision = false;
 		if (isBne == ITYPE_OP_BNE)
 			/*
 			 * BNE
@@ -415,8 +417,8 @@ void mvm::core::datapath::tick()
 	/*
 	 * Jump case
 	 */
-	unsigned int jump = ctrl->read_instruction(inst->get_opcode()->instruction(), SIGNAL_JUMP);
-	unsigned int temp_ctrl1 = ctrl1;
+	jump = ctrl->read_instruction(inst->get_opcode()->instruction(), SIGNAL_JUMP);
+	temp_ctrl1 = ctrl1;
 	/*
 	 * Logical and
 	 */
@@ -425,7 +427,7 @@ void mvm::core::datapath::tick()
 	 * Second data controlled by the control unit
 	 */
 	unsigned int ctrl2 = ctrl->read_instruction(inst->get_opcode()->instruction(), SIGNAL_PCSRC);
-	ctrl2 = 0;
+	//ctrl2 = 0;
 	/*
 	 * Stall controls whether PC forwards
 	 */
@@ -438,7 +440,7 @@ void mvm::core::datapath::tick()
 		temp_PC = IDmux->mux(NewPC1>>2,NewPC2);
 	} else
 		temp_PC = pc->get_value();
-	unsigned int ID_discard = ctrl->read_instruction(inst->get_opcode()->instruction(),SIGNAL_DISCARD);
+	ID_discard = ctrl->read_instruction(inst->get_opcode()->instruction(),SIGNAL_DISCARD);
 
 	/*
 	 * Control signal generation
@@ -446,7 +448,7 @@ void mvm::core::datapath::tick()
 	/*
 	 * Control MUX for control signals
 	 */
-	unsigned int ID_MuxCtrl = ID_discard || stall;
+	ID_MuxCtrl = ID_discard || stall;
 	unsigned int ctrl_WB = ctrl->read_instruction(inst->get_opcode()->instruction(),SIGNAL_WB);
 	unsigned int ctrl_M = ctrl->read_instruction(inst->get_opcode()->instruction(),SIGNAL_M);
 	ctrl_EX = ctrl->read_instruction(inst->get_opcode()->instruction(),SIGNAL_EX);

@@ -1,2 +1,0 @@
-noinst_LIBRARIES = libmvm_core.a
-libmvm_core_a_SOURCES = register32.cpp instruction_memory.cpp data_memory.cpp stack.cpp address_space.cpp alu.cpp alu_control_unit.cpp control.cpp idmux.cpp exmux2.cpp exmux3.cpp pc.cpp latch_if_id.cpp latch_id_ex.cpp latch_ex_mem.cpp latch_mem_wb.cpp stage.cpp stage1_if.cpp stage2_id.cpp stage3_ex.cpp stage4_mem.cpp stage5_wb.cpp datapath.cpp vm.cpp instruction.cpp register_file.cpp

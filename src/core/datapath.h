@@ -77,12 +77,18 @@ namespace mvm
 
 			std::map<std::string,unsigned int> labels;
 			unsigned int align;
-		private:
+			unsigned int ID_MuxCtrl;
+			unsigned int ctrl_MEM;
+			unsigned int jump;
+			unsigned int temp_ctrl1;
+			unsigned int ID_discard;
+			bool collision;
+			idmux *IDmux;
 			bool stall;
+		private:
 			unsigned int clock;
 
 			control *ctrl;
-			idmux *IDmux;
 			ALU *alu;
 			alu_control_unit *acu;
 

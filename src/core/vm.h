@@ -33,7 +33,7 @@ namespace mvm
 		public:
 			vm(const bool dbg = false);
 			~vm();
-			bool load_instructions(std::string const file, const bool load = false);
+			bool load_instructions(std::string const file, const bool preprocess = true);
 			void run();
 			void tick();
 			void reset();

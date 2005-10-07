@@ -366,13 +366,15 @@ namespace mvm
 								std::string str = sect.substr(left,right-left);
 								if (!str.empty()) {
 									unsigned int ad = VM->dp->as->dm->free_address(VM->dp->align);
+									unsigned int adold = ad;
 									for (std::string::iterator it = str.begin(); it != str.end(); it++) {
 										VM->dp->as->dm->write_data(ad,*it);
-										ad+=4;
+										ad++;
 									}
 									VM->dp->as->dm->write_data(ad,'\0');
 									if (!lastlabel.empty()) {
-										VM->dp->labels[lastlabel] = ad;
+										printf("ASCII string %s stored in memory at %d\n",lastlabel.c_str(),adold);
+										VM->dp->labels[lastlabel] = adold;
 										lastlabel.clear();
 									}
 								}
@@ -386,10 +388,11 @@ namespace mvm
 						}
 						unsigned int sz = atoi(sect.c_str());
 						unsigned int fr = VM->dp->as->dm->free_address(VM->dp->align);
-						for (unsigned int i = 0; i < sz; i+=4) {
+						for (unsigned int i = 0; i < sz; i++) {
 							VM->dp->as->dm->write_data(i+fr,'\0');
 						}
 						if (!lastlabel.empty()) {
+							printf("Space allocated for %s at %d\n",lastlabel.c_str(),fr);
 							VM->dp->labels[lastlabel] = fr;
 							lastlabel.clear();
 						}
@@ -407,6 +410,7 @@ namespace mvm
 						if (lastlabel.empty()) {
 							printf("Error: data allocated with no data pointer (leak)!\n");
 						} else {
+							printf("Data stored for %s at %d\n",lastlabel.c_str(),ad);
 							VM->dp->labels[lastlabel] = ad;
 							lastlabel.clear();
 						}
@@ -418,13 +422,13 @@ namespace mvm
 							unsigned char byte3 = (tmp>>8)&0xff;
 							unsigned char byte4 = tmp&0xff;
 							VM->dp->as->dm->write_data(ad,byte1);
-							ad+=4;
+							ad++;
 							VM->dp->as->dm->write_data(ad,byte2);
-							ad+=4;
+							ad++;
 							VM->dp->as->dm->write_data(ad,byte3);
-							ad+=4;
+							ad++;
 							VM->dp->as->dm->write_data(ad,byte4);
-							ad+=4;
+							ad++;
 						}
 					}
 					return;
