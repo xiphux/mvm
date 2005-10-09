@@ -40,7 +40,7 @@ namespace mvm
 		unsigned int dereference_register(std::string reg);
 		bool dereference_pointer(std::string pointer, std::string &imm, std::string &rs);
 		unsigned int dereference_label(std::string label);
-		void mvm::parser::read_mode(std::string &sect);
+		void read_mode(std::string &sect);
 		operation *assembly_to_op(std::string op);
 		std::string opcode_to_assembly(const unsigned int opcode);
 
