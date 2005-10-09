@@ -24,9 +24,13 @@
 #include <vector>
 
 #ifdef OPTIMIZE
-#define abs(v)	(v ^ (v >> (sizeof(int) * 8 - 1))) - (v >> (sizeof(int) * 8 - 1))
+#define intabs(v)	(v^(v>>(sizeof(int)*8-1)))-(v>>(sizeof(int)*8-1))
+#define intmin(x,y)	(y+((x-y)&-(x<y)))
+#define intmax(x,y)	(x-((x-y)&-(x<y)))
 #else
-#define abs(v)	(v<0?-v:v)
+#define intabs(v)	(v<0?-v:v)
+#define intmin(x,y)	(x<y?x:y)
+#define intmax(x,y)	(x>y?x:y)
 #endif
 
 namespace mvm

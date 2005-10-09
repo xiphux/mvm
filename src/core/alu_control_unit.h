@@ -30,7 +30,7 @@ namespace mvm
 		public:
 			alu_control_unit();
 			~alu_control_unit();
-			unsigned int fire_signal(const unsigned int ctrl, const unsigned int inst);
+			unsigned int fire_signal(const unsigned int ctrl, const unsigned int funct, const unsigned int op);
 		};
 
 	}

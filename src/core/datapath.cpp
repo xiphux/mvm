@@ -140,17 +140,22 @@ int mvm::core::datapath::execute_alu(const unsigned int wbdata)
 	 * Choose between the two operators and the immediate field
 	 */
 	int ALUdata2 = EXmux5->mux(temp_EX_MEM_DataW,id_ex->imm->get());
+	if (EXmux5->get_signal())
+		printf("ALUdata2 = temp_EX_MEM_DataW (%d)\n",temp_EX_MEM_DataW);
+	else
+		printf("ALUdata2 = id_ex->imm->get() (%d)\n",id_ex->imm->get());
 	/*
 	 * AluOP is the second and third bit of register ID/EX.EX
 	 */
-	int AluOP = (id_ex->EX.AluOP1<<1)|id_ex->EX.AluOP2;
+	int AluOP = ((id_ex->EX.AluOP1?1:0)<<1)|(id_ex->EX.AluOP2?1:0);
 	/*
 	 * Function field tells instruction
 	 */
+	int AluFunct = id_ex->imm->get()&0x3f;
 	/*
 	 * Create ALU instruction
 	 */
-	int aluCtrl = acu->fire_signal(AluOP,id_ex->OP->get());
+	int aluCtrl = acu->fire_signal(AluOP,AluFunct,id_ex->OP->get());
 	/*
 	 * ALU does its job
 	 */
@@ -499,6 +504,7 @@ void mvm::core::datapath::tick()
 	temp_MEM_WB_WB.RegWrite = ex_mem->WB.RegWrite;
 	temp_MEM_WB_WB.WBData = ex_mem->WB.WBData;
 	temp_MEM_WB_Data = ex_mem->RIS->get();
+	printf("temp_MEM_WB_data: %d\n",temp_MEM_WB_Data);
 	if (ctrl1) {
 		temp_instruction = 0x0;
 		temp_IF_ID_PCpiu4 = 0x0;
