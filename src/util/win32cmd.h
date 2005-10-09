@@ -21,6 +21,7 @@
 #define _MVM_WIN32CMD_H
 
 #include "basecmd.h"
+#include "gcollect.h"
 
 namespace mvm
 {

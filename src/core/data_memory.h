@@ -21,6 +21,7 @@
 #define _MVM_DATA_MEMORY_H
 
 #include <vector>
+#include "gcollect.h"
 
 namespace mvm
 {

@@ -25,11 +25,18 @@
 #endif
 
 #ifdef USE_GCOLLECT
+
+#include <new>
 #include "gc.h"
-inline void *operator new(size_t n) throw (std::bad_alloc) {return GC_malloc(n);}
+inline void *operator new(size_t n) throw (std::bad_alloc) {return GC_MALLOC(n);}
 inline void operator delete(void *) throw () {}
-inline void *operator new[](size_t n) throw (std::bad_alloc) {return GC_malloc(n);}
+inline void *operator new[](size_t n) throw (std::bad_alloc) {return GC_MALLOC(n);}
 inline void operator delete[](void *) throw () {}
+
+#else
+
+#define GC_INIT()
+
 #endif
 
 #endif /* _MVM_GCOLLECT_H */

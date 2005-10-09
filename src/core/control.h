@@ -20,6 +20,8 @@
 #ifndef _MVM_CONTROL_H
 #define _MVM_CONTROL_H
 
+#include "gcollect.h"
+
 #define SIGNAL_NULL 0
 #define SIGNAL_JUMP 1
 #define SIGNAL_PCSRC 2

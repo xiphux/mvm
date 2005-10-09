@@ -22,6 +22,7 @@
 
 #include "register32.h"
 #include "latch.h"
+#include "gcollect.h"
 
 namespace mvm
 {

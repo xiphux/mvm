@@ -20,6 +20,8 @@
 #ifndef _MVM_OPERATION_H
 #define _MVM_OPERATION_H
 
+#include "gcollect.h"
+
 namespace mvm
 {
 	namespace parser

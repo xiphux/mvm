@@ -22,6 +22,7 @@
 
 #include <string>
 #include "datapath.h"
+#include "gcollect.h"
 
 namespace mvm
 {

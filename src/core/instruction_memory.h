@@ -22,6 +22,7 @@
 
 #include <deque>
 #include "instruction.h"
+#include "gcollect.h"
 
 #define TEXT_SEGMENT_START 0x400000
 #define TEXT_SEGMENT_END 0x10000000

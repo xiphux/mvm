@@ -20,6 +20,8 @@
 #ifndef _MVM_CONTROLSTATES_H
 #define _MVM_CONTROLSTATES_H
 
+#include "gcollect.h"
+
 #define UNASSERT(ctrl)			\
 do {					\
 	(ctrl)->RegWrite = false;	\

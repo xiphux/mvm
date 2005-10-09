@@ -20,6 +20,8 @@
 #ifndef _MVM_REGISTER32_H
 #define _MVM_REGISTER32_H
 
+#include "gcollect.h"
+
 namespace mvm
 {
 	namespace core

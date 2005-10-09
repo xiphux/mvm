@@ -20,6 +20,8 @@
 #ifndef _MVM_LATCH_H
 #define _MVM_LATCH_H
 
+#include "gcollect.h"
+
 namespace mvm
 {
 	namespace core

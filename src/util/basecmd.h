@@ -27,6 +27,7 @@
 #include <vector>
 #include <string>
 #include <iostream>
+#include "gcollect.h"
 
 #define OPTPARM_NONE 0
 #define OPTPARM_INT 1

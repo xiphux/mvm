@@ -20,6 +20,8 @@
 #ifndef _MVM_STACK_H
 #define _MVM_STACK_H
 
+#include "gcollect.h"
+
 namespace mvm
 {
 	namespace core

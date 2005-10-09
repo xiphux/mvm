@@ -22,6 +22,7 @@
 
 #include <vector>
 #include <string>
+#include "gcollect.h"
 
 namespace mvm
 {

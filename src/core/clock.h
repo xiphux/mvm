@@ -20,6 +20,8 @@
 #ifndef _MVM_CLOCK_H
 #define _MVM_CLOCK_H
 
+#include "gcollect.h"
+
 namespace mvm
 {
 	namespace core

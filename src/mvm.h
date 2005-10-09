@@ -22,6 +22,8 @@
 
 #include "core/vm.h"
 
+#include "gcollect.h"
+
 extern mvm::core::vm *VM;
 extern bool showregs;
 extern bool debug;

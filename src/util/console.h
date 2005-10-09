@@ -22,6 +22,7 @@
 
 #include <string>
 #include "consolecmd.h"
+#include "gcollect.h"
 
 #define COMMAND_NULL 0
 #define COMMAND_QUIT 1

@@ -22,6 +22,7 @@
 
 #include <string>
 #include "../parser/operation.h"
+#include "gcollect.h"
 
 namespace mvm
 {

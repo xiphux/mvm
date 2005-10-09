@@ -21,6 +21,7 @@
 #define _MVM_IDMUX_H
 
 #include "basemux.h"
+#include "gcollect.h"
 
 namespace mvm
 {

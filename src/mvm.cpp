@@ -207,6 +207,7 @@ static inline void run_gui()
 
 int main(int argc, char **argv)
 {
+	GC_INIT()
 	mvm::util::BaseCmd *cmd = mvm::util::BaseCmd::initialize(argc,argv);
 	cmd->addoption('d',"debug",OPTPARM_NONE,"","Enable debugging output");
 	cmd->addoption('b',"batch",OPTPARM_NONE,"","Run entire file (no console)");

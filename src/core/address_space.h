@@ -23,6 +23,7 @@
 #include "instruction_memory.h"
 #include "data_memory.h"
 #include "stack.h"
+#include "gcollect.h"
 
 namespace mvm
 {

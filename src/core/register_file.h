@@ -21,6 +21,7 @@
 #define _MVM_REGISTER_FILE_H
 
 #include "register32.h"
+#include "gcollect.h"
 
 namespace mvm
 {

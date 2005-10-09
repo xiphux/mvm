@@ -21,6 +21,7 @@
 #define _MVM_STAGE4_MEM_H
 
 #include "stage.h"
+#include "gcollect.h"
 
 namespace mvm
 {

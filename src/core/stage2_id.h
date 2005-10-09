@@ -21,6 +21,7 @@
 #define _MVM_STAGE2_ID_H
 
 #include "stage.h"
+#include "gcollect.h"
 
 namespace mvm
 {

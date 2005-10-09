@@ -20,6 +20,8 @@
 #ifndef _MVM_HAZARD_DETECTION_UNIT_H
 #define _MVM_HAZARD_DETECTION_UNIT_H
 
+#include "gcollect.h"
+
 namespace mvm
 {
 	namespace core

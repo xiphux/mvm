@@ -21,6 +21,7 @@
 #define _MVM_GUI_H
 
 #include "base.h"
+#include "gcollect.h"
 
 namespace mvm
 {

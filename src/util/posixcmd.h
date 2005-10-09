@@ -21,6 +21,7 @@
 #define _MVM_POSIXCMD_H
 
 #include "basecmd.h"
+#include "gcollect.h"
 
 namespace mvm
 {

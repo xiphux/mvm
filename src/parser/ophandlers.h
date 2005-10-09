@@ -22,6 +22,7 @@
 
 #include <string>
 #include "operation.h"
+#include "gcollect.h"
 
 #define MODE_NONE 0
 #define MODE_DATA 1

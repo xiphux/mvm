@@ -21,6 +21,7 @@
 #define _MVM_LATCH_IF_ID_H
 
 #include "register32.h"
+#include "gcollect.h"
 
 namespace mvm
 {

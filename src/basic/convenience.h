@@ -23,6 +23,8 @@
 #include <string>
 #include <vector>
 
+#include "gcollect.h"
+
 #ifdef OPTIMIZE
 #define intabs(v)	(v^(v>>(sizeof(int)*8-1)))-(v>>(sizeof(int)*8-1))
 #define intmin(x,y)	(y+((x-y)&-(x<y)))

@@ -23,6 +23,7 @@
 #include <string>
 #include <vector>
 #include "operation.h"
+#include "gcollect.h"
 
 namespace mvm
 {
