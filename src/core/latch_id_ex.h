@@ -21,6 +21,7 @@
 #define _MVM_LATCH_ID_EX_H
 
 #include "register32.h"
+#include "latch.h"
 
 namespace mvm
 {
@@ -32,9 +33,9 @@ namespace mvm
 		public:
 			latch_id_ex();
 			~latch_id_ex();
-			register32 *WB;
-			register32 *M;
-			register32 *EX;
+			struct latch_wb WB;
+			struct latch_m M;
+			struct latch_ex EX;
 			register32 *PCpiu4;
 			register32 *Data1;
 			register32 *Data2;

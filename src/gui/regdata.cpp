@@ -70,11 +70,11 @@ void mvm::gui::regdata::reprint()
 	mvwprintw(regwin,y1+4,x1+1,"id_ex->OP:");
 	wbinaryprint(regwin,y1+4,x1+MARGIN,VM->dp->id_ex->OP->get(),true);
 	mvwprintw(regwin,y1+5,x1+1,"id_ex->WB:");
-	wbinaryprint(regwin,y1+5,x1+MARGIN,VM->dp->id_ex->WB->get(),true);
+	mvwprintw(regwin,y1+5,x1+MARGIN,"RegWrite:%d, WBData:%d\n",(VM->dp->id_ex->WB.RegWrite?1:0),(VM->dp->id_ex->WB.WBData?1:0));
 	mvwprintw(regwin,y1+6,x1+1,"id_ex->M:");
-	wbinaryprint(regwin,y1+6,x1+MARGIN,VM->dp->id_ex->M->get(),true);
+	mvwprintw(regwin,y1+6,x1+MARGIN,"MemRead:%d, MemWrite:%d, Word:%d\n",(VM->dp->id_ex->M.MemRead?1:0),(VM->dp->id_ex->M.MemWrite?1:0),(VM->dp->id_ex->M.Word?1:0));
 	mvwprintw(regwin,y1+7,x1+1,"id_ex->EX:");
-	wbinaryprint(regwin,y1+7,x1+MARGIN,VM->dp->id_ex->EX->get(),true);
+	mvwprintw(regwin,y1+7,x1+MARGIN,"RegDest:%d, AluOP:%d%d, AluSrc:%d\n",(VM->dp->id_ex->EX.RegDest?1:0),(VM->dp->id_ex->EX.AluOP1?1:0),(VM->dp->id_ex->EX.AluOP2?1:0),(VM->dp->id_ex->EX.AluSrc?1:0));
 	if (VM->dp->inst) {
 		mvwprintw(regwin,y1+8,x1+1,"Instruction:");
 		std::string tmp = VM->dp->inst->get_instruction();
@@ -92,9 +92,9 @@ void mvm::gui::regdata::reprint()
 	mvwprintw(regwin,y1+13,x1+1,"id_ex->Data2:");
 	wbinaryprint(regwin,y1+13,x1+MARGIN,VM->dp->id_ex->Data2->get(),true);
 	mvwprintw(regwin,y1+14,x1+1,"ex_mem->WB:");
-	wbinaryprint(regwin,y1+14,x1+MARGIN,VM->dp->ex_mem->WB->get(),true);
+	mvwprintw(regwin,y1+14,x1+MARGIN,"RegWrite:%d, WBData:%d\n",(VM->dp->ex_mem->WB.RegWrite?1:0),(VM->dp->ex_mem->WB.WBData?1:0));
 	mvwprintw(regwin,y1+15,x1+1,"ex_mem->M:");
-	wbinaryprint(regwin,y1+15,x1+MARGIN,VM->dp->ex_mem->M->get(),true);
+	mvwprintw(regwin,y1+15,x1+MARGIN,"MemRead:%d, MemWrite:%d, Word:%d\n",(VM->dp->ex_mem->M.MemRead?1:0),(VM->dp->ex_mem->M.MemWrite?1:0),(VM->dp->ex_mem->M.Word?1:0));
 	mvwprintw(regwin,y1+16,x1+1,"ex_mem->DataW:");
 	wbinaryprint(regwin,y1+16,x1+MARGIN,VM->dp->ex_mem->DataW->get(),true);
 	mvwprintw(regwin,y1+17,x1+1,"ex_mem->RIS:");
@@ -102,7 +102,7 @@ void mvm::gui::regdata::reprint()
 	mvwprintw(regwin,y1+18,x1+1,"ex_mem->RegW:");
 	wbinaryprint(regwin,y1+18,x1+MARGIN,VM->dp->ex_mem->RegW->get(),true);
 	mvwprintw(regwin,y1+19,x1+1,"mem_wb->WB:");
-	wbinaryprint(regwin,y1+19,x1+MARGIN,VM->dp->mem_wb->WB->get(),true);
+	mvwprintw(regwin,y1+19,x1+MARGIN,"RegWrite:%d, WBData:%d\n",(VM->dp->mem_wb->WB.RegWrite?1:0),(VM->dp->mem_wb->WB.WBData?1:0));
 	mvwprintw(regwin,y1+20,x1+1,"mem_wb->Data:");
 	wbinaryprint(regwin,y1+20,x1+MARGIN,VM->dp->mem_wb->Data->get(),true);
 	mvwprintw(regwin,y1+21,x1+1,"mem_wb->DataR:");

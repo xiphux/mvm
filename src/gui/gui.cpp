@@ -1041,7 +1041,7 @@ void mvm::gui::gui::drawdatapaths()
 	/*
 	 * ID/EX Latch -> EX MUX 4 (3) RT
 	 */
-	if (!(VM->dp->id_ex->EX->get()&0x8fffffff))
+	if (!VM->dp->id_ex->EX.RegDest)
 		attron(A_BOLD);
 	mvwaddch(stdscr,y0+35,x0+81,ACS_LTEE);
 	for (i = 82; i <= 87; i++)
@@ -1052,7 +1052,7 @@ void mvm::gui::gui::drawdatapaths()
 	/*
 	 * ID/EX Latch -> EX MUX 4 (2) RD
 	 */
-	if (VM->dp->id_ex->EX->get()&0x8fffffff)
+	if (VM->dp->id_ex->EX.RegDest)
 		attron(A_BOLD);
 	mvwaddch(stdscr,y0+34,x0+81,ACS_LTEE);
 	for (i = 82; i <= 87; i++)
@@ -1089,7 +1089,7 @@ void mvm::gui::gui::drawdatapaths()
 	/*
 	 * ID/EX Latch -> ALU Control Unit
 	 */
-	if (VM->dp->id_ex->EX->get()&0x60000000)
+	if (VM->dp->id_ex->EX.AluOP1||VM->dp->id_ex->EX.AluOP2)
 		attron(A_BOLD);
 	mvwaddch(stdscr,y0+29,x0+81,ACS_LTEE);
 	for (i = 82; i <= 100; i++)
@@ -1135,7 +1135,7 @@ void mvm::gui::gui::drawdatapaths()
 	/*
 	 * ID/EX Latch -> Hazard Detection Unit
 	 */
-	if (VM->dp->id_ex->M->get()>>31)
+	if (VM->dp->id_ex->M.MemRead)
 		attron(A_BOLD);
 	mvwaddch(stdscr,y0+34,x0+82,ACS_TTEE);
 	mvwaddch(stdscr,y0+35,x0+82,ACS_VLINE);
@@ -1224,7 +1224,7 @@ void mvm::gui::gui::drawdatapaths()
 	/*
 	 * EX/MEM Latch -> Data Memory (Address)
 	 */
-	if (VM->dp->ex_mem->M->get()&0xc0000000)
+	if (VM->dp->ex_mem->M.MemRead||VM->dp->ex_mem->M.MemWrite)
 		attron(A_BOLD);
 	mvwaddch(stdscr,vmidpoint(pci)+6,x0+122,ACS_LTEE);
 	for (i = 123; i <= 127; i++)
@@ -1235,7 +1235,7 @@ void mvm::gui::gui::drawdatapaths()
 	/*
 	 * EX/MEM Latch -> Data Memory (Written Value)
 	 */
-	if (VM->dp->ex_mem->M->get()&0x40000000)
+	if (VM->dp->ex_mem->M.MemWrite)
 		attron(A_BOLD);
 	mvwaddch(stdscr,y0+34,x0+122,ACS_LTEE);
 	mvwaddch(stdscr,y0+34,x0+123,ACS_HLINE);
@@ -1252,7 +1252,7 @@ void mvm::gui::gui::drawdatapaths()
 	/*
 	 * Data Memory -> MEM/WB Latch
 	 */
-	if (VM->dp->ex_mem->M->get()&0x80000000)
+	if (VM->dp->ex_mem->M.MemRead)
 		attron(A_BOLD);
 	mvwaddch(stdscr,vmidpoint(pci)+8,x0+145,ACS_LTEE);
 	mvwaddch(stdscr,vmidpoint(pci)+8,x0+146,ACS_HLINE);
@@ -1308,7 +1308,7 @@ void mvm::gui::gui::drawdatapaths()
 	/*
 	 * EX/MEM Latch -> MEM/WB Latch (2)
 	 */
-	if (VM->dp->ex_mem->WB->get()&0x1)
+	if (VM->dp->ex_mem->WB.WBData)
 		attron(A_BOLD);
 	mvwaddch(stdscr,y0+33,x0+126,ACS_LTEE);
 	for (i = 127; i <= 149; i++)
@@ -1334,7 +1334,7 @@ void mvm::gui::gui::drawdatapaths()
 	/*
 	 * MEM/WB Latch -> WB MUX
 	 */
-	if (VM->dp->mem_wb->WB->get()&0x1)
+	if (VM->dp->mem_wb->WB.WBData)
 		attron(A_BOLD);
 	mvwaddch(stdscr,vmidpoint(pci)+8,x0+157,ACS_LTEE);
 	mvwaddch(stdscr,vmidpoint(pci)+8,x0+158,ACS_HLINE);
@@ -1346,7 +1346,7 @@ void mvm::gui::gui::drawdatapaths()
 	/*
 	 * MEM/WB Latch -> WB MUX (2)
 	 */
-	if (!(VM->dp->mem_wb->WB->get()&0x1))
+	if (!VM->dp->mem_wb->WB.WBData)
 		attron(A_BOLD);
 	mvwaddch(stdscr,y0+33,x0+157,ACS_LTEE);
 	mvwaddch(stdscr,y0+33,x0+158,ACS_HLINE);
@@ -1361,7 +1361,7 @@ void mvm::gui::gui::drawdatapaths()
 	/*
 	 * WB MUX -> Register Memory (Write Data)
 	 */
-	if (VM->dp->mem_wb->WB->get()&0x80000000)
+	if (VM->dp->mem_wb->WB.RegWrite)
 		attron(A_BOLD);
 	mvwaddch(stdscr,y0+28,x0+164,ACS_LTEE);
 	mvwaddch(stdscr,y0+28,x0+165,ACS_HLINE);
@@ -1381,7 +1381,7 @@ void mvm::gui::gui::drawdatapaths()
 	/*
 	 * MEM/WB Latch -> Register Memory (Write Register)
 	 */
-	if (VM->dp->mem_wb->WB->get()&0x80000000)
+	if (VM->dp->mem_wb->WB.RegWrite)
 		attron(A_BOLD);
 	mvwaddch(stdscr,y0+38,x0+140,ACS_TTEE);
 	for (i = 39; i <= 41; i++)
@@ -1778,7 +1778,7 @@ void mvm::gui::gui::drawcontrolpaths()
 	/*
 	 * EX/MEM.M -> Data Memory (MemWrite)
 	 */
-	if (VM->dp->ex_mem->M->get()&0x40000000)
+	if (VM->dp->ex_mem->M.MemWrite)
 		attron(A_BOLD);
 	mvwaddch(stdscr,y0+15,x0+122,ACS_LTEE);
 	for (i = 123; i <= 135; i++)
@@ -1792,7 +1792,7 @@ void mvm::gui::gui::drawcontrolpaths()
 	/*
 	 * EX/MEM.M -> Data Memory (MemRead)
 	 */
-	if (VM->dp->ex_mem->M->get()&0x80000000)
+	if (VM->dp->ex_mem->M.MemWrite)
 		attron(A_BOLD);
 	mvwaddch(stdscr,y0+14,x0+122,ACS_LTEE);
 	for (i = 123; i <= 146; i++)
@@ -1844,7 +1844,7 @@ void mvm::gui::gui::drawcontrolpaths()
 	/*
 	 * MEM/WB.WB -> Register Memory (RegWrite)
 	 */
-	if (VM->dp->mem_wb->WB->get()&0x80000000)
+	if (VM->dp->mem_wb->WB.RegWrite)
 		attron(A_BOLD);
 	mvwaddch(stdscr,y0+14,x0+157,ACS_LTEE);
 	mvwaddch(stdscr,y0+14,x0+158,ACS_HLINE);
@@ -1864,7 +1864,7 @@ void mvm::gui::gui::drawcontrolpaths()
 	/*
 	 * MEM/WB.WB -> Forwarding Unit
 	 */
-	if (VM->dp->mem_wb->WB->get()>>31)
+	if (VM->dp->mem_wb->WB.RegWrite)
 		attron(A_BOLD);
 	mvwaddch(stdscr,y0+14,x0+160,ACS_RTEE);
 	for (i = 15; i <= 42; i++)
@@ -1883,7 +1883,7 @@ void mvm::gui::gui::drawcontrolpaths()
 	/*
 	 * MEM/WB.WB -> WB MUX
 	 */
-	if (VM->dp->mem_wb->WB->get()&0x80000000)
+	if (VM->dp->mem_wb->WB.RegWrite)
 		attron(A_BOLD);
 	mvwaddch(stdscr,y0+15,x0+157,ACS_LTEE);
 	for (i = 158; i <= 161; i++)
@@ -1906,7 +1906,7 @@ void mvm::gui::gui::drawcontrolpaths()
 	/*
 	 * ID/EX.EX -> EX MUX 4
 	 */
-	if (VM->dp->id_ex->EX->get()&0x8fffffff)
+	if (VM->dp->id_ex->EX.RegDest)
 		attron(A_BOLD);
 	mvwaddch(stdscr,y0+17,x0+81,ACS_LTEE);
 	mvwaddch(stdscr,y0+17,x0+82,ACS_HLINE);
@@ -1924,7 +1924,7 @@ void mvm::gui::gui::drawcontrolpaths()
 	/*
 	 * ID/EX.EX -> ALU Control Unit
 	 */
-	if (VM->dp->id_ex->EX->get())
+	if (VM->dp->id_ex->EX.AluOP1||VM->dp->id_ex->EX.AluOP2)
 		attron(A_BOLD);
 	mvwaddch(stdscr,y0+15,x0+81,ACS_LTEE);
 	for (i = 82; i <= 99; i++)

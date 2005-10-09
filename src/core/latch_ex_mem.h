@@ -21,6 +21,7 @@
 #define _MVM_LATCH_EX_MEM_H
 
 #include "register32.h"
+#include "latch.h"
 
 namespace mvm
 {
@@ -32,8 +33,8 @@ namespace mvm
 		public:
 			latch_ex_mem();
 			~latch_ex_mem();
-			register32 *WB;
-			register32 *M;
+			struct latch_wb WB;
+			struct latch_m M;
 			register32 *RIS;
 			register32 *DataW;
 			register32 *RegW;

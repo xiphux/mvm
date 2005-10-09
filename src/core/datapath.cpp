@@ -141,9 +141,9 @@ int mvm::core::datapath::execute_alu(const unsigned int wbdata)
 	 */
 	int ALUdata2 = EXmux5->mux(temp_EX_MEM_DataW,id_ex->imm->get());
 	/*
-	 * AluOP is the second and third bit of register ID/EX.M
+	 * AluOP is the second and third bit of register ID/EX.EX
 	 */
-	int AluOP = id_ex->EX->get()&0x60000000;
+	int AluOP = (id_ex->EX.AluOP1<<1)|id_ex->EX.AluOP2;
 	/*
 	 * Function field tells instruction
 	 */
@@ -171,7 +171,7 @@ void mvm::core::datapath::tick()
 	 * Choose value to save
 	 */
 	unsigned int WBdata;
-	if (mem_wb->WB->get()&0x1)
+	if (mem_wb->WB.WBData)
 		WBdata = mem_wb->DataR->get();
 	else
 		WBdata = mem_wb->Data->get();
@@ -179,7 +179,7 @@ void mvm::core::datapath::tick()
 	/*
 	 * Save only if RegWrite = 1
 	 */
-	if (mem_wb->WB->get()&0x80000000)
+	if (mem_wb->WB.RegWrite)
 		rf->set_register(mem_wb->RegW->get(),WBdata);
 
 	/*
@@ -201,7 +201,7 @@ void mvm::core::datapath::tick()
 	/*
 	 * MemRead means the next op is LW
 	 */
-	if (id_ex->M->get()>>31) {
+	if (id_ex->M.MemRead) {
 		unsigned int rt = id_ex->RT->get();
 		/*
 		 * If the destination is one of the registers
@@ -228,10 +228,10 @@ void mvm::core::datapath::tick()
 	/*
 	 * Regwrite of the former state
 	 */
-	unsigned int ctrl_EX = id_ex->WB->get()>>31;
+	unsigned int ctrl_EX = id_ex->WB.RegWrite;
 	unsigned int exDest;
 	if (ctrl_EX && (isBne == ITYPE_OP_BEQ || isBne == ITYPE_OP_BNE)) {
-		if (!(id_ex->EX->get()>>31))
+		if (!(id_ex->EX.RegDest))
 			exDest = id_ex->RT->get();
 		else
 			exDest = id_ex->RD->get();
@@ -302,8 +302,8 @@ void mvm::core::datapath::tick()
 	/*
 	 * Save to memory (MemWrite = 1)
 	 */
-	if (ex_mem->M->get()&0x40000000) {
-		if (ex_mem->M->get()&0x1) {
+	if (ex_mem->M.MemWrite) {
+		if (ex_mem->M.Word) {
 			unsigned int ris = ex_mem->RIS->get();
 			if (ris%align) {
 				printf("Memory access error\n");
@@ -330,8 +330,8 @@ void mvm::core::datapath::tick()
 	/*
 	 * Load word (MemRead = 1)
 	 */
-	if (ex_mem->M->get()&0x80000000) {
-		if (ex_mem->M->get()&0x1) {
+	if (ex_mem->M.MemRead) {
+		if (ex_mem->M.Word) {
 			unsigned int ris = ex_mem->RIS->get();
 			if (ris%align) {
 				printf("Memory access error\n");
@@ -361,18 +361,18 @@ void mvm::core::datapath::tick()
 	/*
 	 * RegWrite in the state MEM
 	 */
-	ctrl_MEM = ex_mem->WB->get()>>31;
+	ctrl_MEM = ex_mem->WB.RegWrite;
 	unsigned int bData1 = temp_ID_EX_Data1;
 	unsigned int bData2 = temp_ID_EX_Data2;
 	if (ctrl_MEM) {
 		if (ex_mem->RegW->get() == RL1) {
-			if (ex_mem->WB->get()&0x1)
+			if (ex_mem->WB.WBData)
 				bData1 = temp_MEM_WB_DataR;
 			else
 				bData1 = ex_mem->RIS->get();
 		}
 		if (ex_mem->RegW->get() == RL2) {
-			if (ex_mem->WB->get()&0x1)
+			if (ex_mem->WB.WBData)
 				bData2 = temp_MEM_WB_DataR;
 			else
 				bData2 = ex_mem->RIS->get();
@@ -453,13 +453,25 @@ void mvm::core::datapath::tick()
 	unsigned int ctrl_M = ctrl->read_instruction(inst->get_opcode()->instruction(),SIGNAL_M);
 	ctrl_EX = ctrl->read_instruction(inst->get_opcode()->instruction(),SIGNAL_EX);
 	if (!ID_MuxCtrl) {
-		temp_ID_EX_WB = ctrl_WB;
-		temp_ID_EX_M = ctrl_M;
-		temp_ID_EX_EX = ctrl_EX;
+		temp_ID_EX_WB.WBData = ctrl_WB&0x1;
+		temp_ID_EX_WB.RegWrite = ctrl_WB&0x2;
+		temp_ID_EX_M.MemRead = ctrl_M&0x4;
+		temp_ID_EX_M.MemWrite = ctrl_M&0x2;
+		temp_ID_EX_M.Word = ctrl_M&0x1;
+		temp_ID_EX_EX.RegDest = ctrl_EX&0x8;
+		temp_ID_EX_EX.AluOP1 = ctrl_EX&0x4;
+		temp_ID_EX_EX.AluOP2 = ctrl_EX&0x2;
+		temp_ID_EX_EX.AluSrc = ctrl_EX&0x1;
 	} else {
-		temp_ID_EX_WB = 0x0;
-		temp_ID_EX_M = 0x0;
-		temp_ID_EX_EX = 0x0;
+		temp_ID_EX_WB.WBData = false;
+		temp_ID_EX_WB.RegWrite = false;
+		temp_ID_EX_M.MemRead = false;
+		temp_ID_EX_M.MemWrite = false;
+		temp_ID_EX_M.Word = false;
+		temp_ID_EX_EX.RegDest = false;
+		temp_ID_EX_EX.AluOP1 = false;
+		temp_ID_EX_EX.AluOP2 = false;
+		temp_ID_EX_EX.AluSrc = false;
 	}
 
 	/*
@@ -471,7 +483,7 @@ void mvm::core::datapath::tick()
 	/*
 	 * Signal RegDest
 	 */
-	if (!(id_ex->EX->get()&0x8fffffff))
+	if (!(id_ex->EX.RegDest))
 		/*
 		 * RT if the instruction is type I
 		 */
@@ -484,15 +496,19 @@ void mvm::core::datapath::tick()
 	/*
 	 * Forward control signals
 	 */
-	temp_MEM_WB_WB = ex_mem->WB->get();
+	temp_MEM_WB_WB.RegWrite = ex_mem->WB.RegWrite;
+	temp_MEM_WB_WB.WBData = ex_mem->WB.WBData;
 	temp_MEM_WB_Data = ex_mem->RIS->get();
 	if (ctrl1) {
 		temp_instruction = 0x0;
 		temp_IF_ID_PCpiu4 = 0x0;
 		temp_IF_ID_IFdiscard = 0x0;
 	}
-	temp_EX_MEM_WB = id_ex->WB->get();
-	temp_EX_MEM_M = id_ex->M->get();
+	temp_EX_MEM_WB.WBData = id_ex->WB.WBData;
+	temp_EX_MEM_WB.RegWrite = id_ex->WB.RegWrite;
+	temp_EX_MEM_M.MemRead = id_ex->M.MemRead;
+	temp_EX_MEM_M.MemWrite = id_ex->M.MemWrite;
+	temp_EX_MEM_M.Word = id_ex->M.Word;
 	temp_MEM_WB_RegW = ex_mem->RegW->get();
 	set_registers();
 	if (debug)
@@ -509,12 +525,16 @@ void mvm::core::datapath::print_debug()
 	mvm::basic::binaryprint(id_ex->RD->get(),true);
 	printf("id_ex->OP: ");
 	mvm::basic::binaryprint(id_ex->OP->get(),true);
-	printf("id_ex->WB: ");
-	mvm::basic::binaryprint(id_ex->WB->get(),true);
-	printf("id_ex->M: ");
-	mvm::basic::binaryprint(id_ex->M->get(),true);
-	printf("id_ex->EX: ");
-	mvm::basic::binaryprint(id_ex->EX->get(),true);
+	printf("id_ex->WB.WBData: %d\n",(id_ex->WB.WBData?1:0));
+	printf("id_ex->WB.RegWrite: %d\n",(id_ex->WB.RegWrite?1:0));
+	printf("id_ex->M.MemRead: %d\n",(id_ex->M.MemRead?1:0));
+	printf("id_ex->M.MemWrite: %d\n",(id_ex->M.MemWrite?1:0));
+	printf("id_ex->M.Word: %d\n",(id_ex->M.Word?1:0));
+	printf("id_ex->EX.RegDest: %d\n",(id_ex->EX.RegDest?1:0));
+	printf("id_ex->EX.AluSrc: %d\n",(id_ex->EX.AluSrc?1:0));
+	printf("id_ex->EX.AluOP1: %d\n",(id_ex->EX.AluOP1?1:0));
+	printf("id_ex->EX.AluOP2: %d\n",(id_ex->EX.AluOP2?1:0));
+	printf("id_ex->EX.AluOP: %d%d\n",(id_ex->EX.AluOP1?1:0),(id_ex->EX.AluOP2?1:0));
 	printf("PC: ");
 	mvm::basic::binaryprint(pc->get_value(),true);
 	if (inst) {
@@ -531,18 +551,19 @@ void mvm::core::datapath::print_debug()
 	mvm::basic::binaryprint(id_ex->Data1->get(),true);
 	printf("id_ex->Data2: ");
 	mvm::basic::binaryprint(id_ex->Data2->get(),true);
-	printf("ex_mem->WB: ");
-	mvm::basic::binaryprint(ex_mem->WB->get(),true);
-	printf("ex_mem->M: ");
-	mvm::basic::binaryprint(ex_mem->M->get(),true);
+	printf("ex_mem->WB.WBData: %d\n",(ex_mem->WB.WBData?1:0));
+	printf("ex_mem->WB.RegWrite: %d\n",(ex_mem->WB.RegWrite?1:0));
+	printf("ex_mem->M.MemRead: %d\n",(ex_mem->M.MemRead?1:0));
+	printf("ex_mem->M.MemWrite: %d\n",(ex_mem->M.MemWrite?1:0));
+	printf("ex_mem->M.Word: %d\n",(ex_mem->M.Word?1:0));
 	printf("ex_mem->DataW: ");
 	mvm::basic::binaryprint(ex_mem->DataW->get(),true);
 	printf("ex_mem->RIS: ");
 	mvm::basic::binaryprint(ex_mem->RIS->get(),true);
 	printf("ex_mem->RegW: ");
 	mvm::basic::binaryprint(ex_mem->RegW->get(),true);
-	printf("mem_wb->WB: ");
-	mvm::basic::binaryprint(mem_wb->WB->get(),true);
+	printf("mem_wb->WB.WBData: %d\n",(mem_wb->WB.WBData?1:0));
+	printf("mem_wb->WB.RegWrite: %d\n",(mem_wb->WB.RegWrite?1:0));
 	printf("mem_wb->Data: ");
 	mvm::basic::binaryprint(mem_wb->Data->get(),true);
 	printf("mem_wb->DataR: ");
@@ -555,25 +576,25 @@ void mvm::core::datapath::configure_muxes()
 {
 	EXmux3->set_signal1(false);
 	EXmux3->set_signal2(false);
-	if (ex_mem->RegW->get() == id_ex->RS->get() && ex_mem->WB->get() >> 31) {
+	if (ex_mem->RegW->get() == id_ex->RS->get() && ex_mem->WB.RegWrite) {
 		EXmux3->set_signal1(true);
 		EXmux3->set_signal2(false);
 	}
-	if (mem_wb->RegW->get() == id_ex->RS->get() && mem_wb->WB->get() >> 31) {
+	if (mem_wb->RegW->get() == id_ex->RS->get() && mem_wb->WB.RegWrite) {
 		EXmux3->set_signal1(false);
 		EXmux3->set_signal2(true);
 	}
 	EXmux4->set_signal1(false);
 	EXmux4->set_signal2(false);
-	if (ex_mem->RegW->get() == id_ex->RT->get() && ex_mem->WB->get() >> 31) {
+	if (ex_mem->RegW->get() == id_ex->RT->get() && ex_mem->WB.RegWrite) {
 		EXmux4->set_signal1(true);
 		EXmux4->set_signal2(false);
 	}
-	if (mem_wb->RegW->get() == id_ex->RT->get() && mem_wb->WB->get() >> 31) {
+	if (mem_wb->RegW->get() == id_ex->RT->get() && mem_wb->WB.RegWrite) {
 		EXmux4->set_signal1(false);
 		EXmux4->set_signal2(true);
 	}
-	EXmux5->set_signal(id_ex->EX->get()>>31);
+	EXmux5->set_signal(id_ex->EX.AluSrc);
 }
 
 void mvm::core::datapath::set_registers()
@@ -582,21 +603,31 @@ void mvm::core::datapath::set_registers()
 	id_ex->RT->set(RT(inst->get_opcode()->instruction()));
 	id_ex->RD->set(RD(inst->get_opcode()->instruction()));
 	id_ex->OP->set(OPCODE(inst->get_opcode()->instruction()));
-	id_ex->WB->set(temp_ID_EX_WB);
-	id_ex->M->set(temp_ID_EX_M);
-	id_ex->EX->set(temp_ID_EX_EX);
+	id_ex->WB.WBData = temp_ID_EX_WB.WBData;
+	id_ex->WB.RegWrite = temp_ID_EX_WB.RegWrite;
+	id_ex->M.MemRead = temp_ID_EX_M.MemRead;
+	id_ex->M.MemWrite = temp_ID_EX_M.MemWrite;
+	id_ex->M.Word = temp_ID_EX_M.Word;
+	id_ex->EX.RegDest = temp_ID_EX_EX.RegDest;
+	id_ex->EX.AluOP1 = temp_ID_EX_EX.AluOP1;
+	id_ex->EX.AluOP2 = temp_ID_EX_EX.AluOP2;
+	id_ex->EX.AluSrc = temp_ID_EX_EX.AluSrc;
 	pc->set_value(temp_PC);
 	inst = temp_instruction;
 	if_id->PCpiu4->set(temp_IF_ID_PCpiu4);
 	id_ex->imm->set(temp_ID_EX_imm);
 	id_ex->Data1->set(temp_ID_EX_Data1);
 	id_ex->Data2->set(temp_ID_EX_Data2);
-	ex_mem->WB->set(temp_EX_MEM_WB);
-	ex_mem->M->set(temp_EX_MEM_M);
+	ex_mem->WB.WBData = temp_EX_MEM_WB.WBData;
+	ex_mem->WB.RegWrite = temp_EX_MEM_WB.RegWrite;
+	ex_mem->M.MemRead = temp_EX_MEM_M.MemRead;
+	ex_mem->M.MemWrite = temp_EX_MEM_M.MemWrite;
+	ex_mem->M.Word = temp_EX_MEM_M.Word;
 	ex_mem->DataW->set(temp_EX_MEM_DataW);
 	ex_mem->RIS->set(temp_EX_MEM_RIS);
 	ex_mem->RegW->set(temp_EX_MEM_RegW);
-	mem_wb->WB->set(temp_MEM_WB_WB);
+	mem_wb->WB.WBData = temp_MEM_WB_WB.WBData;
+	mem_wb->WB.RegWrite = temp_MEM_WB_WB.RegWrite;
 	mem_wb->Data->set(temp_MEM_WB_Data);
 	mem_wb->DataR->set(temp_MEM_WB_DataR);
 	mem_wb->RegW->set(temp_MEM_WB_RegW);

@@ -100,21 +100,21 @@ namespace mvm
 
 			unsigned int temp_IF_ID_PCpiu4;
 			unsigned int temp_IF_ID_IFdiscard;
-			unsigned int temp_ID_EX_WB;
-			unsigned int temp_ID_EX_M;
-			unsigned int temp_ID_EX_EX;
+			struct latch_wb temp_ID_EX_WB;
+			struct latch_m temp_ID_EX_M;
+			struct latch_ex temp_ID_EX_EX;
 			unsigned int temp_PC;
 			instruction *temp_instruction;
 			unsigned int temp_ID_EX_imm;
 			unsigned int temp_ID_EX_Data1;
 			unsigned int temp_ID_EX_Data2;
 			unsigned int temp_ID_EX_op;
-			unsigned int temp_EX_MEM_WB;
-			unsigned int temp_EX_MEM_M;
+			struct latch_wb temp_EX_MEM_WB;
+			struct latch_m temp_EX_MEM_M;
 			unsigned int temp_EX_MEM_DataW;
 			unsigned int temp_EX_MEM_RIS;
 			unsigned int temp_EX_MEM_RegW;
-			unsigned int temp_MEM_WB_WB;
+			struct latch_wb temp_MEM_WB_WB;
 			unsigned int temp_MEM_WB_Data;
 			unsigned int temp_MEM_WB_DataR;
 			unsigned int temp_MEM_WB_RegW;

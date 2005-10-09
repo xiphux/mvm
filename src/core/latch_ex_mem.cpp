@@ -21,17 +21,18 @@
 
 mvm::core::latch_ex_mem::latch_ex_mem()
 {
-	WB = new register32();
-	M = new register32();
 	RIS = new register32();
 	DataW = new register32();
 	RegW = new register32();
+	WB.RegWrite = false;
+	WB.WBData = false;
+	M.MemRead = false;
+	M.MemWrite = false;
+	M.Word = false;
 }
 
 mvm::core::latch_ex_mem::~latch_ex_mem()
 {
-	delete WB;
-	delete M;
 	delete RIS;
 	delete DataW;
 	delete RegW;

@@ -21,15 +21,15 @@
 
 mvm::core::latch_mem_wb::latch_mem_wb()
 {
-	WB = new register32();
 	DataR = new register32();
 	Data = new register32();
 	RegW = new register32();
+	WB.RegWrite = false;
+	WB.WBData = false;
 }
 
 mvm::core::latch_mem_wb::~latch_mem_wb()
 {
-	delete WB;
 	delete DataR;
 	delete Data;
 	delete RegW;
