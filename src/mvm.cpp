@@ -29,7 +29,7 @@
 #endif
 
 static bool complete = false;
-static bool debug = false;
+bool debug = false;
 static bool loaded = false;
 mvm::core::vm *VM = 0;
 static mvm::util::console *con = 0;

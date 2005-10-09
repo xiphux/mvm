@@ -19,6 +19,7 @@
  */
 #include "alu.h"
 #include "../basic/convenience.h"
+#include "../mvm.h"
 
 mvm::core::ALU::ALU()
 {
@@ -32,34 +33,34 @@ int mvm::core::ALU::execute(unsigned int op, int a, int b)
 {
 	switch (op) {
 		case 0:			/* 000 (AND) */
-			printf("ALU AND\n");
+			if (debug) printf("ALU AND\n");
 			return a & b;
 		case 3:			/* 011 (XOR) */
-			printf("ALU XOR\n");
+			if (debug) printf("ALU XOR\n");
 			return a ^ b;
 		case 5:			/* 101 (NOR) */
-			printf("ALU NOR\n");
+			if (debug) printf("ALU NOR\n");
 			return ~(a | b);
 		case 1:			/* 001 (OR) */
-			printf("ALU OR\n");
+			if (debug) printf("ALU OR\n");
 			return a | b;
 		case 2:			/* 010 (ADD) */
-			printf("ALU ADD\n");
+			if (debug) printf("ALU ADD\n");
 			return a + b;
 		case 6:			/* 110 (SUB) */
-			printf("ALU SUB\n");
+			if (debug) printf("ALU SUB\n");
 			return a - b;
 		case 7:			/* 111 (SLT) */
-			printf("ALU SLT\n");
+			if (debug) printf("ALU SLT\n");
 			return (a<b?1:0);
 		case 4:			/* 100 (SLTIU) */
-			printf("ALU SLTIU\n");
+			if (debug) printf("ALU SLTIU\n");
 			return (abs(a)<abs(b)?1:0);
 		case 8:			/* 1000 (MUL) */
-			printf("ALU MUL\n");
+			if (debug) printf("ALU MUL\n");
 			return a * b;
 		case 9:			/* 1001 (DIV) */
-			printf("ALU DIV\n");
+			if (debug) printf("ALU DIV\n");
 			return a / b;
 	}
 	return 0;

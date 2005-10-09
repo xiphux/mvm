@@ -1,6 +1,6 @@
 /*
- *  alu_control_unit.h
- *  ALU control unit class definition
+ *  gcollect.h
+ *  Header file to enable/disable garbage collection
  *  Copyright (C) 2005 Christopher Han
  *
  *  This program is free software; you can redistribute it and/or modify
@@ -17,23 +17,19 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
  */
-#ifndef _MVM_ALU_CONTROL_UNIT_H
-#define _MVM_ALU_CONTROL_UNIT_H
+#ifndef _MVM_GCOLLECT_H
+#define _MVM_GCOLLECT_H
 
-namespace mvm
-{
-	namespace core
-	{
+#ifdef HAVE_CONFIG_H
+#include <config.h>
+#endif
 
-		class alu_control_unit
-		{
-		public:
-			alu_control_unit();
-			~alu_control_unit();
-			unsigned int fire_signal(const unsigned int ctrl, const unsigned int funct, const unsigned int op);
-		};
+#ifdef USE_GCOLLECT
+#include "gc.h"
+inline void *operator new(size_t n) throw (std::bad_alloc) {return GC_malloc(n);}
+inline void operator delete(void *) throw () {}
+inline void *operator new[](size_t n) throw (std::bad_alloc) {return GC_malloc(n);}
+inline void operator delete[](void *) throw () {}
+#endif
 
-	}
-}
-
-#endif /* _MVM_ALU_CONTROL_UNIT_H */
+#endif /* _MVM_GCOLLECT_H */

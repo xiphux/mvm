@@ -41,6 +41,8 @@
 #include "stage4_mem.h"
 #include "stage5_wb.h"
 
+#include "gcollect.h"
+
 namespace mvm
 {
 	namespace core

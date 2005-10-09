@@ -19,6 +19,7 @@
  */
 #include "register_file.h"
 #include "parser/ophandlers.h"
+#include "../mvm.h"
 
 mvm::core::register_file::register_file()
 {
@@ -36,14 +37,18 @@ mvm::core::register_file::~register_file()
 
 unsigned int mvm::core::register_file::get_register(const unsigned int reg)
 {
-	std::string r = mvm::parser::readable_register(reg);
-	printf("Fetching contents of register %s (%d)\n",r.c_str(),regs[reg]->get());
+	if (debug) {
+		std::string r = mvm::parser::readable_register(reg);
+		printf("Fetching contents of register %s (%d)\n",r.c_str(),regs[reg]->get());
+	}
 	return regs[reg]->get();
 }
 
 void mvm::core::register_file::set_register(const unsigned int reg, const unsigned int val)
 {
-	std::string r = mvm::parser::readable_register(reg);
-	printf("Setting contents of register %s to %d\n",r.c_str(),val);
+	if (debug) {
+		std::string r = mvm::parser::readable_register(reg);
+		printf("Setting contents of register %s to %d\n",r.c_str(),val);
+	}
 	regs[reg]->set(val);
 }

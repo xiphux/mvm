@@ -24,5 +24,6 @@
 
 extern mvm::core::vm *VM;
 extern bool showregs;
+extern bool debug;
 
 #endif /* _MVM_MVM_H */

@@ -117,7 +117,7 @@ void mvm::core::datapath::advance_instructions()
 
 bool mvm::core::datapath::detect_completion()
 {
-	//return false;
+	return false;
 	unsigned int a = (stage1->get_instruction()==0x9 /* 1001 */ ?1:0);
 	unsigned int b = (stage2->get_instruction()==0x9 /* 1001 */ ?1:0);
 	unsigned int c = (stage3->get_instruction()==0x9 /* 1001 */ ?1:0);
@@ -140,10 +140,12 @@ int mvm::core::datapath::execute_alu(const unsigned int wbdata)
 	 * Choose between the two operators and the immediate field
 	 */
 	int ALUdata2 = EXmux5->mux(temp_EX_MEM_DataW,id_ex->imm->get());
-	if (EXmux5->get_signal())
-		printf("ALUdata2 = temp_EX_MEM_DataW (%d)\n",temp_EX_MEM_DataW);
-	else
-		printf("ALUdata2 = id_ex->imm->get() (%d)\n",id_ex->imm->get());
+	if (debug) {
+		if (EXmux5->get_signal())
+			printf("ALUdata2 = temp_EX_MEM_DataW (%d)\n",temp_EX_MEM_DataW);
+		else
+			printf("ALUdata2 = id_ex->imm->get() (%d)\n",id_ex->imm->get());
+	}
 	/*
 	 * AluOP is the second and third bit of register ID/EX.EX
 	 */
@@ -165,8 +167,10 @@ int mvm::core::datapath::execute_alu(const unsigned int wbdata)
 void mvm::core::datapath::tick()
 {
 	clock++;
-	if (complete = detect_completion())
+	if (complete = detect_completion()) {
+		if (debug) printf("Complete\n");
 		return;
+	}
 
 	/*
 	 * Depending on the state of WB, save to the given register
@@ -504,7 +508,7 @@ void mvm::core::datapath::tick()
 	temp_MEM_WB_WB.RegWrite = ex_mem->WB.RegWrite;
 	temp_MEM_WB_WB.WBData = ex_mem->WB.WBData;
 	temp_MEM_WB_Data = ex_mem->RIS->get();
-	printf("temp_MEM_WB_data: %d\n",temp_MEM_WB_Data);
+	if (debug) printf("temp_MEM_WB_data: %d\n",temp_MEM_WB_Data);
 	if (ctrl1) {
 		temp_instruction = 0x0;
 		temp_IF_ID_PCpiu4 = 0x0;
