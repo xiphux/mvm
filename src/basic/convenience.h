@@ -27,10 +27,18 @@
 #define intabs(v)	(v^(v>>(sizeof(int)*8-1)))-(v>>(sizeof(int)*8-1))
 #define intmin(x,y)	(y+((x-y)&-(x<y)))
 #define intmax(x,y)	(x-((x-y)&-(x<y)))
+#define signextend(x,b)	(-(x&(1<<((b)-1)))|x)
 #else
 #define intabs(v)	(v<0?-v:v)
 #define intmin(x,y)	(x<y?x:y)
 #define intmax(x,y)	(x>y?x:y)
+template <typename T, unsigned B>
+inline T __signextend(const T x)
+{
+	  struct {T x:B;} s;
+	    return s.x = x;
+}
+#define signextend(x,b)	__signextend<int,(b)>(x)
 #endif
 
 namespace mvm

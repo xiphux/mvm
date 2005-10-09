@@ -117,7 +117,7 @@ void mvm::core::datapath::advance_instructions()
 
 bool mvm::core::datapath::detect_completion()
 {
-	return false;
+	//return false;
 	unsigned int a = (stage1->get_instruction()==0x9 /* 1001 */ ?1:0);
 	unsigned int b = (stage2->get_instruction()==0x9 /* 1001 */ ?1:0);
 	unsigned int c = (stage3->get_instruction()==0x9 /* 1001 */ ?1:0);
@@ -260,7 +260,7 @@ void mvm::core::datapath::tick()
 	/*
 	 * Immediate value
 	 */
-	temp_ID_EX_imm = inst->get_opcode()->instruction() & 0xffff;
+	temp_ID_EX_imm = signextend((inst->get_opcode()->instruction()&0xffff),16);
 
 	/*
 	 * OP field controls the ALU

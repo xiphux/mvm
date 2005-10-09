@@ -18,6 +18,7 @@
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
  */
 #include "instruction_memory.h"
+#include "../parser/rtype.h"
 
 mvm::core::instruction_memory::instruction_memory()
 {
@@ -46,7 +47,7 @@ mvm::core::instruction *mvm::core::instruction_memory::pop_instruction()
 
 mvm::core::instruction *mvm::core::instruction_memory::fetch_instruction(const unsigned int addr)
 {
-	if (addr>TEXT_SEGMENT_BYTES)
-		return NULL;
+	if ((addr>TEXT_SEGMENT_BYTES)||((addr>>2)>=instructions.size()))
+		return new instruction("nop",new mvm::parser::rtype(0));
 	return instructions.at(addr>>2);
 }
