@@ -362,7 +362,8 @@ void mvm::parser::read_mode(std::string &sect)
 							}
 							VM->dp->as->dm->write_data(ad,'\0');
 							if (!lastlabel.empty()) {
-								printf("ASCII string %s stored in memory at %d\n",lastlabel.c_str(),adold);
+								if (debug)
+									printf("ASCII string %s stored in memory at %d\n",lastlabel.c_str(),adold);
 								VM->dp->labels[lastlabel] = adold;
 								lastlabel.clear();
 							}
@@ -381,7 +382,8 @@ void mvm::parser::read_mode(std::string &sect)
 					VM->dp->as->dm->write_data(i+fr,'\0');
 				}
 				if (!lastlabel.empty()) {
-					printf("Space allocated for %s at %d\n",lastlabel.c_str(),fr);
+					if (debug)
+						printf("Space allocated for %s at %d\n",lastlabel.c_str(),fr);
 					VM->dp->labels[lastlabel] = fr;
 					lastlabel.clear();
 				}
@@ -399,7 +401,8 @@ void mvm::parser::read_mode(std::string &sect)
 				if (lastlabel.empty()) {
 					printf("Error: data allocated with no data pointer (leak)!\n");
 				} else {
-					printf("Data stored for %s at %d\n",lastlabel.c_str(),ad);
+					if (debug)
+						printf("Data stored for %s at %d\n",lastlabel.c_str(),ad);
 					VM->dp->labels[lastlabel] = ad;
 					lastlabel.clear();
 				}

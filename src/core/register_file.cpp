@@ -37,10 +37,6 @@ mvm::core::register_file::~register_file()
 
 unsigned int mvm::core::register_file::get_register(const unsigned int reg)
 {
-	if (debug) {
-		std::string r = mvm::parser::readable_register(reg);
-		printf("Fetching contents of register %s (%d)\n",r.c_str(),regs[reg]->get());
-	}
 	return regs[reg]->get();
 }
 
