@@ -28,12 +28,12 @@ mvm::core::register32::~register32()
 {
 }
 
-int mvm::core::register32::get()
+unsigned int mvm::core::register32::get()
 {
 	return data;
 }
 
-void mvm::core::register32::set(const int v)
+void mvm::core::register32::set(const unsigned int v)
 {
 	data = v;
 }

@@ -35,12 +35,12 @@ mvm::core::register_file::~register_file()
 		delete regs[i];
 }
 
-int mvm::core::register_file::get_register(const unsigned int reg)
+unsigned int mvm::core::register_file::get_register(const unsigned int reg)
 {
 	return regs[reg]->get();
 }
 
-void mvm::core::register_file::set_register(const unsigned int reg, const int val)
+void mvm::core::register_file::set_register(const unsigned int reg, const unsigned int val)
 {
 	if (debug) {
 		std::string r = mvm::parser::readable_register(reg);
