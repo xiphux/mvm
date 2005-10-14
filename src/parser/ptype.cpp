@@ -97,6 +97,7 @@ void mvm::parser::ptype::translate_beqz()
 	p.push_back("$0");
 	p.push_back(parms.at(1));
 	operation *o = new itype("beq",p);
+	ops.push_back(o);
 	std::string i = "beq "+p.at(0)+","+p.at(1)+","+p.at(2);
 	ins.push_back(i);
 }
@@ -108,6 +109,7 @@ void mvm::parser::ptype::translate_bnez()
 	p.push_back("$0");
 	p.push_back(parms.at(1));
 	operation *o = new itype("bne",p);
+	ops.push_back(o);
 	std::string i = "bne "+p.at(0)+","+p.at(1)+","+p.at(2);
 	ins.push_back(i);
 }

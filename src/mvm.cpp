@@ -187,7 +187,6 @@ static inline void run_gui()
 	//box(stdscr,0,0);
 	if (!files.empty())
 		VM->load_instructions(files.at(0));
-	int ch;
 	while (!maingui->complete) {
 		maingui->draw();
 		maingui->refresh();
