@@ -32,10 +32,10 @@ namespace mvm
 		public:
 			register32();
 			~register32();
-			unsigned int get();
-			void set(const unsigned int v);
+			int get();
+			void set(const int v);
 		private:
-			unsigned int data;
+			int data;
 		};
 
 	}

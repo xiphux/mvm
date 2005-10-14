@@ -264,7 +264,11 @@ void mvm::core::datapath::tick()
 	/*
 	 * Immediate value
 	 */
-	temp_ID_EX_imm = signextend((inst->get_opcode()->instruction()&0xffff),16);
+	temp_ID_EX_imm = signextend(IMMED(inst->get_opcode()->instruction()),16);
+	printf("temp_ID_EX_imm: %d\n",temp_ID_EX_imm);
+	printf("inst->get_opcode()->instruction: ");
+	mvm::basic::binaryprint(inst->get_opcode()->instruction(),true);
+	printf(" (%s)\n",inst->get_instruction().c_str());
 
 	/*
 	 * OP field controls the ALU
@@ -436,7 +440,7 @@ void mvm::core::datapath::tick()
 	 * Second data controlled by the control unit
 	 */
 	unsigned int ctrl2 = ctrl->read_instruction(inst->get_opcode()->instruction(), SIGNAL_PCSRC);
-	//ctrl2 = 0;
+	ctrl2 = 0;
 	/*
 	 * Stall controls whether PC forwards
 	 */
@@ -471,6 +475,12 @@ void mvm::core::datapath::tick()
 		temp_ID_EX_EX.AluOP1 = ctrl_EX&0x4;
 		temp_ID_EX_EX.AluOP2 = ctrl_EX&0x2;
 		temp_ID_EX_EX.AluSrc = ctrl_EX&0x1;
+		printf("ctrl_WB: ");
+		mvm::basic::binaryprint(ctrl_WB,true);
+		printf("ctrl_M: ");
+		mvm::basic::binaryprint(ctrl_M,true);
+		printf("ctrl_EX: ");
+		mvm::basic::binaryprint(ctrl_EX,true);
 	} else {
 		temp_ID_EX_WB.WBData = false;
 		temp_ID_EX_WB.RegWrite = false;

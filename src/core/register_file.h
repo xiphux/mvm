@@ -33,8 +33,8 @@ namespace mvm
 		public:
 			register_file();
 			~register_file();
-			unsigned int get_register(const unsigned int reg);
-			void set_register(const unsigned int reg, const unsigned int val);
+			int get_register(const unsigned int reg);
+			void set_register(const unsigned int reg, const int val);
 		private:
 			register32 *regs[32];
 		};
