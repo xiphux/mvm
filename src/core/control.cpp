@@ -17,7 +17,7 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
  *
- *  $Id: control.cpp 210 2005-10-15 04:18:35Z xiphux $
+ *  $Id: control.cpp 251 2005-12-07 10:01:26Z xiphux $
  */
 #include "control.h"
 #include "../basic/opcode.h"
@@ -35,16 +35,17 @@ unsigned int mvm::core::control::read_instruction(const unsigned int inst, const
 	unsigned int op = OPCODE(inst);
 	unsigned int ex,mem,wb;
 	switch (op) {
-		case 0:
-			unsigned int funct = FUNCT(inst);
-			if (!funct) {
-				ex = 0x0;
-				mem = 0x0;
-				wb = 0x0;
-			} else {
-				ex = 0xc;		/* 1100 */
-				mem = 0x0;
-				wb = 0x2;		/* 10 */
+		case 0: {
+				unsigned int funct = FUNCT(inst);
+				if (!funct) {
+					ex = 0x0;
+					mem = 0x0;
+					wb = 0x0;
+				} else {
+					ex = 0xc;		/* 1100 */
+					mem = 0x0;
+					wb = 0x2;		/* 10 */
+				}
 			}
 			break;
 		case ITYPE_OP_ADDI:
